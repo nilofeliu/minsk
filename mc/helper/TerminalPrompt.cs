@@ -69,7 +69,7 @@ namespace Minsk.helper
                 {
                     var e = new Evaluator((ExpressionSyntax)syntaxTree.Root);
                     var result = e.Evaluate();
-                    Console.WriteLine($"\nResult: {result}");
+                    Console.WriteLine($"Result: {result}");
                 }
                 else
                 {
@@ -133,8 +133,6 @@ namespace Minsk.helper
             // |__
             // |--
             // |
-
-            Console.WriteLine("-----------------------");
 
             var marker = isLast ? "└──" : "├──";
 
