@@ -2,7 +2,7 @@
 
 namespace Minsk.CodeAnalysis
 {
-    sealed class SyntaxTree
+    public sealed class SyntaxTree
     {
         public IReadOnlyList<string> Diagnostics { get; }
         public SyntaxNode Root { get; }

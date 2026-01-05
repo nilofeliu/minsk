@@ -1,6 +1,6 @@
 ﻿namespace Minsk.CodeAnalysis
 {
-    sealed class ParenthesizedExpressionSyntax : ExpressionSyntax
+    public sealed class ParenthesizedExpressionSyntax : ExpressionSyntax
     {
         public override SyntaxKind Kind => SyntaxKind.ParenthesisedExpression;
         public SyntaxToken OpenParenthesisToken { get; }
