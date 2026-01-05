@@ -1,4 +1,6 @@
-﻿namespace Minsk.CodeAnalysis
+﻿using Minsk.CodeAnalysis.Syntax;
+
+namespace Minsk.CodeAnalysis.Syntax
 {
     internal sealed class Parser
     {
