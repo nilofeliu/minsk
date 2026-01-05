@@ -66,23 +66,33 @@
             return new SyntaxTree(_diagnostic, expression, endOfFileToken);
         }
 
-
         private ExpressionSyntax ParseExpression(int parentPrecedence = 0)
         {
-            var left = ParsePrimaryExpression();
+            ExpressionSyntax left;
+            var unaryOperatorPrecedence = Current.Kind.GetUnaryOperatorPrecedence();
+            if (unaryOperatorPrecedence != 0 && unaryOperatorPrecedence >= parentPrecedence)
+            {
+                var operatorToken = NextToken();
+                var operand = ParseExpression(unaryOperatorPrecedence);
+                left = new UnaryExpressionSyntax(operatorToken, operand);
+            }
+            else
+            {
+                left = ParsePrimaryExpression();
+            }
+
 
             while (true)
-            {
-                var precedence = Current.Kind.GetBinaryOperatorPrecedence();
-                if (precedence == 0 || precedence <= parentPrecedence)
-                    break;
-                var operatorToken = NextToken();
-                var right = ParseExpression(precedence);
-                left = new BinaryExpressionSyntax(left, operatorToken, right);
-            }
+                {
+                    var precedence = Current.Kind.GetBinaryOperatorPrecedence();
+                    if (precedence == 0 || precedence <= parentPrecedence)
+                        break;
+                    var operatorToken = NextToken();
+                    var right = ParseExpression(precedence);
+                    left = new BinaryExpressionSyntax(left, operatorToken, right);
+                }
             return left;
         }
-
 
         private ExpressionSyntax ParsePrimaryExpression()
         {

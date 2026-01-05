@@ -23,9 +23,21 @@ namespace Minsk.CodeAnalysis
         private int EvaluateExpression(ExpressionSyntax node)
         {
             if (node is LiteralExpressionSyntax n)
-
             {
                 return (int)n.LiteralToken.Value;
+            }
+            else if (node is UnaryExpressionSyntax u)
+            {
+                var operand = EvaluateExpression(u.Operand);
+                switch (u.OperatorToken.Kind)
+                {
+                    case SyntaxKind.PlusToken:
+                        return operand;
+                    case SyntaxKind.MinusToken:
+                        return -operand;
+                    default:
+                        throw new Exception($"Unexpected unary operator {u.OperatorToken.Kind}");
+                }
             }
             else if (node is BinaryExpressionSyntax b)
             {

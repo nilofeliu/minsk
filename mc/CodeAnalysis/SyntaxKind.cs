@@ -16,8 +16,8 @@
 
         // Expressions
         LiteralExpression,
+        UnaryExpression,
         BinaryExpression,
-        ParenthesisedExpression
-        
+        ParenthesisedExpression        
     }
 }
