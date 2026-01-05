@@ -91,7 +91,7 @@ namespace Minsk.helper
             Console.WriteLine("-----------------------");
             while (true)
             {
-                var token = lexer.NextToken();
+                var token = lexer.Lex();
                 if (token.Kind == SyntaxKind.EndOfFileToken)
                     break;
                 tokens.Add(token);
