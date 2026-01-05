@@ -1,9 +1,4 @@
 ﻿using Minsk.CodeAnalysis.Syntax;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Minsk.CodeAnalysis.Binding
 {
@@ -28,12 +23,16 @@ namespace Minsk.CodeAnalysis.Binding
                     return BindBinaryExpression((BinaryExpressionSyntax)syntax);
 
                 default:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Unexpected syntax node {syntax.Kind} <BINDER>");
+                    Console.ResetColor();
                     throw new Exception($"Unexpected syntax node {syntax.Kind}");
             }
         }
         private BoundExpression BindLiteralExpression(LiteralExpressionSyntax syntax)
         {
-            var value = syntax.LiteralToken.Value as int? ?? 0;
+
+            var value = syntax.Value ?? 0;
             return new BoundLiteralExpression(value);
         }
         private BoundExpression BindUnaryExpression(UnaryExpressionSyntax syntax)
@@ -68,45 +67,77 @@ namespace Minsk.CodeAnalysis.Binding
         }
         private BoundUnaryOperatorKind? BindUnaryOperatorKind(SyntaxKind kind, Type operandtype)
         {
-            if (operandtype != typeof(int))
+            if (operandtype == typeof(int))
             {
-                return null;
+                switch (kind)
+                {
+                    case SyntaxKind.PlusToken:
+                        return BoundUnaryOperatorKind.Identity;
+                    case SyntaxKind.MinusToken:
+                        return BoundUnaryOperatorKind.Negation;
+
+                    default:
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine($"Unexpected unary operator {kind} <BINDER>");
+                        Console.ResetColor();
+                        break;
+                }
+            }
+            else if (operandtype == typeof(bool))
+            {
+                switch (kind)
+                {
+                    case SyntaxKind.BangToken:
+                        return BoundUnaryOperatorKind.LogicalNegation;
+                    default:
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine($"Unexpected unary operator {kind} <BINDER>");
+                        Console.ResetColor();
+                        break;
+                }
             }
 
-            switch (kind)
-            {
-                case SyntaxKind.PlusToken:
-                    return BoundUnaryOperatorKind.Identity;
-                case SyntaxKind.MinusToken:
-                    return BoundUnaryOperatorKind.Negation;
-
-                default:
-                    throw new Exception($"Unexpected unary operator {kind}");
-            }
+            return null;
         }
 
         private BoundBinaryOperatorKind? BindBinaryOperatorKind(SyntaxKind kind, Type leftType, Type rightType)
         {
-            if (leftType != typeof(int) || rightType != typeof(int))
+            if (leftType == typeof(int) && rightType == typeof(int))
             {
-                return null;
-            }
-
-            switch (kind)
-            {
-                case SyntaxKind.PlusToken:
+                switch (kind)
+                {
+                    case SyntaxKind.PlusToken:
                     return BoundBinaryOperatorKind.Addition;
-                case SyntaxKind.MinusToken:
+                    case SyntaxKind.MinusToken:
                     return BoundBinaryOperatorKind.Subtraction;
-                case SyntaxKind.StarToken:
+                    case SyntaxKind.StarToken:
                     return BoundBinaryOperatorKind.Multiplication;
-                case SyntaxKind.SlashToken:
+                    case SyntaxKind.SlashToken:
                     return BoundBinaryOperatorKind.Division;
 
-                default:
-                throw new Exception($"Unexpected binary operator {kind}");
+                    default:
+                    Console.WriteLine($"Unexpected binary operator {kind}");
+                    return null;
+                }
             }
+            else if (leftType == typeof(bool) && rightType == typeof(bool))
+            {
+                switch (kind)
+                {
+                    case SyntaxKind.AmpersandAmpersandToken:
+                    return BoundBinaryOperatorKind.LogicalAnd;
+                    case SyntaxKind.PipePipeToken:
+                    return BoundBinaryOperatorKind.LogicalOr;
+                    default:
+                    Console.WriteLine($"Unexpected binary operator {kind}");
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
 
+            }
         }
     }
 }

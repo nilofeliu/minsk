@@ -5,15 +5,25 @@
         public override Type Type => Right.Type;
         public override BoundNodeKind Kind => BoundNodeKind.BinaryExpression;
         public BoundExpression Left { get; }
-        public BoundBinaryOperatorKind Operatorkind { get; }
+        public BoundBinaryOperatorKind OperatorKind { get; }
+        public BoundBinaryOperator? Op { get; }
         public BoundExpression Right { get; }
+
+        public BoundBinaryExpression(BoundExpression left,
+            BoundBinaryOperator op,
+            BoundExpression right)
+        {
+            Left = left;
+            Op = op;
+            Right = right;
+        }
 
         public BoundBinaryExpression(BoundExpression left,
             BoundBinaryOperatorKind operatorkind,
             BoundExpression right)
         {
             Left = left;
-            Operatorkind = operatorkind;
+            OperatorKind = operatorkind;
             Right = right;
         }
     }

@@ -17,6 +17,8 @@
         LessThanOrEqual,
         GreaterThan,
         GreaterThanOrEqual,
+        LogicalAnd,
+        LogicalOr,
     }
 }
 

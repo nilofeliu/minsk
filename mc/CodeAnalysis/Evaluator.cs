@@ -18,59 +18,65 @@ namespace Minsk.CodeAnalysis
             _root = root;
         }
 
-        public int Evaluate()
+        public object Evaluate()
         {
             return EvaluateExpression(_root);
         }
 
-        private int EvaluateExpression(BoundExpression node)
+        private object EvaluateExpression(BoundExpression node)
         {
-            switch (node)
-            {
-                case BoundLiteralExpression n:
-                    return EvaluateLiteralExpression(n);
-                case BoundUnaryExpression u:
-                    return EvaluateUnaryExpression(u);
-                case BoundBinaryExpression b:
-                    return EvaluateBinaryExpression(b);
-                default:
-                    throw new Exception($"Unexpected node {node.Kind}");
 
-            }
+            if (node is BoundLiteralExpression n)
+                return EvaluateLiteralExpression(n);
+            if (node is BoundUnaryExpression u)
+                return EvaluateUnaryExpression(u);
+            if (node is BoundBinaryExpression b)
+                return EvaluateBinaryExpression(b);
+
+            throw new Exception($"Unexpected node {node.Kind}");
+
         }
-        private int EvaluateLiteralExpression(BoundLiteralExpression node)
+        private object EvaluateLiteralExpression(BoundLiteralExpression n)
         {
-            return (int)node.Value;
+            return n.Value;
         }
-        private int EvaluateUnaryExpression(BoundUnaryExpression node)
+        private object EvaluateUnaryExpression(BoundUnaryExpression u)
         {
-            var operand = EvaluateExpression(node.Operand);
-            switch (node.OperatorKind)
+            var operand = EvaluateExpression(u.Operand);
+
+            switch (u.OperatorKind)
             {
                 case BoundUnaryOperatorKind.Identity:
-                    return operand;
+                    return (int)operand;
                 case BoundUnaryOperatorKind.Negation:
-                    return -operand;
+                    return -(int)operand;
+                case BoundUnaryOperatorKind.LogicalNegation:
+                    return (bool)operand;
                 default:
-                    throw new Exception($"Unexpected unary operator {node.OperatorKind}");
+                    throw new Exception($"Unexpected unary operator {u.OperatorKind}");
             }
         }
-        private int EvaluateBinaryExpression(BoundBinaryExpression node)
+        private object EvaluateBinaryExpression(BoundBinaryExpression b)
         {
-            var left = EvaluateExpression(node.Left);
-            var right = EvaluateExpression(node.Right);
-            switch (node.Operatorkind)
+            var left = EvaluateExpression(b.Left);
+            var right = EvaluateExpression(b.Right);
+         
+            switch (b.OperatorKind)
             {
                 case BoundBinaryOperatorKind.Addition:
-                    return left + right;
+                    return (int)left + (int)right;
                 case BoundBinaryOperatorKind.Subtraction:
-                    return left - right;
+                    return (int)left - (int)right;
                 case BoundBinaryOperatorKind.Multiplication:
-                    return left * right;
+                    return (int)left * (int)right;
                 case BoundBinaryOperatorKind.Division:
-                    return left / right;
+                    return (int)left / (int)right;
+                case BoundBinaryOperatorKind.LogicalAnd:
+                    return (bool)left && (bool)right;
+                case BoundBinaryOperatorKind.LogicalOr:
+                    return (bool)left || (bool)right;
                 default:
-                    throw new Exception($"Unexpected binary operator {node.Operatorkind}");
+                    throw new Exception($"Unexpected binary operator {b.OperatorKind}");
             }
         }
     }
