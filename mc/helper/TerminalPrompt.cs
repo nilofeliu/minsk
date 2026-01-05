@@ -1,4 +1,5 @@
 ﻿using Minsk.CodeAnalysis;
+using Minsk.CodeAnalysis.Binding;
 using Minsk.CodeAnalysis.Syntax;
 using System;
 using System.Collections.Generic;
@@ -52,6 +53,10 @@ namespace Minsk.helper
                 }
                                
                 var syntaxTree = SyntaxTree.Parse(line);
+                var binder = new Binder();
+                var boundExpression = binder.BindExpression((ExpressionSyntax)syntaxTree.Root);
+
+                IReadOnlyList<string> diagnostics = syntaxTree.Diagnostics;
 
                 if (showTree)
                 {
@@ -65,10 +70,10 @@ namespace Minsk.helper
                     PrintTokens(new Lexer(line));
                     Console.ResetColor();
                 }
-
-                if (!syntaxTree.Diagnostics.Any())
+                                
+                if (!diagnostics.Any())
                 {
-                    var e = new Evaluator((ExpressionSyntax)syntaxTree.Root);
+                    var e = new Evaluator(boundExpression);
                     var result = e.Evaluate();
                     Console.WriteLine($"Result: {result}");
                 }
