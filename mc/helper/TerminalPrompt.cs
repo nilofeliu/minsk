@@ -75,7 +75,7 @@ namespace Minsk.helper
                 {
                     var e = new Evaluator(boundExpression);
                     var result = e.Evaluate();
-                    Console.WriteLine($"Result: {result}");
+                    Console.WriteLine($"{result}");
                 }
                 else
                 {
@@ -94,7 +94,7 @@ namespace Minsk.helper
 
             List<SyntaxToken> tokens = new();
 
-            Console.WriteLine("-----------------------");
+            Console.WriteLine("----------------------------");
             while (true)
             {
                 var token = lexer.Lex();
@@ -115,6 +115,7 @@ namespace Minsk.helper
                 Console.WriteLine(' ');
                 position++;
             }
+            Console.WriteLine("----------------------------");
         }
 
         private static string GetPadding(int position)
