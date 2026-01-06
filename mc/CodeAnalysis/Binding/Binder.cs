@@ -22,6 +22,9 @@ namespace Minsk.CodeAnalysis.Binding
                 case SyntaxKind.BinaryExpression:
                     return BindBinaryExpression((BinaryExpressionSyntax)syntax);
 
+                case SyntaxKind.ParenthesisedExpression:
+                    return BindExpression(((ParenthesizedExpressionSyntax)syntax).Expression);
+
                 default:
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"Unexpected syntax node {syntax.Kind} <BINDER>");
