@@ -19,7 +19,9 @@
         BangToken,
         AmpersandAmpersandToken,
         PipePipeToken,
-        
+        EqualsEqualsToken,
+        BangEqualsToken,
+
         // Keywords
         TrueKeyword,
         FalseKeyword,
@@ -29,7 +31,6 @@
         UnaryExpression,
         BinaryExpression,
         ParenthesisedExpression,
-        EqualsEqualsToken,
-        BangEqualsToken,
+
     }
 }
