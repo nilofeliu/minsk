@@ -7,14 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Minsk.helper
+namespace Minsk
 {
     internal class TerminalPrompt
     {
         internal static void PromptReader()
         {
             bool showTree = false;
-            bool showLexicon = false;
 
             while (true)
             {
@@ -36,10 +35,6 @@ namespace Minsk.helper
                         showTree = !showTree;
                         Console.WriteLine(showTree ? $"Showing parse trees." : "Not showing parse trees.");
                         continue;
-                        case "#showtokens":
-                        showLexicon = !showLexicon;
-                        Console.WriteLine(showLexicon ? "Showing lexical tokens." : "Not showing lexical tokens.");
-                        continue;
                         case "#cls":
                         Console.Clear();
                         continue;
@@ -53,10 +48,8 @@ namespace Minsk.helper
                 }
                                
                 var syntaxTree = SyntaxTree.Parse(line);
-                var binder = new Binder();
-                var boundExpression = binder.BindExpression((ExpressionSyntax)syntaxTree.Root);
-
-                IReadOnlyList<string> diagnostics = syntaxTree.Diagnostics;
+                var compilation = new Compilation(syntaxTree);
+                var result = compilation.Evaluate();
 
                 if (showTree)
                 {
@@ -64,66 +57,42 @@ namespace Minsk.helper
                     PrintTree(syntaxTree.Root);
                     Console.ResetColor();
                 }
-                if (showLexicon)
+
+                if (!result.Diagnostics.Any())
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkGray;
-                    PrintTokens(new Lexer(line));
-                    Console.ResetColor();
-                }
-                                
-                if (!diagnostics.Any())
-                {
-                    var e = new Evaluator(boundExpression);
-                    var result = e.Evaluate();
-                    Console.WriteLine($"{result}");
+                    Console.WriteLine($"{result.Value}");
                 }
                 else
                 {
                     Console.WriteLine();
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    foreach (var diagnostic in syntaxTree.Diagnostics)
+                  
+                    foreach (var diagnostic in result.Diagnostics)
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine(diagnostic);
+                        Console.ResetColor();
+
+                        var prefix = line.Substring(0, diagnostic.Span.Start);
+                        var error = line.Substring(diagnostic.Span.Start, diagnostic.Span.Length);
+                        var suffix = line.Substring(diagnostic.Span.End);
+
+                        Console.Write("    ");
+                        Console.Write(prefix);
+
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.Write(error);
+                        Console.ResetColor();
+
+                        Console.WriteLine(suffix);
+
+                        Console.WriteLine();
+
                     }
-                    Console.ResetColor();
+                    
                 }
             }
         }
-        private static void PrintTokens(Lexer lexer)
-        {
-
-            List<SyntaxToken> tokens = new();
-
-            Console.WriteLine("----------------------------");
-            while (true)
-            {
-                var token = lexer.Lex();
-                if (token.Kind == SyntaxKind.EndOfFileToken)
-                    break;
-                tokens.Add(token);
-            }
-
-            int position = 0;
-
-            foreach (var token in tokens)
-            {
-                string padding = GetPadding(position);
-
-                Console.Write($"Position: {position} {padding}Token: {token.Kind} '{token.Text}' ");
-                if (token.Value != null)
-                    Console.Write($"Value: {token.Value}");
-                Console.WriteLine(' ');
-                position++;
-            }
-            Console.WriteLine("----------------------------");
-        }
-
-        private static string GetPadding(int position)
-        {
-            int digitCount = position.ToString().Length;
-            return new string(' ', 4 - digitCount);
-        }
-
+        
         private static void PrintCommands()
         {
             Console.WriteLine("Available commands:");

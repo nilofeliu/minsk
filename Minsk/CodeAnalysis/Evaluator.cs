@@ -1,5 +1,4 @@
 ﻿using Minsk.CodeAnalysis.Binding;
-using Minsk.CodeAnalysis.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,7 +50,7 @@ namespace Minsk.CodeAnalysis
                 case BoundUnaryOperatorKind.Negation:
                     return -(int)operand;
                 case BoundUnaryOperatorKind.LogicalNegation:
-                    return (bool)operand;
+                    return !(bool)operand;
                 default:
                     throw new Exception($"Unexpected unary operator {u.Op}");
             }

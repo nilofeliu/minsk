@@ -1,7 +1,6 @@
 ﻿using Minsk.CodeAnalysis;
-using Minsk.helper;
 using System;
-using static Minsk.helper.TerminalPrompt;
+using static Minsk.TerminalPrompt;
 
 namespace Minsk
 {

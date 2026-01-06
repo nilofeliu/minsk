@@ -2,11 +2,11 @@
 {
     public sealed class SyntaxTree
     {
-        public IReadOnlyList<string> Diagnostics { get; }
+        public IReadOnlyList<Diagnostic> Diagnostics { get; }
         public SyntaxNode Root { get; }
         public SyntaxToken EndOfFileToken { get; }
 
-        public SyntaxTree(IEnumerable<string> diagnostics, SyntaxNode root, SyntaxToken endOfFileToken)
+        public SyntaxTree(IEnumerable<Diagnostic> diagnostics, SyntaxNode root, SyntaxToken endOfFileToken)
         {
             Diagnostics = diagnostics.ToArray();
             Root = root;

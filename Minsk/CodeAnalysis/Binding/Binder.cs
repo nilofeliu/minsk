@@ -5,9 +5,9 @@ namespace Minsk.CodeAnalysis.Binding
 
     internal sealed class Binder
     {
-        private readonly List<string> _diagnostic = new();
+        private readonly DiagnosticBag _diagnostic = new();
 
-        public IEnumerable<string> Diagnostics => _diagnostic;
+        public DiagnosticBag Diagnostics => _diagnostic;
 
         public BoundExpression BindExpression(ExpressionSyntax syntax)
         {
@@ -26,9 +26,6 @@ namespace Minsk.CodeAnalysis.Binding
                     return BindExpression(((ParenthesizedExpressionSyntax)syntax).Expression);
 
                 default:
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Unexpected syntax node {syntax.Kind} <BINDER>");
-                    Console.ResetColor();
                     throw new Exception($"Unexpected syntax node {syntax.Kind}");
             }
         }
@@ -44,7 +41,9 @@ namespace Minsk.CodeAnalysis.Binding
             var boundOperator = BoundUnaryOperator.Bind(syntax.OperatorToken.Kind, boundOperand.Type);
             if (boundOperator == null)
             {
-                _diagnostic.Add($"Unary operator '{syntax.OperatorToken.Text}' is not defined for type {boundOperand.Type}.");
+                _diagnostic.ReportUndefinedUnaryOperator(syntax.OperatorToken.Span, syntax.OperatorToken.Text, boundOperand.Type);
+
+
                 return boundOperand;
             }
             return new BoundUnaryExpression(boundOperator, boundOperand);
@@ -58,11 +57,8 @@ namespace Minsk.CodeAnalysis.Binding
 
             if (boundOperator == null)
             {
-                _diagnostic.Add
-                    ($"Binary operator '{syntax.OperatorToken.Text}' " +
-                    $"is not defined for type {boundLeft.Type} " +
-                    $"and {boundRight.Type}.");
-
+                _diagnostic.ReportUndefinedBinaryOperator(
+                    syntax.OperatorToken.Span, syntax.OperatorToken.Text, boundLeft.Type, boundRight.Type);
                 return boundLeft;
             }
 

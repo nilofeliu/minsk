@@ -6,9 +6,9 @@ namespace Minsk.CodeAnalysis.Syntax
     {
         private readonly SyntaxToken[] _tokens;
         private int _position;
-        private List<string> _diagnostic = new();
+        private DiagnosticBag _diagnostic = new();
 
-        public IEnumerable<string> Diagnostics => _diagnostic;
+        public DiagnosticBag Diagnostics => _diagnostic;
 
         public Parser(string text)
         {
@@ -57,8 +57,7 @@ namespace Minsk.CodeAnalysis.Syntax
             if (Current.Kind == kind)
                 return NextToken();
 
-            _diagnostic.Add($"ERROR: Unexpected token <{Current.Kind}>," +
-                $" expected <{kind}> at position {Current.Position}. <PARSER>");
+            _diagnostic.ReportUnexpectedToken(Current.Span, Current.Kind, kind);
             return new SyntaxToken(kind, Current.Position, null, null);
         }   
 
@@ -123,9 +122,6 @@ namespace Minsk.CodeAnalysis.Syntax
                     return new LiteralExpressionSyntax(numberToken);
                 }
             }
-
         }
-
-
     }
 }
