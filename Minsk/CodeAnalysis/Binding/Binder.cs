@@ -13,6 +13,9 @@ namespace Minsk.CodeAnalysis.Binding
         {
             switch (syntax.Kind)
             {
+                case SyntaxKind.ParenthesisedExpression:
+                    return BindParenthesizedExpression((ParenthesizedExpressionSyntax)syntax);
+
                 case SyntaxKind.LiteralExpression:
                     return BindLiteralExpression((LiteralExpressionSyntax)syntax);
 
@@ -22,13 +25,31 @@ namespace Minsk.CodeAnalysis.Binding
                 case SyntaxKind.BinaryExpression:
                     return BindBinaryExpression((BinaryExpressionSyntax)syntax);
 
-                case SyntaxKind.ParenthesisedExpression:
-                    return BindExpression(((ParenthesizedExpressionSyntax)syntax).Expression);
+                case SyntaxKind.NameExpression:
+                    return BindNameExpression((NameExpressionSyntax)syntax);
+
+                case SyntaxKind.AssignmentExpression:
+                    return BindAssignmentExpression((AssignmentExpressionSyntax)syntax);
 
                 default:
                     throw new Exception($"Unexpected syntax node {syntax.Kind}");
             }
         }
+
+        private BoundExpression BindNameExpression(NameExpressionSyntax syntax)
+        {
+            throw new NotImplementedException();
+        }
+
+        private BoundExpression BindAssignmentExpression(AssignmentExpressionSyntax syntax)
+        {
+            throw new NotImplementedException();
+        }
+        private BoundExpression BindParenthesizedExpression(ParenthesizedExpressionSyntax syntax)
+        {
+            return BindExpression(syntax.Expression);
+        }
+
         private BoundExpression BindLiteralExpression(LiteralExpressionSyntax syntax)
         {
 
@@ -64,6 +85,8 @@ namespace Minsk.CodeAnalysis.Binding
 
             return new BoundBinaryExpression(boundLeft, boundOperator, boundRight);
         }
+       
+
     }
 }
 

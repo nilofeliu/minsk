@@ -68,14 +68,37 @@ namespace Minsk.CodeAnalysis.Syntax
             return new SyntaxTree(_diagnostic, expression, endOfFileToken);
         }
 
-        private ExpressionSyntax ParseExpression(int parentPrecedence = 0)
+        private ExpressionSyntax ParseExpression()
+        {
+            return ParseAssingmentExpression();
+        }
+
+        private ExpressionSyntax ParseAssingmentExpression()
+        {
+
+            if (Peek(0).Kind == SyntaxKind.IdentifierToken &&
+                Peek(1).Kind == SyntaxKind.EqualsToken)
+            {
+                var identifierToken = NextToken();
+                var operatorToken = NextToken();
+                var right = ParseAssingmentExpression();
+         
+                return new AssignmentExpressionSyntax(identifierToken, operatorToken, right);
+            }
+            
+            return ParseOperatorExpression();
+
+        }
+
+
+        private ExpressionSyntax ParseOperatorExpression(int parentPrecedence = 0)
         {
             ExpressionSyntax left;
             var unaryOperatorPrecedence = Current.Kind.GetUnaryOperatorPrecedence();
             if (unaryOperatorPrecedence != 0 && unaryOperatorPrecedence >= parentPrecedence)
             {
                 var operatorToken = NextToken();
-                var operand = ParseExpression(unaryOperatorPrecedence);
+                var operand = ParseOperatorExpression(unaryOperatorPrecedence);
                 left = new UnaryExpressionSyntax(operatorToken, operand);
             }
             else
@@ -90,7 +113,7 @@ namespace Minsk.CodeAnalysis.Syntax
                     if (precedence == 0 || precedence <= parentPrecedence)
                         break;
                     var operatorToken = NextToken();
-                    var right = ParseExpression(precedence);
+                    var right = ParseOperatorExpression(precedence);
                     left = new BinaryExpressionSyntax(left, operatorToken, right);
                 }
             return left;
@@ -103,7 +126,7 @@ namespace Minsk.CodeAnalysis.Syntax
                 case SyntaxKind.OpenParenthesisToken:
                 {
                     var left = NextToken();
-                    var expression = ParseExpression();
+                    var expression = ParseOperatorExpression();
                     var right = MatchToken(SyntaxKind.CloseParenthesisToken);
                     return new ParenthesizedExpressionSyntax(left, expression, right);
                 }
@@ -115,6 +138,13 @@ namespace Minsk.CodeAnalysis.Syntax
                     var value = keywordToken.Kind == SyntaxKind.TrueKeyword;
                     return new LiteralExpressionSyntax(keywordToken, value);
                 }
+
+                case SyntaxKind.IdentifierToken:
+                {
+                    var identifierToken = NextToken();
+                    return new NameExpressionSyntax(identifierToken);
+                }
+
 
                 default:
                 {
