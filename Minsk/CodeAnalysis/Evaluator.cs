@@ -11,10 +11,12 @@ namespace Minsk.CodeAnalysis
     {
 
         private readonly BoundExpression _root;
+        private readonly Dictionary<string, object> _variables;
 
-        public Evaluator(BoundExpression root)
+        public Evaluator(BoundExpression root, Dictionary<string, object> variables)
         {
             _root = root;
+            _variables = variables;
         }
 
         public object Evaluate()
@@ -27,18 +29,40 @@ namespace Minsk.CodeAnalysis
 
             if (node is BoundLiteralExpression n)
                 return EvaluateLiteralExpression(n);
+
+            if (node is BoundVariableExpression v)
+                return EvaluateVariableExpression(v);
+
+            if (node is BoundAssignmentExpression a)
+                return EvaluateAssignmentExpression(a);
+
             if (node is BoundUnaryExpression u)
                 return EvaluateUnaryExpression(u);
+
             if (node is BoundBinaryExpression b)
                 return EvaluateBinaryExpression(b);
 
             throw new Exception($"Unexpected node {node.Kind}");
 
         }
+
         private object EvaluateLiteralExpression(BoundLiteralExpression n)
         {
             return n.Value;
         }
+
+        private object EvaluateVariableExpression(BoundVariableExpression v)
+        {
+            return _variables[v.Name];
+        }
+
+        private object EvaluateAssignmentExpression(BoundAssignmentExpression a)
+        {
+            var value = EvaluateExpression(a.Expression);
+            _variables[a.Name] = value;
+            return value;
+        }
+
         private object EvaluateUnaryExpression(BoundUnaryExpression u)
         {
             var operand = EvaluateExpression(u.Operand);

@@ -1,4 +1,5 @@
 ﻿using Minsk.CodeAnalysis.Syntax;
+using System.Collections.ObjectModel;
 
 namespace Minsk.CodeAnalysis.Binding
 {
@@ -7,7 +8,15 @@ namespace Minsk.CodeAnalysis.Binding
     {
         private readonly DiagnosticBag _diagnostic = new();
 
+        public readonly Dictionary<string, object> _variables;
+
+        public Binder(Dictionary<string, object> variables)
+        {
+            _variables = variables;
+        }
+
         public DiagnosticBag Diagnostics => _diagnostic;
+                
 
         public BoundExpression BindExpression(ExpressionSyntax syntax)
         {
@@ -19,32 +28,23 @@ namespace Minsk.CodeAnalysis.Binding
                 case SyntaxKind.LiteralExpression:
                     return BindLiteralExpression((LiteralExpressionSyntax)syntax);
 
-                case SyntaxKind.UnaryExpression:
-                    return BindUnaryExpression((UnaryExpressionSyntax)syntax);
-
-                case SyntaxKind.BinaryExpression:
-                    return BindBinaryExpression((BinaryExpressionSyntax)syntax);
-
                 case SyntaxKind.NameExpression:
                     return BindNameExpression((NameExpressionSyntax)syntax);
 
                 case SyntaxKind.AssignmentExpression:
                     return BindAssignmentExpression((AssignmentExpressionSyntax)syntax);
 
+                case SyntaxKind.UnaryExpression:
+                    return BindUnaryExpression((UnaryExpressionSyntax)syntax);
+
+                case SyntaxKind.BinaryExpression:
+                    return BindBinaryExpression((BinaryExpressionSyntax)syntax);
+
                 default:
                     throw new Exception($"Unexpected syntax node {syntax.Kind}");
             }
         }
 
-        private BoundExpression BindNameExpression(NameExpressionSyntax syntax)
-        {
-            throw new NotImplementedException();
-        }
-
-        private BoundExpression BindAssignmentExpression(AssignmentExpressionSyntax syntax)
-        {
-            throw new NotImplementedException();
-        }
         private BoundExpression BindParenthesizedExpression(ParenthesizedExpressionSyntax syntax)
         {
             return BindExpression(syntax.Expression);
@@ -56,6 +56,50 @@ namespace Minsk.CodeAnalysis.Binding
             var value = syntax.Value ?? 0;
             return new BoundLiteralExpression(value);
         }
+
+        private BoundExpression BindNameExpression(NameExpressionSyntax syntax)
+        {
+            var name = syntax.IdentifierToken.Text;
+            if (!_variables.TryGetValue(name, out var value))
+            {
+                _diagnostic.ReportUndefinedName(syntax.IdentifierToken.Span, name);
+                return new BoundLiteralExpression(0);
+            }
+
+            var type = value.GetType();
+
+            return new BoundVariableExpression(name, type);
+        }
+
+        private BoundExpression BindAssignmentExpression(AssignmentExpressionSyntax syntax)
+        {
+            var name = syntax.IdentifierToken.Text;
+            var boundExpression = BindExpression(syntax.Expression);
+
+
+            var defaultValue = boundExpression.Type switch
+            {
+                var t when t == typeof(int) => (object)0,
+                var t when t == typeof(bool) => (object)false,
+                _ => null
+            };
+
+            //var defaultValue = 
+            //    boundExpression.Type == typeof(int)
+            //    ? (object)0 
+            //    : boundExpression.Type == typeof(bool)
+            //        ? (object)false
+            //        : null;
+
+            if (defaultValue == null)
+                throw new Exception($"Unsupported type {boundExpression.Type}.");
+
+            _variables[name] = defaultValue;
+
+            return new BoundAssignmentExpression(name, boundExpression);
+            
+        }
+
         private BoundExpression BindUnaryExpression(UnaryExpressionSyntax syntax)
         {
             var boundOperand = BindExpression(syntax.Operand);

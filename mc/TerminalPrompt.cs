@@ -15,6 +15,8 @@ namespace Minsk
         {
             bool showTree = false;
 
+            Dictionary<string, object> variables = new();
+
             while (true)
             {
                 Console.Write(">");
@@ -46,10 +48,10 @@ namespace Minsk
                         continue;
                     }
                 }
-                               
+
                 var syntaxTree = SyntaxTree.Parse(line);
                 var compilation = new Compilation(syntaxTree);
-                var result = compilation.Evaluate();
+                var result = compilation.Evaluate(variables);
 
                 if (showTree)
                 {
@@ -65,16 +67,30 @@ namespace Minsk
                 else
                 {
                     Console.WriteLine();
-                  
+                    List<Exception> exceptions = new();
+
                     foreach (var diagnostic in result.Diagnostics)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine(diagnostic);
                         Console.ResetColor();
 
-                        var prefix = line.Substring(0, diagnostic.Span.Start);
-                        var error = line.Substring(diagnostic.Span.Start, diagnostic.Span.Length);
-                        var suffix = line.Substring(diagnostic.Span.End);
+                        var prefix = "";
+                        var error = "";
+                        var suffix = "";
+
+                        try
+                        {
+                            prefix = line.Substring(0, diagnostic.Span.Start);
+
+                            error = line.Substring(diagnostic.Span.Start, diagnostic.Span.Length);
+
+                            suffix = line.Substring(diagnostic.Span.End);
+                        }
+                        catch (Exception e)
+                        {
+                            exceptions.Add(e);
+                        }
 
                         Console.Write("    ");
                         Console.Write(prefix);
@@ -86,12 +102,25 @@ namespace Minsk
                         Console.WriteLine(suffix);
 
                         Console.WriteLine();
-
+                        
                     }
-                    
+                    PrintExceptions(exceptions);
                 }
             }
         }
+        private static void PrintExceptions(List<Exception> exceptions)
+        {
+            if (exceptions.Count == 0)
+                return;
+            Console.WriteLine("Exceptions:");
+            foreach (var ex in exceptions)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine(ex.Message);
+                Console.ResetColor();
+            }
+        }
+        
         
         private static void PrintCommands()
         {
