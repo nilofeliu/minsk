@@ -3,16 +3,16 @@ namespace Minsk.CodeAnalysis.Binding
 {
     internal sealed class BoundAssignmentExpression : BoundExpression
     {
-        private string _name;
+        private VariableSymbol _variable;
         private BoundExpression _expression;
 
-        public BoundAssignmentExpression(string name, BoundExpression expression)
+        public BoundAssignmentExpression(VariableSymbol variable, BoundExpression expression)
         {
-            _name = name;
+            _variable = variable;
             _expression = expression;
         }
 
-        public string Name => _name;
+        public VariableSymbol Variable => _variable;
         public BoundExpression Expression => _expression;
 
         public override Type Type => Expression.Type;

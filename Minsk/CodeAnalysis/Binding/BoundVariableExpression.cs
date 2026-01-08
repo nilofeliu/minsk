@@ -3,17 +3,15 @@ namespace Minsk.CodeAnalysis.Binding
 {
     internal sealed class BoundVariableExpression : BoundExpression
     {
-        private string _name;
-        private Type _type;
+        private VariableSymbol _variable;
 
-        public BoundVariableExpression(string name, Type type)
+        public BoundVariableExpression(VariableSymbol variable)
         {
-            _name = name;
-            _type = type;
+            _variable = variable;
         }
 
-        public string Name => _name;
-        public override Type Type => _type;
+        public VariableSymbol Variable => _variable;
+        public override Type Type => _variable.Type;
         public override BoundNodeKind Kind => BoundNodeKind.VariableExpression;
     }
 }

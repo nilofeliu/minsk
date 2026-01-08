@@ -15,7 +15,7 @@ namespace Minsk
         {
             bool showTree = false;
 
-            Dictionary<string, object> variables = new();
+            Dictionary<VariableSymbol, object> variables = new();
 
             while (true)
             {

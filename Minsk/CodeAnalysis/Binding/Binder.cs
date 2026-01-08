@@ -8,9 +8,9 @@ namespace Minsk.CodeAnalysis.Binding
     {
         private readonly DiagnosticBag _diagnostic = new();
 
-        public readonly Dictionary<string, object> _variables;
+        public readonly Dictionary<VariableSymbol, object> _variables;
 
-        public Binder(Dictionary<string, object> variables)
+        public Binder(Dictionary<VariableSymbol, object> variables)
         {
             _variables = variables;
         }
@@ -60,15 +60,17 @@ namespace Minsk.CodeAnalysis.Binding
         private BoundExpression BindNameExpression(NameExpressionSyntax syntax)
         {
             var name = syntax.IdentifierToken.Text;
-            if (!_variables.TryGetValue(name, out var value))
+
+            var variable = _variables.Keys.FirstOrDefault(v => v.Name == name);
+
+            if (variable == null)
             {
                 _diagnostic.ReportUndefinedName(syntax.IdentifierToken.Span, name);
                 return new BoundLiteralExpression(0);
             }
 
-            var type = value.GetType();
-
-            return new BoundVariableExpression(name, type);
+          
+            return new BoundVariableExpression(variable);
         }
 
         private BoundExpression BindAssignmentExpression(AssignmentExpressionSyntax syntax)
@@ -76,27 +78,16 @@ namespace Minsk.CodeAnalysis.Binding
             var name = syntax.IdentifierToken.Text;
             var boundExpression = BindExpression(syntax.Expression);
 
-
-            var defaultValue = boundExpression.Type switch
+            var existingVariable = _variables.Keys.FirstOrDefault(v => v.Name == name);
+            if (existingVariable != null)
             {
-                var t when t == typeof(int) => (object)0,
-                var t when t == typeof(bool) => (object)false,
-                _ => null
-            };
+                _variables.Remove(existingVariable);
+            }
 
-            //var defaultValue = 
-            //    boundExpression.Type == typeof(int)
-            //    ? (object)0 
-            //    : boundExpression.Type == typeof(bool)
-            //        ? (object)false
-            //        : null;
+            var variable = new VariableSymbol(name, boundExpression.Type);
+            _variables[variable] = null;
 
-            if (defaultValue == null)
-                throw new Exception($"Unsupported type {boundExpression.Type}.");
-
-            _variables[name] = defaultValue;
-
-            return new BoundAssignmentExpression(name, boundExpression);
+            return new BoundAssignmentExpression(variable, boundExpression);
             
         }
 
