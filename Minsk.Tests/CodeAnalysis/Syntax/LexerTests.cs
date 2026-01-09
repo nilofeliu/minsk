@@ -3,7 +3,8 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace Minsk.Tests.CodeAnalysis.Syntax;
 
-public class LexerTest
+
+public class LexerTests
 {
     [Theory]
     [MemberData(nameof(GetTokensData))]
@@ -50,7 +51,7 @@ public class LexerTest
 
     public static IEnumerable<object?[]> GetTokensData()
     {
-        var test = new LexerTest();
+        var test = new LexerTests();
         foreach (var t in GetTokens().Concat(GetSeparator()))
         {
             yield return new object?[] { t.kind, t.text };
@@ -59,7 +60,7 @@ public class LexerTest
 
     public static IEnumerable<object?[]> GetTokensPairsData()
     {
-        var test = new LexerTest();
+        var test = new LexerTests();
         foreach (var t in GetTokensPairs())
         {
             yield return new object?[] { t.t1kind, t.t1text, t.t2kind, t.t2text };
@@ -68,7 +69,7 @@ public class LexerTest
 
     public static IEnumerable<object?[]> GetTokensPairsWithSeparatorData()
     {
-        var test = new LexerTest();
+        var test = new LexerTests();
         foreach (var t in GetTokensPairsWithSeparator())
         {
             yield return new object?[] { t.t1kind, t.t1text,t.separatorKind, t.separatorText, t.t2kind, t.t2text };
