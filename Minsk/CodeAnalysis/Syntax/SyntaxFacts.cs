@@ -1,9 +1,9 @@
 ﻿
 namespace Minsk.CodeAnalysis.Syntax
 {
-    internal static class SyntaxFacts
+    public static class SyntaxFacts
     {
-        internal static int GetUnaryOperatorPrecedence(this SyntaxKind kind)
+        public static int GetUnaryOperatorPrecedence(this SyntaxKind kind)
         {
             switch (kind)
             {
@@ -18,7 +18,7 @@ namespace Minsk.CodeAnalysis.Syntax
             ;
         }
 
-        internal static int GetBinaryOperatorPrecedence(this SyntaxKind kind)
+        public static int GetBinaryOperatorPrecedence(this SyntaxKind kind)
         {
             switch (kind)
             {
@@ -45,7 +45,7 @@ namespace Minsk.CodeAnalysis.Syntax
             };
         }
 
-        internal static SyntaxKind GetKeywordKind(string text)
+        public static SyntaxKind GetKeywordKind(string text)
         {
             switch (text)
             {
@@ -56,6 +56,28 @@ namespace Minsk.CodeAnalysis.Syntax
                 default:
                     return SyntaxKind.IdentifierToken;
             }
+        }
+
+        public static string? GetText(SyntaxKind kind)
+        {
+            return kind switch
+            {
+                SyntaxKind.PlusToken => "+",
+                SyntaxKind.MinusToken => "-",
+                SyntaxKind.StarToken => "*",
+                SyntaxKind.SlashToken => "/",
+                SyntaxKind.OpenParenthesisToken => "(",
+                SyntaxKind.CloseParenthesisToken => ")",
+                SyntaxKind.EqualsToken => "=",
+                SyntaxKind.BangToken => "!",
+                SyntaxKind.AmpersandAmpersandToken => "&&",
+                SyntaxKind.PipePipeToken => "||",
+                SyntaxKind.EqualsEqualsToken => "==",
+                SyntaxKind.BangEqualsToken => "!=",
+                SyntaxKind.TrueKeyword => "true",
+                SyntaxKind.FalseKeyword => "false",
+                _ => null,
+            };
         }
     }
 }

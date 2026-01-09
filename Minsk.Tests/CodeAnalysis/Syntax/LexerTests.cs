@@ -93,10 +93,11 @@ public class LexerTests
             (SyntaxKind.EqualsEqualsToken, "=="),
             (SyntaxKind.BangEqualsToken, "!="),
 
-            (SyntaxKind.IdentifierToken, "a"),
-            (SyntaxKind.IdentifierToken, "abc"),
             (SyntaxKind.TrueKeyword, "true"),
             (SyntaxKind.FalseKeyword, "false"),
+            
+            (SyntaxKind.IdentifierToken, "a"),
+            (SyntaxKind.IdentifierToken, "abc"),
 
             (SyntaxKind.NumberToken, "1"),
             (SyntaxKind.NumberToken, "123"),
@@ -179,4 +180,6 @@ public class LexerTests
         };
 
     }
+
+    
 }

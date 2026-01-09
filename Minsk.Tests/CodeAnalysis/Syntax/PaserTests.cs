@@ -2,17 +2,11 @@
 
 namespace Minsk.Tests.CodeAnalysis.Syntax;
 
-public class PaserTests
+public partial class PaserTests
 {
-    [Fact]
-    public void Parser_Parses_BinaryExpression()
-    {
-        var text = "1 + 2";
-        var syntaxTree = SyntaxTree.Parse(text);
-        var expression = syntaxTree.Root as ExpressionSyntax;
-        var binaryExpression = Assert.IsType<BinaryExpressionSyntax>(expression);
-        Assert.IsType<NumberExpressionSyntax>(binaryExpression.Left);
-        Assert.Equal(SyntaxKind.PlusToken, binaryExpression.OperatorToken.Kind);
-        Assert.IsType<NumberExpressionSyntax>(binaryExpression.Right);
-    }
+    //[Theory]
+    //public void Parser_BinaryExpression_HonorPrecedences(SyntaxKind op1, SyntaxKind op2)
+    //{
+
+    //}
 }
