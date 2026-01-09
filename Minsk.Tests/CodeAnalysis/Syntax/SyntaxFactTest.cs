@@ -20,6 +20,7 @@ public partial class PaserTests
             Assert.Equal(kind, token.Kind);
             Assert.Equal(text, token.Text);
         }
+
         public static IEnumerable<object[]> GetSyntaxKindData()
         {
             var kinds = (SyntaxKind[])Enum.GetValues(typeof(SyntaxKind));
