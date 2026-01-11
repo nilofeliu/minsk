@@ -26,7 +26,6 @@ public class LexerTests
         untestedTokenKinds.Remove(SyntaxKind.EndOfFileToken);
 
         Assert.Empty(untestedTokenKinds);
-
     }
     [Theory]
     [MemberData(nameof(GetTokensData))]
