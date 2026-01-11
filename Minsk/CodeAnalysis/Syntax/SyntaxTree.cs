@@ -1,14 +1,16 @@
-﻿namespace Minsk.CodeAnalysis.Syntax
+﻿using System.Collections.Immutable;
+
+namespace Minsk.CodeAnalysis.Syntax
 {
     public sealed class SyntaxTree
     {
-        public IReadOnlyList<Diagnostic> Diagnostics { get; }
+        public ImmutableArray<Diagnostic> Diagnostics { get; }
         public SyntaxNode Root { get; }
         public SyntaxToken EndOfFileToken { get; }
 
-        public SyntaxTree(IEnumerable<Diagnostic> diagnostics, SyntaxNode root, SyntaxToken endOfFileToken)
+        public SyntaxTree(ImmutableArray<Diagnostic> diagnostics, SyntaxNode root, SyntaxToken endOfFileToken)
         {
-            Diagnostics = diagnostics.ToArray();
+            Diagnostics = diagnostics;
             Root = root;
             EndOfFileToken = endOfFileToken;
         }

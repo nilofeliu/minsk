@@ -1,5 +1,6 @@
 ﻿using Minsk.CodeAnalysis.Binding;
 using Minsk.CodeAnalysis.Syntax;
+using System.Collections.Immutable;
 
 namespace Minsk.CodeAnalysis
 {
@@ -17,14 +18,14 @@ namespace Minsk.CodeAnalysis
             var binder = new Binder(variables);
             var boundExpression = binder.BindExpression((ExpressionSyntax)Syntax.Root);
 
-            var diagnostics = Syntax.Diagnostics.Concat(binder.Diagnostics).ToArray();
+            var diagnostics = Syntax.Diagnostics.Concat(binder.Diagnostics).ToImmutableArray();
             if (diagnostics.Length > 0)
                 return new EvaluationResult(diagnostics, null);
 
             var evaluator = new Evaluator(boundExpression, variables);
             var value = evaluator.Evaluate();
 
-            return new EvaluationResult(Array.Empty<Diagnostic>(), value);
+            return new EvaluationResult(ImmutableArray< Diagnostic>.Empty, value);
         }
 
     }
