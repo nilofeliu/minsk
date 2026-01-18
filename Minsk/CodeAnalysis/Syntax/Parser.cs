@@ -30,6 +30,7 @@ namespace Minsk.CodeAnalysis.Syntax
 
             _tokens = tokens.ToImmutableArray();
             _diagnostic.AddRange(lexer.Diagnostics);
+
         }
 
 

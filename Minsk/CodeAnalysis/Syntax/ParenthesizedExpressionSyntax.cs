@@ -12,11 +12,6 @@
             Expression = expression;
             CloseParenthesisToken = closeParenthesisToken;
         }
-        public override IEnumerable<SyntaxNode> GetChildren()
-        {
-            yield return OpenParenthesisToken;
-            yield return Expression;
-            yield return CloseParenthesisToken;
-        }
+
     }
 }

@@ -17,9 +17,6 @@
             Value = value;
         }
 
-        public override IEnumerable<SyntaxNode> GetChildren()
-        {
-            yield return LiteralToken;
-        }
+
     }
 }
