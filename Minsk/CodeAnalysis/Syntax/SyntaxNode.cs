@@ -39,5 +39,49 @@ namespace Minsk.CodeAnalysis.Syntax
                 }
             }
         }
+
+        public void WriteTo(TextWriter writer)
+        {
+            PrintTree(writer, this);
+        }
+
+        private static void PrintTree(TextWriter writer, SyntaxNode node, string indent = "", bool isLast = true)
+        {
+            // |__
+            // |--
+            // |
+
+            var marker = isLast ? "└──" : "├──";
+
+            writer.Write($"{indent}{marker}{node.Kind}");
+
+            if (node is SyntaxToken t && t.Value != null)
+            {
+                writer.Write($" ");
+                writer.Write(t.Value);
+            }
+
+            writer.WriteLine();
+
+            indent += isLast ? "   " : "│  ";
+
+
+            var lastChild = node.GetChildren().LastOrDefault();
+
+            foreach (var child in node.GetChildren())
+            {
+                PrintTree(writer, child, indent, child == lastChild);
+            }
+
+        }
+
+        public override string ToString()
+        {
+            using (var writer = new StringWriter())
+            {
+                WriteTo(writer);
+                return writer.ToString();
+            }
+        }
     }
 }

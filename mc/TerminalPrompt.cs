@@ -56,7 +56,7 @@ namespace Minsk
                 if (showTree)
                 {
                     Console.ForegroundColor = ConsoleColor.DarkGray;
-                    PrintTree(syntaxTree.Root);
+                    syntaxTree.Root.WriteTo(Console.Out);
                     Console.ResetColor();
                 }
 
@@ -133,34 +133,34 @@ namespace Minsk
             Console.WriteLine("Type any expression to evaluate it.");
         }
 
-        private static void PrintTree(SyntaxNode node, string indent = "", bool isLast = true)
-        {
-            // |__
-            // |--
-            // |
+        //private static void PrintTree(SyntaxNode node, string indent = "", bool isLast = true)
+        //{
+        //    // |__
+        //    // |--
+        //    // |
 
-            var marker = isLast ? "└──" : "├──";
+        //    var marker = isLast ? "└──" : "├──";
 
-            Console.Write($"{indent}{marker}{node.Kind}");
+        //    Console.Write($"{indent}{marker}{node.Kind}");
 
-            if (node is SyntaxToken t && t.Value != null)
-            {
-                Console.Write($" ");
-                Console.Write(t.Value);
-            }
+        //    if (node is SyntaxToken t && t.Value != null)
+        //    {
+        //        Console.Write($" ");
+        //        Console.Write(t.Value);
+        //    }
 
-            Console.WriteLine();
+        //    Console.WriteLine();
 
-            indent += isLast ? "   " : "│  ";
+        //    indent += isLast ? "   " : "│  ";
 
 
-            var lastChild = node.GetChildren().LastOrDefault();
+        //    var lastChild = node.GetChildren().LastOrDefault();
 
-            foreach (var child in node.GetChildren())
-            {
-                PrintTree(child, indent, child == lastChild);
-            }
+        //    foreach (var child in node.GetChildren())
+        //    {
+        //        PrintTree(child, indent, child == lastChild);
+        //    }
 
-        }
+        //}
     }
 }
