@@ -1,4 +1,5 @@
-﻿using static System.Net.Mime.MediaTypeNames;
+﻿using Minsk.CodeAnalysis.Text;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Minsk.CodeAnalysis.Syntax
 {
