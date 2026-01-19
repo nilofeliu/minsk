@@ -69,9 +69,17 @@ namespace Minsk
                     Console.WriteLine();
                     List<Exception> exceptions = new();
 
+                    var text = syntaxTree.Text;
+
+
                     foreach (var diagnostic in result.Diagnostics)
                     {
+                        var lineIndex = text.GetLineIndex(diagnostic.Span.Start);
+                        var lineNumber = lineIndex + 1;
+                        var character = diagnostic.Span.Start - text.Lines[lineIndex].Start +1;
+
                         Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write($"({lineNumber}, {character}): ");
                         Console.WriteLine(diagnostic);
                         Console.ResetColor();
 
@@ -95,7 +103,7 @@ namespace Minsk
                         Console.Write("    ");
                         Console.Write(prefix);
 
-                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.ForegroundColor = ConsoleColor.DarkRed;                        
                         Console.Write(error);
                         Console.ResetColor();
 

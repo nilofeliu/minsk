@@ -1,4 +1,5 @@
 ﻿using Minsk.CodeAnalysis.Syntax;
+using Minsk.CodeAnalysis.Text;
 using System.Collections.Immutable;
 
 namespace Minsk.CodeAnalysis.Syntax
@@ -6,11 +7,11 @@ namespace Minsk.CodeAnalysis.Syntax
     internal sealed class Parser
     {
         private DiagnosticBag _diagnostic = new();
+        private readonly SourceText _text;
         private readonly ImmutableArray<SyntaxToken> _tokens;
-
         private int _position;
 
-        public Parser(string text)
+        public Parser(SourceText text)
         {
             List<SyntaxToken> tokens = new List<SyntaxToken>();
 
@@ -28,9 +29,9 @@ namespace Minsk.CodeAnalysis.Syntax
 
             } while (token.Kind != SyntaxKind.EndOfFileToken);
 
+            _text = text;
             _tokens = tokens.ToImmutableArray();
             _diagnostic.AddRange(lexer.Diagnostics);
-
         }
 
 
@@ -66,7 +67,7 @@ namespace Minsk.CodeAnalysis.Syntax
         {
             var expression = ParseExpression();
             var endOfFileToken = MatchToken(SyntaxKind.EndOfFileToken);
-            return new SyntaxTree(_diagnostic.ToImmutableArray(), expression, endOfFileToken);
+            return new SyntaxTree(_text, _diagnostic.ToImmutableArray(), expression, endOfFileToken);
         }
 
         private ExpressionSyntax ParseExpression()
