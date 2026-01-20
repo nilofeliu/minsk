@@ -145,6 +145,7 @@ namespace Minsk
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine(ex.Message);
                 Console.ResetColor();
+                Console.WriteLine(ex.ToString());
             }
         }
         

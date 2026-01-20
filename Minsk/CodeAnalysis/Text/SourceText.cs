@@ -1,6 +1,5 @@
 ﻿
 using System.Collections.Immutable;
-
 namespace Minsk.CodeAnalysis.Text;
 
 
@@ -32,6 +31,7 @@ public sealed class SourceText
 
             if (position == start)
                 return index;
+
             if (start > position)
             {
                 upper = index - 1;

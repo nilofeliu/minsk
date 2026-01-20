@@ -13,8 +13,11 @@
 
         public static TextSpan FromBounds(int start, int end)
         {
-            var length = end - start;
+            
+            var length = end > start ? end - start : 0;
+
             return new TextSpan(start, length);
+
         }
 
         public bool OverlapsWith(TextSpan span)
