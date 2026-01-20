@@ -75,11 +75,12 @@ public sealed class SourceText
         return result.ToImmutable();
     }
 
+
     private static void AddLine(ImmutableArray<TextLine>.Builder result, SourceText sourceText, int position, int lineStart, int lineBreakWidth)
     {
-        var lineLenght = position - lineStart;
-        var lineLenghtIncludingLineBreak = lineLenght + lineBreakWidth;
-        var line = new TextLine(sourceText, lineStart, lineBreakWidth, lineLenghtIncludingLineBreak);
+        var lineLength = position - lineStart;
+        var lineLengthIncludingLineBreak = lineLength + lineBreakWidth;
+        var line = new TextLine(sourceText, lineStart, lineLength, lineLengthIncludingLineBreak);
         result.Add(line);
     }
 
