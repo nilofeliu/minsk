@@ -1,10 +1,12 @@
 ﻿using Minsk.CodeAnalysis.Syntax;
+using Minsk.CodeAnalysis.Text;
 
 namespace Minsk.Tests.CodeAnalysis.Syntax;
 
 public partial class PaserTests
 {
-    public class SyntaxFactTest
+
+    public class SyntaxFactTests
     {
         [Theory]
         [MemberData(nameof(GetSyntaxKindData))]
