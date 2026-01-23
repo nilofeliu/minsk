@@ -21,10 +21,12 @@ namespace Minsk
 
             while (true)
             {
+                Console.ForegroundColor = ConsoleColor.Yellow;
                 if (textBuilder.Length == 0) 
-                    Console.Write("> ");
+                    Console.Write("» ");
                 else
                     Console.Write("| ");
+                Console.ResetColor();
 
                 string input = Console.ReadLine();
                 var isBlank = string.IsNullOrWhiteSpace(input);
@@ -76,15 +78,14 @@ namespace Minsk
                 var result = compilation.Evaluate(variables);
                 
                 if (showTree)
-                {
-                    Console.ForegroundColor = ConsoleColor.DarkGray;
                     syntaxTree.Root.WriteTo(Console.Out);
-                    Console.ResetColor();
-                }
+
 
                 if (!result.Diagnostics.Any())
                 {
+                    Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine($"{result.Value}");
+                    Console.ResetColor();
                 }
                 else
                 {

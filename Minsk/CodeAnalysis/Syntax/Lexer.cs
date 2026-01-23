@@ -1,4 +1,6 @@
 ﻿using Minsk.CodeAnalysis.Text;
+using System.Collections.Immutable;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Minsk.CodeAnalysis.Syntax
 {
@@ -6,7 +8,7 @@ namespace Minsk.CodeAnalysis.Syntax
     {               
         private readonly DiagnosticBag _diagnostics = new();
         private readonly SourceText _text;
-
+        
         private int _position;
         private int _start;
         private SyntaxKind _kind;
@@ -22,6 +24,7 @@ namespace Minsk.CodeAnalysis.Syntax
         private char Current => Peek(0);
 
         private char Lookahead => Peek(1);
+
 
         private char Peek(int offset)
         {
@@ -39,12 +42,10 @@ namespace Minsk.CodeAnalysis.Syntax
 
         public SyntaxToken Lex()
         {
-
             _start = _position;
             _kind = SyntaxKind.BadToken;
             _value = null;
-
-
+                        
             switch (Current)
             {
                 case '\0':
@@ -143,8 +144,11 @@ namespace Minsk.CodeAnalysis.Syntax
             if (text == null)
                 text = _text.ToString(_start, length);
 
-            return new SyntaxToken(_kind, _start, text, _value);
+
+            var token = new SyntaxToken(_kind, _start, text, _value);
             
+            return token;
+
         }
 
         private void ReadIdentifierTokenOrKeyword()
