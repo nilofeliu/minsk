@@ -7,15 +7,19 @@ namespace Minsk.CodeAnalysis.Syntax
     {
         public SourceText Text { get; }
         public ImmutableArray<Diagnostic> Diagnostics { get; }
-        public SyntaxNode Root { get; }
+        public CompilationUnitSyntax Root { get; }
         public SyntaxToken EndOfFileToken { get; }
 
-        public SyntaxTree(SourceText text,ImmutableArray<Diagnostic> diagnostics, SyntaxNode root, SyntaxToken endOfFileToken)
+        public SyntaxTree(SourceText text) //ImmutableArray<Diagnostic> diagnostics, CompilationUnitSyntax root)
         {
+            var parser = new Parser(text);
+            var root = parser.ParseCompilationUnit();
+            var diagnostics = parser.Diagnostics.ToImmutableArray();
+
+
             Text = text;
             Diagnostics = diagnostics;
             Root = root;
-            EndOfFileToken = endOfFileToken;
         }
 
         public static SyntaxTree Parse(string text)
@@ -25,8 +29,7 @@ namespace Minsk.CodeAnalysis.Syntax
         }
         public static SyntaxTree Parse(SourceText text)
         {            
-            var parser = new Parser(text);
-            return parser.Parse();
+            return new SyntaxTree(text);
         }
         public static IEnumerable<SyntaxToken> ParseTokens(string text)
         {

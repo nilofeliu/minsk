@@ -11,6 +11,8 @@ namespace Minsk.CodeAnalysis.Syntax
         private readonly ImmutableArray<SyntaxToken> _tokens;
         private int _position;
 
+        public DiagnosticBag Diagnostics => _diagnostic; 
+
         public Parser(SourceText text)
         {
             List<SyntaxToken> tokens = new List<SyntaxToken>();
@@ -63,11 +65,11 @@ namespace Minsk.CodeAnalysis.Syntax
             return new SyntaxToken(kind, Current.Position, null, null);
         }   
 
-        public SyntaxTree Parse()
+        public CompilationUnitSyntax ParseCompilationUnit()
         {
             var expression = ParseExpression();
             var endOfFileToken = MatchToken(SyntaxKind.EndOfFileToken);
-            return new SyntaxTree(_text, _diagnostic.ToImmutableArray(), expression, endOfFileToken);
+            return new CompilationUnitSyntax(expression, endOfFileToken);
         }
 
         private ExpressionSyntax ParseExpression()

@@ -15,6 +15,8 @@
         CloseParenthesisToken,
         IdentifierToken,
 
+        // Nodes
+        CompilationUnit,
 
         // Operators
         EqualsToken,
