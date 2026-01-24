@@ -2,6 +2,7 @@
 using Minsk.CodeAnalysis.Syntax;
 using Minsk.CodeAnalysis.Text;
 using System.Collections;
+using System.Xml.Linq;
 
 namespace Minsk.CodeAnalysis
 {
@@ -58,10 +59,17 @@ namespace Minsk.CodeAnalysis
             var message = $"Binary operator '{operatorText}' is not defined for types {leftType} and {rightType}.";
             Report(span, message);
         }
-         
-        internal void ReportUndefinedName(TextSpan span, string nameText)
+
+        public void ReportUndefinedName(TextSpan span, string name)
         {
-            var message = $"Variable '{nameText}' doesn't exist.";
+            var message = $"Variable '{name}' doesn't exist.";
+            Report(span, message); ;
+        }
+
+
+        public void ReportCannotConvert(TextSpan span, Type fromType, Type toType)
+        {
+            var message = $"Cannot convert type '{fromType}' to type '{toType}'.";
             Report(span, message); ;
         }
     }

@@ -17,7 +17,7 @@ namespace Minsk
             bool showTree = false;
             Dictionary<VariableSymbol, object> variables = new();
             var textBuilder = new StringBuilder();
-
+            Compilation previous = null;
 
             while (true)
             {
@@ -52,6 +52,9 @@ namespace Minsk
                             case "#cls":
                                 Console.Clear();
                                 continue;
+                            case "#reset":
+                                previous = null;
+                                continue;
                             case "#help":
                                 PrintCommands();
                                 continue;
@@ -74,7 +77,12 @@ namespace Minsk
 
                 
 
-                var compilation = new Compilation(syntaxTree);
+                var compilation = previous == null ?
+                    new Compilation(syntaxTree)
+                    : previous.ContinueWith(syntaxTree);
+
+                // previous = compilation;
+
                 var result = compilation.Evaluate(variables);
                 
                 if (showTree)
@@ -86,6 +94,8 @@ namespace Minsk
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine($"{result.Value}");
                     Console.ResetColor();
+
+                    previous = compilation;
                 }
                 else
                 {
