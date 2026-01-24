@@ -22,7 +22,7 @@ namespace Minsk.CodeAnalysis.Binding
             return true;
         }
 
-        public bool TryLookUp(string name, out VariableSymbol variable)
+        public bool TryLookup(string name, out VariableSymbol variable)
         { 
             if (_variables.TryGetValue(name, out variable))
                 return true;
@@ -30,7 +30,7 @@ namespace Minsk.CodeAnalysis.Binding
             if (Parent == null)
                 return false;
 
-            return (Parent.TryLookUp(name, out variable));
+            return (Parent.TryLookup(name, out variable));
         
         }
 

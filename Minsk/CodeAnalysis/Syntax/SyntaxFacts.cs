@@ -86,6 +86,8 @@ namespace Minsk.CodeAnalysis.Syntax
                 SyntaxKind.SlashToken => "/",
                 SyntaxKind.OpenParenthesisToken => "(",
                 SyntaxKind.CloseParenthesisToken => ")",
+                SyntaxKind.OpenBraceToken => "{",
+                SyntaxKind.CloseBraceToken => "}",
                 SyntaxKind.EqualsToken => "=",
                 SyntaxKind.BangToken => "!",
                 SyntaxKind.AmpersandAmpersandToken => "&&",

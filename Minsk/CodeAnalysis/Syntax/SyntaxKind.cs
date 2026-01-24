@@ -13,6 +13,8 @@
         SlashToken,
         OpenParenthesisToken,
         CloseParenthesisToken,
+        CloseBraceToken,
+        OpenBraceToken,
         IdentifierToken,
 
         // Nodes
@@ -30,6 +32,10 @@
         TrueKeyword,
         FalseKeyword,
 
+        //Statements
+        BlockStatement,
+        ExpressionStatement,
+
         // Expressions
         LiteralExpression,
         NameExpression,
@@ -37,6 +43,6 @@
         BinaryExpression,
         ParenthesisedExpression,
         AssignmentExpression,
-        
+        VariableDeclaration,
     }
 }
