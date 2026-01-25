@@ -30,11 +30,13 @@ namespace Minsk.CodeAnalysis
 
         public void EvaluateStatement(BoundStatement node)
         {
-
             switch (node.Kind)
             {
                 case BoundNodeKind.BlockStatement:
                      EvaluateBlockStatement((BoundBlockStatement)node);
+                    break;
+                case BoundNodeKind.VariableDeclaration:
+                    EvaluateVariableDeclaration((BoundVariableDeclaration)node);
                     break;
                 case BoundNodeKind.ExpressionStatement:
                      EvaluateExpressionStatement((BoundExpressionStatement)node);
@@ -42,8 +44,15 @@ namespace Minsk.CodeAnalysis
                 default:
                     throw new Exception($"Unexpected node {node.Kind}");
             }
-
         }
+
+        private void EvaluateVariableDeclaration(BoundVariableDeclaration node)
+        {
+            var value = EvaluateExpression(node.Initializer);
+            _variables[node.Variable] = value;
+            _lastValue = value;
+        }
+
         private void EvaluateBlockStatement(BoundBlockStatement node)
         {
             foreach (var statement in node.Statements)

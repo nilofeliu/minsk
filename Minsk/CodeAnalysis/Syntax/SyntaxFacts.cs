@@ -49,10 +49,15 @@ namespace Minsk.CodeAnalysis.Syntax
         {
             switch (text)
             {
-                case "true":
-                    return SyntaxKind.TrueKeyword;
+
                 case "false":
                     return SyntaxKind.FalseKeyword;
+                case "let":
+                    return SyntaxKind.LetKeyword;
+                case "true":
+                    return SyntaxKind.TrueKeyword;
+                case "var":
+                    return SyntaxKind.VarKeyword;
                 default:
                     return SyntaxKind.IdentifierToken;
             }
@@ -96,6 +101,8 @@ namespace Minsk.CodeAnalysis.Syntax
                 SyntaxKind.BangEqualsToken => "!=",
                 SyntaxKind.TrueKeyword => "true",
                 SyntaxKind.FalseKeyword => "false",
+                SyntaxKind.LetKeyword  => "let",
+                SyntaxKind.VarKeyword => "var",
                 _ => null,
             };
         }

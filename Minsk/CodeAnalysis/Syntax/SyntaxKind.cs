@@ -31,10 +31,13 @@
         // Keywords
         TrueKeyword,
         FalseKeyword,
+        LetKeyword,
+        VarKeyword,
 
         //Statements
         BlockStatement,
         ExpressionStatement,
+        VariableDeclaration,
 
         // Expressions
         LiteralExpression,
@@ -43,6 +46,6 @@
         BinaryExpression,
         ParenthesisedExpression,
         AssignmentExpression,
-        VariableDeclaration,
+
     }
 }
