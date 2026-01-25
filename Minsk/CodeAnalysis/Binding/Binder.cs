@@ -8,8 +8,7 @@ internal sealed class Binder
 {
     private readonly Dictionary<VariableSymbol, object> _variables;
     private readonly DiagnosticBag _diagnostics = new DiagnosticBag();
-    
-    
+
     private BoundScope _scope;
 
     public Binder(BoundScope parent)
