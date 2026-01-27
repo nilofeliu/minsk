@@ -11,8 +11,7 @@ namespace Minsk.CodeAnalysis
 
         public Compilation(SyntaxTree syntaxTree) 
             : this(null, syntaxTree) 
-        {
-            SyntaxTree = syntaxTree;
+        {  
         }
 
         private Compilation(Compilation previous, SyntaxTree syntaxTree)
@@ -21,9 +20,9 @@ namespace Minsk.CodeAnalysis
             SyntaxTree = syntaxTree;
         }
 
-        public SyntaxTree SyntaxTree { get; }
         public Compilation Previous { get; }
-
+        public SyntaxTree SyntaxTree { get; }
+        
         internal BoundGlobalScope GlobalScope
         {
             get 
@@ -33,10 +32,11 @@ namespace Minsk.CodeAnalysis
                     var globalScope = Binder.BindGlobalScope(Previous?.GlobalScope, SyntaxTree.Root);
                     Interlocked.CompareExchange(ref _globalScope, globalScope, null);
                 }
-
                 return _globalScope; 
             }
         }
+
+   
 
         public Compilation ContinueWith(SyntaxTree syntaxTree)
         {
@@ -52,8 +52,33 @@ namespace Minsk.CodeAnalysis
             var evaluator = new Evaluator(GlobalScope.Statement, variables);
             var value = evaluator.Evaluate();
 
+            ReadGlobalScopeVariables(GlobalScope);
+
             return new EvaluationResult(ImmutableArray< Diagnostic>.Empty, value);
         }
+        // my own hlper method for debugging
 
+        private int _index = 0;
+
+        internal void ReadGlobalScopeVariables(BoundGlobalScope scope)
+        {
+            _index++;
+            Console.WriteLine("------------------");
+            Console.WriteLine($"Current GlobalScope count is {_globalScope.Variables.Count()}");
+            foreach (var variable in scope.Variables)
+            {
+                Console.WriteLine($"Var '{variable.Name}' Type = {variable.Type}.");
+            }
+
+            if (scope.Previous != null)
+            {
+
+                Console.WriteLine($"Parent Scope {_index} count is {_globalScope.Variables.Count()}");
+                ReadGlobalScopeVariables(scope.Previous);
+                Console.WriteLine("------------------");
+            }
+            else
+                _index = 0;
+        }
     }
 }

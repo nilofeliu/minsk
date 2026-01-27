@@ -75,15 +75,20 @@ namespace Minsk
                     continue;
                 }
 
-                
+                //var compilation = previous == null 
+                //    ? new Compilation(syntaxTree)
+                //    : previous.ContinueWith(syntaxTree);
 
-                var compilation = previous == null ?
-                    new Compilation(syntaxTree)
-                    : previous.ContinueWith(syntaxTree);
+                Compilation compilation;
 
-                // previous = compilation;
+                if (previous == null)
+                    compilation = new Compilation(syntaxTree);
+                else
+                    compilation = previous.ContinueWith(syntaxTree);
 
-                var result = compilation.Evaluate(variables);
+                    previous = compilation;
+
+                    var result = compilation.Evaluate(variables);
                 
                 if (showTree)
                     syntaxTree.Root.WriteTo(Console.Out);
@@ -95,7 +100,7 @@ namespace Minsk
                     Console.WriteLine($"{result.Value}");
                     Console.ResetColor();
 
-                    previous = compilation;
+                    //previous = compilation;
                 }
                 else
                 {

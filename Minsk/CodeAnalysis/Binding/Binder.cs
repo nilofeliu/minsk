@@ -6,14 +6,13 @@ namespace Minsk.CodeAnalysis.Binding;
 
 internal sealed class Binder
 {
-    private readonly Dictionary<VariableSymbol, object> _variables;
     private readonly DiagnosticBag _diagnostics = new DiagnosticBag();
 
     private BoundScope _scope;
 
     public Binder(BoundScope parent)
     {
-        _scope = new BoundScope(parent);
+        _scope = new BoundScope(parent); 
     }
 
     public static BoundGlobalScope BindGlobalScope(BoundGlobalScope previous, CompilationUnitSyntax syntax)
@@ -26,7 +25,8 @@ internal sealed class Binder
 
         if (previous != null)
             diagnostics = diagnostics.InsertRange(0, previous.Diagnostics);
-
+        
+        
         return new BoundGlobalScope(previous, diagnostics, variables, expression);
     }
 
