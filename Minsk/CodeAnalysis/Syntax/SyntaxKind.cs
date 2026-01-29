@@ -17,6 +17,7 @@
         OpenBraceToken,
         IdentifierToken,
 
+
         // Nodes
         CompilationUnit,
 
@@ -27,6 +28,10 @@
         PipePipeToken,
         EqualsEqualsToken,
         BangEqualsToken,
+        LessToken,
+        LessOrEqualsToken,
+        GreaterToken,
+        GreaterOrEqualsToken,
 
         // Keywords
         TrueKeyword,

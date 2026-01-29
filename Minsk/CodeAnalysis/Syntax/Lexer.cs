@@ -98,27 +98,52 @@ namespace Minsk.CodeAnalysis.Syntax
                     }
                     break;
                 case '=':
-                    if (Lookahead == '=')
-                    {
-                        _kind = SyntaxKind.EqualsEqualsToken;
-                        _position += 2;
-                    }
-                    else
+                    if (Lookahead != '=')
                     {
                         _kind = SyntaxKind.EqualsToken;
                         _position++;
                     }
+                    else
+                    {
+                        _kind = SyntaxKind.EqualsEqualsToken;
+                        _position += 2;
+                    }
                     break;
                 case '!':
-                    if (Lookahead == '=')
+                    if (Lookahead != '=')
+                    {
+                        _kind = SyntaxKind.BangToken;
+                        _position++;
+                    }
+                    else
                     {
                         _kind = SyntaxKind.BangEqualsToken;
                         _position += 2;
 
                     }
+                    break;
+                case '<':
+                    if (Lookahead == '=')
+                    {
+                        _kind = SyntaxKind.LessOrEqualsToken;
+                        _position += 2;
+                    }
                     else
                     {
-                        _kind = SyntaxKind.BangToken;
+                        _kind = SyntaxKind.LessToken;
+                        _position++;
+                    }
+                    break;
+                case '>':
+                    if (Lookahead == '=')
+                    {
+                        _kind = SyntaxKind.GreaterOrEqualsToken;
+                        _position += 2;
+
+                    }
+                    else
+                    {
+                        _kind = SyntaxKind.GreaterToken;
                         _position++;
                     }
                     break;

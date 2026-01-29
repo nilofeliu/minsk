@@ -6,6 +6,7 @@
         Subtraction,
         Multiplication,
         Division,
+
         BitwiseAnd,
         BitwiseOr,
         ExclusiveOr,
@@ -13,10 +14,12 @@
         RightShift,
         Equals,
         NotEquals,
-        LessThan,
-        LessThanOrEqual,
-        GreaterThan,
-        GreaterThanOrEqual,
+
+        Less,
+        LessOrEquals,
+        Greater,
+        GreaterOrEquals,
+
         LogicalAnd,
         LogicalOr,
     }

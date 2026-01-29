@@ -32,6 +32,10 @@ namespace Minsk.CodeAnalysis.Syntax
 
                 case SyntaxKind.EqualsEqualsToken:
                 case SyntaxKind.BangEqualsToken:
+                case SyntaxKind.GreaterOrEqualsToken:
+                case SyntaxKind.GreaterToken:
+                case SyntaxKind.LessOrEqualsToken:
+                case SyntaxKind.LessToken:
                     return 3;
 
                 case SyntaxKind.AmpersandAmpersandToken:
@@ -94,6 +98,10 @@ namespace Minsk.CodeAnalysis.Syntax
                 SyntaxKind.OpenBraceToken => "{",
                 SyntaxKind.CloseBraceToken => "}",
                 SyntaxKind.EqualsToken => "=",
+                SyntaxKind.GreaterToken => ">",
+                SyntaxKind.GreaterOrEqualsToken => ">=",
+                SyntaxKind.LessToken => "<",
+                SyntaxKind.LessOrEqualsToken => "<=",
                 SyntaxKind.BangToken => "!",
                 SyntaxKind.AmpersandAmpersandToken => "&&",
                 SyntaxKind.PipePipeToken => "||",

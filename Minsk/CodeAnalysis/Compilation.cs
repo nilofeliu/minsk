@@ -9,9 +9,10 @@ namespace Minsk.CodeAnalysis
 
         private BoundGlobalScope _globalScope;
 
+
         public Compilation(SyntaxTree syntaxTree) 
             : this(null, syntaxTree) 
-        {  
+        {
         }
 
         private Compilation(Compilation previous, SyntaxTree syntaxTree)
@@ -22,7 +23,7 @@ namespace Minsk.CodeAnalysis
 
         public Compilation Previous { get; }
         public SyntaxTree SyntaxTree { get; }
-        
+                
         internal BoundGlobalScope GlobalScope
         {
             get 
