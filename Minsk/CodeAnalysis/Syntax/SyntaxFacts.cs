@@ -56,6 +56,10 @@ namespace Minsk.CodeAnalysis.Syntax
 
                 case "false":
                     return SyntaxKind.FalseKeyword;
+                case "if":
+                    return SyntaxKind.IfKeyword;
+                case "else":
+                    return SyntaxKind.ElseKeyword;
                 case "let":
                     return SyntaxKind.LetKeyword;
                 case "true":
@@ -107,10 +111,13 @@ namespace Minsk.CodeAnalysis.Syntax
                 SyntaxKind.PipePipeToken => "||",
                 SyntaxKind.EqualsEqualsToken => "==",
                 SyntaxKind.BangEqualsToken => "!=",
+
                 SyntaxKind.TrueKeyword => "true",
                 SyntaxKind.FalseKeyword => "false",
                 SyntaxKind.LetKeyword  => "let",
                 SyntaxKind.VarKeyword => "var",
+                SyntaxKind.IfKeyword => "if",
+                SyntaxKind.ElseKeyword => "else",
                 _ => null,
             };
         }

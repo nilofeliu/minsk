@@ -20,6 +20,7 @@
 
         // Nodes
         CompilationUnit,
+        ElseClause,
 
         // Operators
         EqualsToken,
@@ -39,11 +40,6 @@
         LetKeyword,
         VarKeyword,
 
-        //Statements
-        BlockStatement,
-        ExpressionStatement,
-        VariableDeclaration,
-
         // Expressions
         LiteralExpression,
         NameExpression,
@@ -52,5 +48,12 @@
         ParenthesisedExpression,
         AssignmentExpression,
 
+        //Statements
+        BlockStatement,
+        ExpressionStatement,
+        VariableDeclaration,
+        IfStatement,
+        IfKeyword,
+        ElseKeyword,
     }
 }

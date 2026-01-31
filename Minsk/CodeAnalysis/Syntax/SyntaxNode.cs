@@ -35,7 +35,8 @@ namespace Minsk.CodeAnalysis.Syntax
                     if (children != null)
                     {
                         foreach (var child in children)
-                            yield return child;
+                            if (child != null)
+                                yield return child;
                     }
                 }
             }
