@@ -20,6 +20,7 @@
         ExpressionStatement,
         VariableDeclaration,
         IfStatement,
+        WhileStatement,
     }
 }
 

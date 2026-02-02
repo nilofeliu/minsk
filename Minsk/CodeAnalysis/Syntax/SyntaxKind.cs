@@ -52,8 +52,10 @@
         BlockStatement,
         ExpressionStatement,
         VariableDeclaration,
+        WhileStatement,
         IfStatement,
         IfKeyword,
         ElseKeyword,
+        WhileKeyword,
     }
 }

@@ -177,6 +177,26 @@ public class LexerTests
                        
         if (t1 == SyntaxKind.WhiteSpaceToken && t2 == SyntaxKind.WhiteSpaceToken)
             return true;
+        
+        if (t1 == SyntaxKind.LessToken && t2 == SyntaxKind.EqualsToken)
+            return true;
+        if (t1 == SyntaxKind.LessToken && t2 == SyntaxKind.EqualsEqualsToken)
+            return true;
+        if (t1 == SyntaxKind.GreaterToken && t2 == SyntaxKind.EqualsToken)
+            return true;
+        if (t1 == SyntaxKind.GreaterToken && t2 == SyntaxKind.EqualsEqualsToken)
+            return true;
+
+
+        //if (t1 == SyntaxKind.LessOrEqualsToken && t2 == SyntaxKind.EqualsToken)
+        //    return true;
+        //if (t1 == SyntaxKind.LessOrEqualsToken && t2 == SyntaxKind.EqualsEqualsToken)
+        //    return true;
+        //if (t1 == SyntaxKind.GreaterOrEqualsToken && t2 == SyntaxKind.EqualsToken)
+        //    return true;
+        //if (t1 == SyntaxKind.GreaterOrEqualsToken && t2 == SyntaxKind.EqualsEqualsToken)
+        //    return true;
+
         return false;
     }
 

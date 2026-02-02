@@ -66,6 +66,8 @@ internal sealed class Binder
                 return BindVariableDeclaration((VariableDeclarationSyntax)syntax);
             case SyntaxKind.IfStatement:
                 return BindIfStatement((IfStatementSyntax)syntax);
+            case SyntaxKind.WhileStatement:
+                return BindWhileStatement((WhileStatementSyntax)syntax);
             case SyntaxKind.ExpressionStatement:
                 return BindExpressionStatement((ExpressionStatementSyntax)syntax);
             default:
@@ -87,11 +89,6 @@ internal sealed class Binder
         _scope = _scope.Parent;
 
         return new BoundBlockStatement(statements.ToImmutable());
-    }
-    private BoundStatement BindExpressionStatement(ExpressionStatementSyntax syntax)
-    {
-        var expression = BindExpression(syntax.Expression);
-        return new BoundExpressionStatement(expression);
     }
 
     private BoundStatement BindVariableDeclaration(VariableDeclarationSyntax syntax)
@@ -117,6 +114,14 @@ internal sealed class Binder
         return new BoundIfStatement(condition, thenStatement, elseStatement);
     }
 
+    private BoundStatement BindWhileStatement(WhileStatementSyntax syntax)
+    {
+        var condition = BindExpression(syntax.Condition, typeof(bool));
+        var body = BindStatement(syntax.Body);
+
+        return new BoundWhileStatement(condition, body);
+    }
+
     private BoundExpression BindExpression(ExpressionSyntax syntax, Type targetType)
     {
         var result = BindExpression(syntax);
@@ -126,6 +131,11 @@ internal sealed class Binder
         return result;
     }
 
+    private BoundStatement BindExpressionStatement(ExpressionStatementSyntax syntax)
+    {
+        var expression = BindExpression(syntax.Expression);
+        return new BoundExpressionStatement(expression);
+    }
 
     public BoundExpression BindExpression(ExpressionSyntax syntax)
     {

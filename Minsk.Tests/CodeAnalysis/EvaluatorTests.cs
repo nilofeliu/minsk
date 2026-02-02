@@ -23,6 +23,18 @@ namespace Minsk.Tests.CodeAnalysis
         [InlineData("12 != 3", true)]
         [InlineData("3 != 3", false)]
 
+        [InlineData("3 < 4", true)]
+        [InlineData("3 < 2", false)]
+        [InlineData("4 <= 4", true)]
+        [InlineData("4 <= 5", true)]
+        [InlineData("3 <= 2", false)]
+
+        [InlineData("5 > 4", true)]
+        [InlineData("4 > 5", false)]
+        [InlineData("4 >= 4", true)]
+        [InlineData("5 >= 4", true)]
+        [InlineData("4 >= 5", false)]
+
         [InlineData("false == false", true)]
         [InlineData("true == false", false)]
         [InlineData("false != false", false)]
@@ -32,6 +44,14 @@ namespace Minsk.Tests.CodeAnalysis
         [InlineData("!true", false)]
         [InlineData("!false", true)]
         [InlineData("{var a = 0 ( a = 10) * a }", 100)]
+        [InlineData("{var a = 0 if a == 0 a = 10 a }", 10)]
+        [InlineData("{var a = 0 if a == 4 a = 10 a }", 0)]
+
+        [InlineData("{var a = 0 if a == 0 a = 10 else a = 5 a }", 10)]
+        [InlineData("{var a = 0 if a == 4 a = 10 else a = 5 a }", 5)]
+
+        [InlineData("{var i = 10 var result = 0 while i > 0 { result = result + i i = i -1} result }", 55 )]
+
         public void SyntaxFact_GetText_RoundTrips(string text, object expectedValue)
         {
             var syntaxTree = SyntaxTree.Parse(text);
@@ -64,6 +84,23 @@ namespace Minsk.Tests.CodeAnalysis
             AssertDiagnostics(text, diagnostics);
         }
 
+        [Fact]
+        public void Evaluator_IfStatement_Reports_CannotConvert()
+        {
+            var text = @"
+                {
+                    var x = 0
+                    if [10]
+                        x = 10
+                }
+            ";
+
+            var diagnostics = @"
+                Cannot convert type 'System.Int32' to 'System.Boolean'.
+            ";
+
+            AssertDiagnostics(text, diagnostics);
+        }
         public void Evaluator_NameExpression_Reports_Undefined()
         {
             var text = @"[x] * 10";

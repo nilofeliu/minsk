@@ -16,5 +16,4 @@
         public StatementSyntax ThenStatement { get; }
         public ElseClauseSyntax ElseClause { get; }
     }
-
 }
