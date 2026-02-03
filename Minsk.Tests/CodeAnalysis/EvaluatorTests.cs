@@ -86,6 +86,23 @@ namespace Minsk.Tests.CodeAnalysis
             AssertDiagnostics(text, diagnostics);
         }
 
+
+        [Fact]
+        public void Evaluator_BlockStatement_NoInfiniteLoop()
+        {
+            var text = @"
+                {
+                [)][]
+            ";
+
+            var diagnostics = @"
+                Unexpected token <CloseParenthesisToken>, expected <IdentifierToken>.
+                Unexpected token <EndOfFileToken>, expected <CloseBraceToken>.
+            ";
+
+            AssertDiagnostics(text, diagnostics);
+        }
+
         [Fact]
         public void Evaluator_IfStatement_Reports_CannotConvert()
         {
