@@ -85,6 +85,8 @@ namespace Minsk.CodeAnalysis.Syntax
                     return ParseIfStatement();
                 case SyntaxKind.WhileKeyword:
                     return ParseWhileStatement();
+                case SyntaxKind.ForKeyword:
+                    return ParseForStatement();
                 default:
                     return ParseExpressionStatement();
             }
@@ -128,6 +130,19 @@ namespace Minsk.CodeAnalysis.Syntax
             var body = ParseStatement();
 
             return new WhileStatementSyntax(keyword, condition, body);
+        }
+
+        private StatementSyntax ParseForStatement()
+        {
+            var keyword = MatchToken(SyntaxKind.ForKeyword);
+            var identifier = MatchToken(SyntaxKind.IdentifierToken);
+            var equals = MatchToken(SyntaxKind.EqualsToken);
+            var lowerBound = ParseExpression();
+            var toKeword = MatchToken(SyntaxKind.ToKeyword);
+            var upperBound = ParseExpression();
+            var body = ParseStatement();
+            
+            return new ForStatementSyntax(keyword, identifier, equals, lowerBound, toKeword, upperBound, body);
         }
 
         private BlockStatementSyntax ParseBlockStatement()
