@@ -150,11 +150,23 @@ namespace Minsk.CodeAnalysis.Syntax
             var statements = ImmutableArray.CreateBuilder<StatementSyntax>();
 
             var openBraceToken = MatchToken(SyntaxKind.OpenBraceToken);
+            
+
             while (Current.Kind != SyntaxKind.EndOfFileToken &&
                 Current.Kind!= SyntaxKind.CloseBraceToken)
             {
+
+                var startToken = Current;
+
                 var statement = ParseStatement();
                 statements.Add(statement);
+
+                // if ParseStatement does not consume any token,
+                // skip the current token and continue.
+                // No error needs to be reporteed, because it has 
+                // already been tried to parse the expression;
+
+                if (Current == startToken) NextToken();
             }
 
             var closeBraceToken = MatchToken(SyntaxKind.CloseBraceToken);

@@ -171,17 +171,17 @@ namespace Minsk.Tests.CodeAnalysis
             AssertDiagnostics(text, diagnostics);
         }
 
-        //[Fact]
-        //public void Evaluator_NameExpression_Reports_NoErrorForInsertedToken()
-        //{
-        //    var text = @"[]";
+        [Fact]
+        public void Evaluator_NameExpression_Reports_NoErrorForInsertedToken()
+        {
+            var text = @"[]";
 
-        //    var diagnostics = @"
-        //        Unexpected token <EndOfFileToken>, expected <IdentifierToken>.
-        //    ";
+            var diagnostics = @"
+                Unexpected token <EndOfFileToken>, expected <IdentifierToken>.
+            ";
 
-        //    AssertDiagnostics(text, diagnostics);
-        //}
+            AssertDiagnostics(text, diagnostics);
+        }
 
         [Fact]
         public void Evaluator_UnaryExpression_Reports_Undefined()
