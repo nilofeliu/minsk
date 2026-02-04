@@ -5,6 +5,7 @@ using Minsk.CodeAnalysis.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,6 +16,7 @@ namespace Minsk
         internal static void PromptReader()
         {
             bool showTree = false;
+            bool showScope = false;
             Dictionary<VariableSymbol, object> variables = new();
             var textBuilder = new StringBuilder();
             Compilation previous = null;
@@ -86,10 +88,10 @@ namespace Minsk
                 else
                     compilation = previous.ContinueWith(syntaxTree);
 
-                    previous = compilation;
+                // previous = compilation;
 
-                    var result = compilation.Evaluate(variables);
-                
+                var result = compilation.Evaluate(variables);
+
                 if (showTree)
                     syntaxTree.Root.WriteTo(Console.Out);
 
@@ -100,7 +102,7 @@ namespace Minsk
                     Console.WriteLine($"{result.Value}");
                     Console.ResetColor();
 
-                    //previous = compilation;
+                    previous = compilation;
                 }
                 else
                 {
@@ -164,8 +166,8 @@ namespace Minsk
                 Console.WriteLine(ex.ToString());
             }
         }
-        
-        
+
+
         private static void PrintCommands()
         {
             Console.WriteLine("Available commands:");
