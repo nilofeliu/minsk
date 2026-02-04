@@ -9,7 +9,6 @@ namespace Minsk.CodeAnalysis
 
         private BoundGlobalScope _globalScope;
 
-
         public Compilation(SyntaxTree syntaxTree) 
             : this(null, syntaxTree) 
         {
@@ -36,8 +35,7 @@ namespace Minsk.CodeAnalysis
                 return _globalScope; 
             }
         }
-
-   
+          
 
         public Compilation ContinueWith(SyntaxTree syntaxTree)
         {
@@ -53,7 +51,6 @@ namespace Minsk.CodeAnalysis
             var evaluator = new Evaluator(GlobalScope.Statement, variables);
             var value = evaluator.Evaluate();
 
-            ReadGlobalScopeVariables(GlobalScope);
 
             return new EvaluationResult(ImmutableArray< Diagnostic>.Empty, value);
         }
@@ -65,7 +62,7 @@ namespace Minsk.CodeAnalysis
         {
             _index++;
             Console.WriteLine("------------------");
-            Console.WriteLine($"Current GlobalScope count is {_globalScope.Variables.Count()}");
+            Console.WriteLine($"Current scope layer is {_globalScope.Variables.Count()}");
             foreach (var variable in scope.Variables)
             {
                 Console.WriteLine($"Var '{variable.Name}' Type = {variable.Type}.");
@@ -73,10 +70,7 @@ namespace Minsk.CodeAnalysis
 
             if (scope.Previous != null)
             {
-
-                Console.WriteLine($"Parent Scope {_index} count is {_globalScope.Variables.Count()}");
                 ReadGlobalScopeVariables(scope.Previous);
-                Console.WriteLine("------------------");
             }
             else
                 _index = 0;

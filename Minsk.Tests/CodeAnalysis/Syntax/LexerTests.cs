@@ -7,7 +7,7 @@ namespace Minsk.Tests.CodeAnalysis.Syntax;
 public class LexerTests
 {
     [Fact]
-    public void Lexer_Tests_AllTokens()
+    public void Lexer_Tests_CoverAllTokens()
     {
         var tokenKinds = Enum.GetValues(typeof(SyntaxKind))
             .Cast<SyntaxKind>()
@@ -190,14 +190,14 @@ public class LexerTests
             return true;
 
 
-        //if (t1 == SyntaxKind.LessOrEqualsToken && t2 == SyntaxKind.EqualsToken)
-        //    return true;
-        //if (t1 == SyntaxKind.LessOrEqualsToken && t2 == SyntaxKind.EqualsEqualsToken)
-        //    return true;
-        //if (t1 == SyntaxKind.GreaterOrEqualsToken && t2 == SyntaxKind.EqualsToken)
-        //    return true;
-        //if (t1 == SyntaxKind.GreaterOrEqualsToken && t2 == SyntaxKind.EqualsEqualsToken)
-        //    return true;
+        if (t1 == SyntaxKind.AmpersandToken && t2 == SyntaxKind.AmpersandToken)
+            return true;
+        if (t1 == SyntaxKind.AmpersandToken && t2 == SyntaxKind.AmpersandAmpersandToken)
+            return true;
+        if (t1 == SyntaxKind.PipeToken && t2 == SyntaxKind.PipeToken)
+            return true;
+        if (t1 == SyntaxKind.PipeToken && t2 == SyntaxKind.PipePipeToken)
+            return true;
 
         return false;
     }

@@ -33,7 +33,7 @@ namespace Minsk.CodeAnalysis
             switch (node.Kind)
             {
                 case BoundNodeKind.BlockStatement:
-                     EvaluateBlockStatement((BoundBlockStatement)node);
+                    EvaluateBlockStatement((BoundBlockStatement)node);
                     break;
                 case BoundNodeKind.VariableDeclaration:
                     EvaluateVariableDeclaration((BoundVariableDeclaration)node);
@@ -48,7 +48,7 @@ namespace Minsk.CodeAnalysis
                     EvaluateForStatement((BoundForStatement)node);
                     break;
                 case BoundNodeKind.ExpressionStatement:
-                     EvaluateExpressionStatement((BoundExpressionStatement)node);
+                    EvaluateExpressionStatement((BoundExpressionStatement)node);
                     break;
                 default:
                     throw new Exception($"Unexpected node {node.Kind}");
@@ -154,6 +154,8 @@ namespace Minsk.CodeAnalysis
                     return -(int)operand;
                 case BoundUnaryOperatorKind.LogicalNegation:
                     return !(bool)operand;
+                case BoundUnaryOperatorKind.OnesComplement:
+                    return ~(int)operand;
                 default:
                     throw new Exception($"Unexpected unary operator {u.Op}");
             }
@@ -162,7 +164,7 @@ namespace Minsk.CodeAnalysis
         {
             var left = EvaluateExpression(b.Left);
             var right = EvaluateExpression(b.Right);
-         
+
             switch (b.Op.Kind)
             {
                 case BoundBinaryOperatorKind.Addition:
@@ -177,6 +179,24 @@ namespace Minsk.CodeAnalysis
                     return (bool)left && (bool)right;
                 case BoundBinaryOperatorKind.LogicalOr:
                     return (bool)left || (bool)right;
+
+                case BoundBinaryOperatorKind.BitwiseAnd:
+                    if (b.Type == typeof(int))
+                        return (int)left & (int)right;
+                    else
+                        return (bool)left & (bool)right;
+                case BoundBinaryOperatorKind.BitwiseOr:
+                    if (b.Type == typeof(int))
+                        return (int)left | (int)right;
+                    else
+                        return (bool)left | (bool)right;
+                case BoundBinaryOperatorKind.BitwiseXor:
+                    if (b.Type == typeof(int))
+                        return (int)left ^ (int)right;
+                    else
+                        return (bool)left ^ (bool)right;
+
+
                 case BoundBinaryOperatorKind.Equals:
                     return Equals(left, right);
                 case BoundBinaryOperatorKind.NotEquals:
@@ -189,6 +209,8 @@ namespace Minsk.CodeAnalysis
                     return (int)left > (int)right;
                 case BoundBinaryOperatorKind.GreaterOrEquals:
                     return (int)left >= (int)right;
+
+
                 default:
                     throw new Exception($"Unexpected binary operator {b.Op}");
             }

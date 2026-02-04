@@ -10,6 +10,7 @@ namespace Minsk.CodeAnalysis.Syntax
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.MinusToken:
                 case SyntaxKind.BangToken:
+                case SyntaxKind.TildeToken:
                     return 6;   
 
                 default:
@@ -39,9 +40,12 @@ namespace Minsk.CodeAnalysis.Syntax
                     return 3;
 
                 case SyntaxKind.AmpersandAmpersandToken:
+                case SyntaxKind.AmpersandToken:
                     return 2;
 
+                case SyntaxKind.PipeToken:
                 case SyntaxKind.PipePipeToken:
+                case SyntaxKind.HatToken:
                     return 1;
 
                 default:
@@ -103,20 +107,26 @@ namespace Minsk.CodeAnalysis.Syntax
                 SyntaxKind.MinusToken => "-",
                 SyntaxKind.StarToken => "*",
                 SyntaxKind.SlashToken => "/",
+
                 SyntaxKind.OpenParenthesisToken => "(",
                 SyntaxKind.CloseParenthesisToken => ")",
                 SyntaxKind.OpenBraceToken => "{",
                 SyntaxKind.CloseBraceToken => "}",
+
                 SyntaxKind.EqualsToken => "=",
+                SyntaxKind.EqualsEqualsToken => "==",
                 SyntaxKind.GreaterToken => ">",
                 SyntaxKind.GreaterOrEqualsToken => ">=",
                 SyntaxKind.LessToken => "<",
                 SyntaxKind.LessOrEqualsToken => "<=",
                 SyntaxKind.BangToken => "!",
-                SyntaxKind.AmpersandAmpersandToken => "&&",
-                SyntaxKind.PipePipeToken => "||",
-                SyntaxKind.EqualsEqualsToken => "==",
                 SyntaxKind.BangEqualsToken => "!=",
+                SyntaxKind.AmpersandAmpersandToken => "&&",
+                SyntaxKind.AmpersandToken => "&",
+                SyntaxKind.PipePipeToken => "||",
+                SyntaxKind.PipeToken => "|",
+                SyntaxKind.TildeToken => "~",
+                SyntaxKind.HatToken => "^",
 
                 SyntaxKind.TrueKeyword => "true",
                 SyntaxKind.FalseKeyword => "false",

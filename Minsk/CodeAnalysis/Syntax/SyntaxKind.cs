@@ -22,16 +22,20 @@
         ElseClause,
 
         // Operators
-        EqualsToken,
-        BangToken,
+        AmpersandToken,
         AmpersandAmpersandToken,
-        PipePipeToken,
-        EqualsEqualsToken,
+        BangToken,
         BangEqualsToken,
+        EqualsToken,
+        EqualsEqualsToken,
         LessToken,
         LessOrEqualsToken,
         GreaterToken,
         GreaterOrEqualsToken,
+        HatToken,
+        PipeToken,
+        PipePipeToken,
+        TildeToken,
 
         // Keywords
         TrueKeyword,
@@ -45,20 +49,19 @@
         ToKeyword,
 
         // Expressions
+        AssignmentExpression,
+        BinaryExpression,
         LiteralExpression,
         NameExpression,
-        UnaryExpression,
-        BinaryExpression,
         ParenthesisedExpression,
-        AssignmentExpression,
+        UnaryExpression,
 
         //Statements
         BlockStatement,
         ExpressionStatement,
-        VariableDeclaration,
-        WhileStatement,
-        IfStatement,
         ForStatement,
-
+        IfStatement,
+        WhileStatement,
+        VariableDeclaration,
     }
 }

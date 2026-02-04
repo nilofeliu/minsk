@@ -9,6 +9,8 @@
 
         BitwiseAnd,
         BitwiseOr,
+        BitwiseXor,
+
         ExclusiveOr,
         LeftShift,
         RightShift,
