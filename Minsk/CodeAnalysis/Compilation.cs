@@ -54,26 +54,10 @@ namespace Minsk.CodeAnalysis
 
             return new EvaluationResult(ImmutableArray< Diagnostic>.Empty, value);
         }
-        // my own hlper method for debugging
 
-        private int _index = 0;
-
-        internal void ReadGlobalScopeVariables(BoundGlobalScope scope)
+        public void EmitTree(TextWriter writer)
         {
-            _index++;
-            Console.WriteLine("------------------");
-            Console.WriteLine($"Current scope layer is {_globalScope.Variables.Count()}");
-            foreach (var variable in scope.Variables)
-            {
-                Console.WriteLine($"Var '{variable.Name}' Type = {variable.Type}.");
-            }
-
-            if (scope.Previous != null)
-            {
-                ReadGlobalScopeVariables(scope.Previous);
-            }
-            else
-                _index = 0;
+            GlobalScope.Statement.WriteTo(writer);
         }
     }
 }
