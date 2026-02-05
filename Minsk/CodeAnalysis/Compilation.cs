@@ -1,4 +1,5 @@
 ﻿using Minsk.CodeAnalysis.Binding;
+using Minsk.CodeAnalysis.Lowering;
 using Minsk.CodeAnalysis.Syntax;
 using System.Collections.Immutable;
 
@@ -48,7 +49,8 @@ namespace Minsk.CodeAnalysis
             if (diagnostics.Length > 0)
                 return new EvaluationResult(diagnostics, null);
 
-            var evaluator = new Evaluator(GlobalScope.Statement, variables);
+            var statement = GetStatement();
+            var evaluator = new Evaluator(statement, variables);
             var value = evaluator.Evaluate();
 
 
@@ -57,7 +59,14 @@ namespace Minsk.CodeAnalysis
 
         public void EmitTree(TextWriter writer)
         {
+            var statement = GetStatement();
             GlobalScope.Statement.WriteTo(writer);
+        }
+
+        private BoundStatement GetStatement()
+        {
+            var result = GlobalScope.Statement;
+            return Lowerer.Lower(result);
         }
     }
 }
