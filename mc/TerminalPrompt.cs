@@ -16,7 +16,8 @@ namespace Minsk
         internal static void PromptReader()
         {
             bool showTree = false;
-            bool showScope = false;
+            bool showprogram = false;
+
             Dictionary<VariableSymbol, object> variables = new();
             var textBuilder = new StringBuilder();
             Compilation previous = null;
@@ -50,6 +51,10 @@ namespace Minsk
                             case "#showtree":
                                 showTree = !showTree;
                                 Console.WriteLine(showTree ? $"Showing parse trees." : "Not showing parse trees.");
+                                continue;
+                            case "#showprogram":
+                                showprogram = !showprogram;
+                                Console.WriteLine(showprogram ? $"Showing bound tree." : "Not showing bound tree.");
                                 continue;
                             case "#cls":
                                 Console.Clear();
@@ -94,6 +99,10 @@ namespace Minsk
 
                 if (showTree)
                     syntaxTree.Root.WriteTo(Console.Out);
+
+                if (showprogram)
+                    compilation.EmitTree(Console.Out);
+
 
 
                 if (!result.Diagnostics.Any())
@@ -173,7 +182,7 @@ namespace Minsk
             Console.WriteLine("Available commands:");
             Console.WriteLine("#exit - Exit the application");
             Console.WriteLine("#showtree - Toggle showing parse trees");
-            Console.WriteLine("#showtokens - Toggle showing lexical tokens");
+            Console.WriteLine("#showprogram - Toggle showing bound tree");
             Console.WriteLine("#cls - Clear the console");
             Console.WriteLine("#help - Show this help message");
             Console.WriteLine("Type any expression to evaluate it.");
