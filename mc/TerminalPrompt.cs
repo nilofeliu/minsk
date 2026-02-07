@@ -95,7 +95,7 @@ namespace Minsk
 
                 // previous = compilation;
 
-                var result = compilation.Evaluate(variables);
+             
 
                 if (showTree)
                     syntaxTree.Root.WriteTo(Console.Out);
@@ -103,7 +103,7 @@ namespace Minsk
                 if (showprogram)
                     compilation.EmitTree(Console.Out);
 
-
+                var result = compilation.Evaluate(variables);
 
                 if (!result.Diagnostics.Any())
                 {
