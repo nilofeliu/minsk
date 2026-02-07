@@ -53,17 +53,16 @@ namespace Minsk.CodeAnalysis
             var evaluator = new Evaluator(statement, variables);
             var value = evaluator.Evaluate();
 
-
             return new EvaluationResult(ImmutableArray< Diagnostic>.Empty, value);
         }
 
         public void EmitTree(TextWriter writer)
         {
             var statement = GetStatement();
-            GlobalScope.Statement.WriteTo(writer);
+            statement.WriteTo(writer);
         }
 
-        private BoundStatement GetStatement()
+        private BoundBlockStatement GetStatement()
         {
             var result = GlobalScope.Statement;
             return Lowerer.Lower(result);

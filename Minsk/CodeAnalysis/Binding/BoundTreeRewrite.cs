@@ -19,7 +19,15 @@ internal abstract class BoundTreeRewrite
             case BoundNodeKind.WhileStatement:
                 return RewriteWhileStatement((BoundWhileStatement)node);
             case BoundNodeKind.ForStatement:
+
                 return RewriteForStatement((BoundForStatement)node);
+            case BoundNodeKind.LabelStatement:
+                return RewriteLabelStatement((BoundLabelStatement)node);
+            case BoundNodeKind.GotoStatement:
+                return RewriteGotoStatement((BoundGotoStatement)node);
+            case BoundNodeKind.ConditionalGotoStatement:
+                return RewriteConditionalGotoStatement((BoundConditionalGotoStatement)node);
+
             case BoundNodeKind.ExpressionStatement:
                 return RewriteExpressionStatement((BoundExpressionStatement)node);
             default:
@@ -76,7 +84,8 @@ internal abstract class BoundTreeRewrite
         if (condition == node.Condition && thenStatement == node.ThenStatement && elseStatement == node.ElseStatement)
             return node;
         
-        return new BoundIfStatement(condition, thenStatement, elseStatement);    }
+        return new BoundIfStatement(condition, thenStatement, ImmutableArray<BoundElseIfClause>.Empty, elseStatement); 
+    }
 
     protected virtual BoundStatement RewriteWhileStatement(BoundWhileStatement node)
     {
@@ -99,6 +108,25 @@ internal abstract class BoundTreeRewrite
             return node;
 
         return new BoundForStatement(node.Variable, lowerBound, upperBound, body);
+    }
+
+    protected virtual BoundStatement RewriteLabelStatement(BoundLabelStatement node)
+    {
+        return node;
+    }
+
+    protected virtual BoundStatement RewriteGotoStatement(BoundGotoStatement node)
+    {
+        return node;
+    }
+
+    protected virtual BoundStatement RewriteConditionalGotoStatement(BoundConditionalGotoStatement node)
+    {
+        var condition = RewriteExpression(node.Condition);
+        if (condition == node.Condition)
+            return node;
+
+        return new BoundConditionalGotoStatement(node.Label, condition, node.JumpIfFalse);
     }
 
     protected virtual BoundStatement RewriteExpressionStatement(BoundExpressionStatement node)

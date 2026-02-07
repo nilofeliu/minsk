@@ -54,10 +54,10 @@ namespace Minsk.CodeAnalysis.Binding
 
         public void WriteTo(TextWriter writer)
         {
-            PrintTree(writer, this);
+            PrintNode(writer, this);
         }
 
-        private static void PrintTree(TextWriter writer, BoundNode node, string indent = "", bool isLast = true)
+        private static void PrintNode(TextWriter writer, BoundNode node, string indent = "", bool isLast = true)
         {
             var isToConsole = writer == Console.Out;
             var marker = isLast ? "└──" : "├──";
@@ -116,7 +116,7 @@ namespace Minsk.CodeAnalysis.Binding
             var lastChild = node.GetChildren().LastOrDefault();
 
             foreach (var child in node.GetChildren())
-                PrintTree(writer, child, indent, child == lastChild);
+                PrintNode(writer, child, indent, child == lastChild);
         }
 
         private static string GetText(BoundNode node)

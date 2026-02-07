@@ -22,6 +22,9 @@
         IfStatement,
         WhileStatement,
         ForStatement,
+        GotoStatement,
+        LabelStatement,
+        ConditionalGotoStatement,
     }
 }
 
