@@ -51,7 +51,7 @@ namespace Minsk.CodeAnalysis
                         index++;
                         break;
                     case BoundNodeKind.GotoStatement:
-                        var gs = (BoundConditionalGotoStatement)s;
+                        var gs = (BoundGotoStatement)s;
                         index = labelToIndex[gs.Label];
                         break;
                     case BoundNodeKind.ConditionalGotoStatement:
@@ -60,6 +60,8 @@ namespace Minsk.CodeAnalysis
                         if (condition && !cgs.JumpIfFalse ||
                             !condition && cgs.JumpIfFalse)
                             index = labelToIndex[cgs.Label];
+                        else
+                            index++;
                         break;
                     case BoundNodeKind.LabelStatement:
                         index++;

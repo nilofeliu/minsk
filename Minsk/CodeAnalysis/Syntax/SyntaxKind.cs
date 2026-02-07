@@ -19,7 +19,6 @@
 
         // Nodes
         CompilationUnit,
-        ElseIfClause,
         ElseClause,
 
         // Operators
@@ -46,7 +45,6 @@
         ForKeyword,
         WhileKeyword,
         IfKeyword,
-        ElseIfKeyword,
         ElseKeyword,
         ToKeyword,
 
