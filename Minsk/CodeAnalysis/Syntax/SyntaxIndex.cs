@@ -17,7 +17,13 @@ namespace Minsk.CodeAnalysis.Syntax
         private readonly Dictionary<SyntaxKind, SyntaxType> _binaryOperators;
         private readonly Dictionary<SyntaxKind, SyntaxType> _assignmentOperators;
         private readonly Dictionary<SyntaxKind, SyntaxType> _reservedKeywords;
+
+
+        private readonly Dictionary<string, SyntaxKind> _textToKind;
+        private readonly Dictionary<string, SyntaxKind> _tokenIndex;
+
         private readonly Dictionary<SyntaxKind, string> _syntaxKindIndex;
+        
 
         // Private constructor — called only once
         private SyntaxIndex()
@@ -27,14 +33,23 @@ namespace Minsk.CodeAnalysis.Syntax
             _assignmentOperators = LoadAssignmentOperators();
             _reservedKeywords = LoadReservedKeywords();
             _syntaxKindIndex = BuildSyntaxKindIndex();
+            _tokenIndex = BuildOperatorIndex();
+
+            _textToKind = _reservedKeywords.ToDictionary(
+                kvp => kvp.Value.Text, kvp => kvp.Key);
         }
 
-        // Public instance properties (non-static now)
+        // Public instance properties 
         public Dictionary<SyntaxKind, SyntaxType> UnaryOperators => _unaryOperators;
         public Dictionary<SyntaxKind, SyntaxType> BinaryOperators => _binaryOperators;
         public Dictionary<SyntaxKind, SyntaxType> AssignmentOperators => _assignmentOperators;
         public Dictionary<SyntaxKind, SyntaxType> ReservedKeywords => _reservedKeywords;
+
+
+        // Indexes properties
         public Dictionary<SyntaxKind, string> SyntaxKindIndex => _syntaxKindIndex;
+        public Dictionary<string, SyntaxKind> TokenIndex => _tokenIndex;
+        public Dictionary<string, SyntaxKind> TextToKind => _textToKind;
 
         // All loading methods remain unchanged — just private now
         private Dictionary<SyntaxKind, SyntaxType> LoadUnaryOperators()
@@ -68,13 +83,6 @@ namespace Minsk.CodeAnalysis.Syntax
             return binaryOperators;
         }
 
-        private Dictionary<SyntaxKind, SyntaxType> LoadAssignmentOperators()
-        {
-            var assignmentOperators = new Dictionary<SyntaxKind, SyntaxType>();
-            assignmentOperators.Add(SyntaxKind.EqualsToken, new SyntaxType(SyntaxKind.EqualsToken, "=", 0));
-            return assignmentOperators;
-        }
-
         private Dictionary<SyntaxKind, SyntaxType> LoadReservedKeywords()
         {
             return LoadBooleanKeywords()
@@ -82,6 +90,13 @@ namespace Minsk.CodeAnalysis.Syntax
                 .Concat(LoadVariableKeywords())
                 .Concat(LoadScopeKeywords())
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+        }
+
+        private Dictionary<SyntaxKind, SyntaxType> LoadAssignmentOperators()
+        {
+            var assignmentOperators = new Dictionary<SyntaxKind, SyntaxType>();
+            assignmentOperators.Add(SyntaxKind.EqualsToken, new SyntaxType(SyntaxKind.EqualsToken, "=", 0));
+            return assignmentOperators;
         }
 
         private Dictionary<SyntaxKind, SyntaxType> LoadBooleanKeywords()
@@ -129,6 +144,17 @@ namespace Minsk.CodeAnalysis.Syntax
             MergeDictionary(combined, _assignmentOperators);
             MergeDictionary(combined, _reservedKeywords);
             return combined;
+        }
+
+        private Dictionary<string, SyntaxKind> BuildOperatorIndex()
+        {
+            var combined = new Dictionary<SyntaxKind, string>();
+            MergeDictionary(combined, _unaryOperators);
+            MergeDictionary(combined, _binaryOperators);
+            MergeDictionary(combined, _assignmentOperators);
+            MergeDictionary(combined, LoadScopeKeywords());
+            return combined.ToDictionary(
+                kvp => kvp.Value, kvp => kvp.Key); ;
         }
 
         private void MergeDictionary(

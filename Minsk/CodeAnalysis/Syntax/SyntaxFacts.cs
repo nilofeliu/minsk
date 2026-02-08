@@ -5,11 +5,11 @@ namespace Minsk.CodeAnalysis.Syntax;
 
 public static class SyntaxFacts
 {
-    static SyntaxIndex syntaxIndex = SyntaxIndex.Instance;
+    private static SyntaxIndex _syntaxIndex = SyntaxIndex.Instance;
 
     public static int GetUnaryOperatorPrecedence(this SyntaxKind kind)
     {
-        if (syntaxIndex.UnaryOperators.TryGetValue(kind, out var syntaxType))
+        if (_syntaxIndex.UnaryOperators.TryGetValue(kind, out var syntaxType))
             return syntaxType.Precedence;
 
         return 0;
@@ -17,7 +17,7 @@ public static class SyntaxFacts
 
     public static int GetBinaryOperatorPrecedence(this SyntaxKind kind)
     {
-        if (syntaxIndex.BinaryOperators.TryGetValue(kind, out var syntaxType))
+        if (_syntaxIndex.BinaryOperators.TryGetValue(kind, out var syntaxType))
             return syntaxType.Precedence;
 
         return 0;
@@ -25,28 +25,40 @@ public static class SyntaxFacts
 
     public static SyntaxKind GetKeywordKind(string text)
     {
-
-        var result = syntaxIndex.ReservedKeywords
-            .FirstOrDefault(kvp => kvp.Value.Text == text);
-
-        return result.Value != null ? result.Key : SyntaxKind.IdentifierToken;
-
+        return _syntaxIndex.TextToKind.TryGetValue(text, out var kind)
+            ? kind
+            : SyntaxKind.IdentifierToken;
     }
+
+    //public static SyntaxKind GetKeywordKind(string text)
+    //{
+
+    //    var result = _syntaxIndex.ReservedKeywords
+    //        .FirstOrDefault(kvp => kvp.Value.Text == text);
+
+    //    return result.Value != null ? result.Key : SyntaxKind.IdentifierToken;
+
+    //}
 
     public static IEnumerable<SyntaxKind> GetUnaryOperatorKinds()
     {
-        return syntaxIndex.UnaryOperators.Keys;
+        return _syntaxIndex.UnaryOperators.Keys;
     }
 
     public static IEnumerable<SyntaxKind> GetBinaryOperatorKinds()
     {
-        return syntaxIndex.BinaryOperators.Keys;
+        return _syntaxIndex.BinaryOperators.Keys;
+    }
+
+    public static Dictionary<string, SyntaxKind> GetSyntaxKind()
+    {
+        return _syntaxIndex.TokenIndex;
     }
 
     public static string? GetText(SyntaxKind kind)
     {
         // Try to get from the combined index first
-        if (syntaxIndex.SyntaxKindIndex.TryGetValue(kind, out var syntaxType))
+        if (_syntaxIndex.SyntaxKindIndex.TryGetValue(kind, out var syntaxType))
             return syntaxType;
 
         return null;
