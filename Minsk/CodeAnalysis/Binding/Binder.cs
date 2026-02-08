@@ -123,7 +123,7 @@ internal sealed class Binder
         var thenStatement = BindStatement(syntax.ThenStatement);
         var elseStatement = syntax.ElseClause == null ? null : BindStatement(syntax.ElseClause.ElseStatement);
 
-        return new BoundIfStatement(condition, thenStatement, elseStatement);
+        return new BoundIfStatement(condition, thenStatement, ImmutableArray<BoundElseIfClause>.Empty, elseStatement);
     }
 
     private BoundStatement BindWhileStatement(WhileStatementSyntax syntax)

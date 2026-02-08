@@ -20,6 +20,7 @@
         // Nodes
         CompilationUnit,
         ElseClause,
+        ElseIfClause,
 
         // Operators
         AmpersandToken,
