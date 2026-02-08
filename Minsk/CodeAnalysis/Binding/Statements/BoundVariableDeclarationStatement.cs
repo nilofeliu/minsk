@@ -1,12 +1,11 @@
 ﻿using Minsk.CodeAnalysis.Binding.Expressions;
 using Minsk.CodeAnalysis.Binding.Kind;
-using Minsk.CodeAnalysis.Binding.Statements;
 
-namespace Minsk.CodeAnalysis.Binding.Objects
+namespace Minsk.CodeAnalysis.Binding.Statements
 {
-    internal sealed class BoundVariableDeclaration : BoundStatement
+    internal sealed class BoundVariableDeclarationStatement : BoundStatement
     {
-        public BoundVariableDeclaration(VariableSymbol variable, BoundExpression initializer)
+        public BoundVariableDeclarationStatement(VariableSymbol variable, BoundExpression initializer)
         {
             Variable = variable;
             Initializer = initializer;

@@ -1,6 +1,5 @@
 ﻿using Minsk.CodeAnalysis.Binding.Expressions;
 using Minsk.CodeAnalysis.Binding.Kind;
-using Minsk.CodeAnalysis.Binding.Objects;
 using Minsk.CodeAnalysis.Binding.Statements;
 using System;
 using System.Collections.Generic;
@@ -46,7 +45,7 @@ namespace Minsk.CodeAnalysis
                 switch (s.Kind)
                 {
                     case BoundNodeKind.VariableDeclaration:
-                        EvaluateVariableDeclaration((BoundVariableDeclaration)s);
+                        EvaluateVariableDeclaration((BoundVariableDeclarationStatement)s);
                         index++;
                         break;
                     case BoundNodeKind.ExpressionStatement:
@@ -75,7 +74,7 @@ namespace Minsk.CodeAnalysis
             return _lastValue;
         }
                
-        private void EvaluateVariableDeclaration(BoundVariableDeclaration node)
+        private void EvaluateVariableDeclaration(BoundVariableDeclarationStatement node)
         {
             var value = EvaluateExpression(node.Initializer);
             _variables[node.Variable] = value;

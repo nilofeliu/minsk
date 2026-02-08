@@ -26,10 +26,10 @@ namespace Minsk.CodeAnalysis.Lowering
             //      }   
             // }
 
-            var variableDeclaration = new BoundVariableDeclaration(node.Variable, node.LowerBound);
+            var variableDeclaration = new BoundVariableDeclarationStatement(node.Variable, node.LowerBound);
             var variableExpression = new BoundVariableExpression(node.Variable);
             var upperBoundSymbol = new VariableSymbol("upperBound", true, typeof(int));
-            var upperBoundDeclaration = new BoundVariableDeclaration(upperBoundSymbol, node.UpperBound);
+            var upperBoundDeclaration = new BoundVariableDeclarationStatement(upperBoundSymbol, node.UpperBound);
 
             var condition = new BoundBinaryExpression(
                 variableExpression,

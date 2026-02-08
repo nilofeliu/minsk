@@ -1,6 +1,5 @@
 ﻿using Minsk.CodeAnalysis.Binding.Expressions;
 using Minsk.CodeAnalysis.Binding.Kind;
-using Minsk.CodeAnalysis.Binding.Objects;
 using Minsk.CodeAnalysis.Binding.Statements;
 using System.Collections.Immutable;
 using System.Linq.Expressions;
@@ -17,7 +16,7 @@ internal abstract class BoundTreeRewrite
             case BoundNodeKind.BlockStatement:
                 return RewriteBlockStatement((BoundBlockStatement)node);
             case BoundNodeKind.VariableDeclaration:
-                return RewriteVariableDeclaration((BoundVariableDeclaration)node);
+                return RewriteVariableDeclaration((BoundVariableDeclarationStatement)node);
             case BoundNodeKind.IfStatement:
                 return RewriteIfStatement((BoundIfStatement)node);
             case BoundNodeKind.WhileStatement:
@@ -68,13 +67,13 @@ internal abstract class BoundTreeRewrite
         return new BoundBlockStatement(builder.MoveToImmutable());
     }
 
-    protected virtual BoundStatement RewriteVariableDeclaration(BoundVariableDeclaration node)
+    protected virtual BoundStatement RewriteVariableDeclaration(BoundVariableDeclarationStatement node)
     {
         var initializer = RewriteExpression(node.Initializer);
         if (initializer == node.Initializer)
             return node;
 
-        return new BoundVariableDeclaration(node.Variable, initializer);
+        return new BoundVariableDeclarationStatement(node.Variable, initializer);
     }
 
     protected virtual BoundStatement RewriteIfStatement(BoundIfStatement node)
