@@ -13,7 +13,7 @@ public partial class PaserTests
         [MemberData(nameof(GetSyntaxKindData))]
         public void SyntaxFact_GetText_RoundTrips(SyntaxKind kind)
         {
-            var text = SyntaxFacts.GetText(kind);
+            var text = SyntaxQuery.GetText(kind);
             if (text is null)
                 return;
 

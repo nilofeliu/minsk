@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace Minsk.CodeAnalysis.Syntax;
 
-public static class SyntaxFacts
+public static class SyntaxQuery
 {
     private static SyntaxIndex _syntaxIndex = SyntaxIndex.Instance;
 
@@ -50,7 +50,7 @@ public static class SyntaxFacts
         return _syntaxIndex.BinaryOperators.Keys;
     }
 
-    public static Dictionary<string, SyntaxKind> GetSyntaxKind()
+    public static Dictionary<string, SyntaxKind> GetTokenIndex()
     {
         return _syntaxIndex.TokenIndex;
     }

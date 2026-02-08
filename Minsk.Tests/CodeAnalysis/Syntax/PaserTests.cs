@@ -11,10 +11,10 @@ public partial class PaserTests
     [MemberData(nameof(GetBinaryOperatorPairsData))]
     public void Parser_BinaryExpression_HonorPrecedences(SyntaxKind op1, SyntaxKind op2)
     {
-        var op1Precedence = SyntaxFacts.GetBinaryOperatorPrecedence(op1);
-        var op2Precedence = SyntaxFacts.GetBinaryOperatorPrecedence(op2);
-        var op1Text = SyntaxFacts.GetText(op1);
-        var op2Text = SyntaxFacts.GetText(op2);
+        var op1Precedence = SyntaxQuery.GetBinaryOperatorPrecedence(op1);
+        var op2Precedence = SyntaxQuery.GetBinaryOperatorPrecedence(op2);
+        var op1Text = SyntaxQuery.GetText(op1);
+        var op2Text = SyntaxQuery.GetText(op2);
         var text = $"a {op1Text} b {op2Text} c";
         var expression = ParseExpression(text);
 
@@ -56,10 +56,10 @@ public partial class PaserTests
     [MemberData(nameof(GetUnaryOperatorPairsData))]
     public void Parser_UnaryExpression_HonorPrecedences(SyntaxKind unaryKind, SyntaxKind binaryKind)
     {
-        var unaryPrecedence = SyntaxFacts.GetUnaryOperatorPrecedence(unaryKind);
-        var binaryPrecedence = SyntaxFacts.GetBinaryOperatorPrecedence(binaryKind);
-        var unaryText = SyntaxFacts.GetText(unaryKind);
-        var binaryText = SyntaxFacts.GetText(binaryKind);
+        var unaryPrecedence = SyntaxQuery.GetUnaryOperatorPrecedence(unaryKind);
+        var binaryPrecedence = SyntaxQuery.GetBinaryOperatorPrecedence(binaryKind);
+        var unaryText = SyntaxQuery.GetText(unaryKind);
+        var binaryText = SyntaxQuery.GetText(binaryKind);
         var text = $"{unaryText} a {binaryText} b";
         var expression = ParseExpression(text);
 
@@ -105,9 +105,9 @@ public partial class PaserTests
 
     public static IEnumerable<object[]> GetUnaryOperatorPairsData()
     {
-        foreach (var op1 in SyntaxFacts.GetUnaryOperatorKinds())
+        foreach (var op1 in SyntaxQuery.GetUnaryOperatorKinds())
         {
-            foreach (var op2 in SyntaxFacts.GetBinaryOperatorKinds())
+            foreach (var op2 in SyntaxQuery.GetBinaryOperatorKinds())
             {
                 yield return new object[] { op1, op2 };
             }
@@ -116,9 +116,9 @@ public partial class PaserTests
 
     public static IEnumerable<object[]> GetBinaryOperatorPairsData()
     {
-        foreach (var op1 in SyntaxFacts.GetBinaryOperatorKinds())
+        foreach (var op1 in SyntaxQuery.GetBinaryOperatorKinds())
         {
-            foreach (var op2 in SyntaxFacts.GetBinaryOperatorKinds())
+            foreach (var op2 in SyntaxQuery.GetBinaryOperatorKinds())
             {
                     yield return new object[] { op1, op2 };
             }

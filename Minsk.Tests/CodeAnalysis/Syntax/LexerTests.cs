@@ -104,7 +104,7 @@ public class LexerTests
     {
         var fixedTokens = Enum.GetValues(typeof(SyntaxKind))
             .Cast<SyntaxKind>()
-            .Select(k => (kind: k, text: SyntaxFacts.GetText(k)))
+            .Select(k => (kind: k, text: SyntaxQuery.GetText(k)))
             .Where(t => t.text != null);         
 
 
