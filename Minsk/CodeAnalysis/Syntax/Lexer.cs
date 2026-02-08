@@ -10,8 +10,6 @@ internal sealed class Lexer
     private readonly DiagnosticBag _diagnostics = new();
     private readonly SourceText _text;
 
-    private SyntaxIndex _syntaxIndex = SyntaxIndex.Instance;
-
     private int _position;
     private int _start;
     private SyntaxKind _kind;
@@ -66,7 +64,7 @@ internal sealed class Lexer
 
 
         var length = _position - _start;
-        var text = SyntaxFacts.GetText(_kind);
+        var text = SyntaxQuery.GetText(_kind);
         if (text == null)
             text = _text.ToString(_start, length);
 
@@ -121,7 +119,7 @@ internal sealed class Lexer
         // Try two-character operators first (greedy matching)
         var twoChar = Current.ToString() + Lookahead.ToString();
 
-        if (_syntaxIndex.TokenIndex.TryGetValue(twoChar, out var kind))
+        if (SyntaxQuery.GetTokenIndex().TryGetValue(twoChar, out var kind))
         {
             _kind = kind;
             _position += 2;
@@ -131,7 +129,7 @@ internal sealed class Lexer
         // Try single-character operators
         var oneChar = Current.ToString();
 
-        if (_syntaxIndex.TokenIndex.TryGetValue(oneChar, out kind))
+        if (SyntaxQuery.GetTokenIndex().TryGetValue(oneChar, out kind))
         {
             _kind = kind;
             _position++;
@@ -150,7 +148,7 @@ internal sealed class Lexer
 
         var length = _position - _start;
         var text = _text.ToString(_start, length);
-        _kind = SyntaxFacts.GetKeywordKind(text);
+        _kind = SyntaxQuery.GetKeywordKind(text);
     }
 
     private void ReadWhiteSpaceToken()
