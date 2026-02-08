@@ -1,4 +1,6 @@
-﻿using Minsk.CodeAnalysis.Text;
+﻿using Minsk.CodeAnalysis.Syntax.Kind;
+using Minsk.CodeAnalysis.Syntax.Object;
+using Minsk.CodeAnalysis.Text;
 using System.Collections.Immutable;
 
 namespace Minsk.CodeAnalysis.Syntax

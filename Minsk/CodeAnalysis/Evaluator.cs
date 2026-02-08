@@ -1,4 +1,7 @@
-﻿using Minsk.CodeAnalysis.Binding;
+﻿using Minsk.CodeAnalysis.Binding.Expressions;
+using Minsk.CodeAnalysis.Binding.Kind;
+using Minsk.CodeAnalysis.Binding.Objects;
+using Minsk.CodeAnalysis.Binding.Statements;
 using System;
 using System.Collections.Generic;
 using System.Linq;

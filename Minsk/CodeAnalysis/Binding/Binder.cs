@@ -1,4 +1,10 @@
-﻿using Minsk.CodeAnalysis.Syntax;
+﻿using Minsk.CodeAnalysis.Binding.Expressions;
+using Minsk.CodeAnalysis.Binding.Objects;
+using Minsk.CodeAnalysis.Binding.Statements;
+using Minsk.CodeAnalysis.Syntax.Expression;
+using Minsk.CodeAnalysis.Syntax.Kind;
+using Minsk.CodeAnalysis.Syntax.Object;
+using Minsk.CodeAnalysis.Syntax.Statement;
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 

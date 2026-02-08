@@ -1,5 +1,6 @@
 ﻿using System;
-using Minsk.CodeAnalysis.Syntax;
+using Minsk.CodeAnalysis.Binding.Kind;
+using Minsk.CodeAnalysis.Syntax.Kind;
 
 namespace Minsk.CodeAnalysis.Binding
 {

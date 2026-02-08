@@ -1,4 +1,7 @@
-﻿using Minsk.CodeAnalysis.Syntax;
+﻿using Minsk.CodeAnalysis.Binding.Expressions;
+using Minsk.CodeAnalysis.Binding.Kind;
+using Minsk.CodeAnalysis.Binding.Statements;
+using Minsk.CodeAnalysis.Syntax;
 using System.Reflection;
 
 

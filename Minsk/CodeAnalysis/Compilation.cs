@@ -1,4 +1,6 @@
 ﻿using Minsk.CodeAnalysis.Binding;
+using Minsk.CodeAnalysis.Binding.Objects;
+using Minsk.CodeAnalysis.Binding.Statements;
 using Minsk.CodeAnalysis.Lowering;
 using Minsk.CodeAnalysis.Syntax;
 using System.Collections.Immutable;

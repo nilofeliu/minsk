@@ -1,5 +1,8 @@
 ﻿using Minsk.CodeAnalysis.Binding;
-using Minsk.CodeAnalysis.Syntax;
+using Minsk.CodeAnalysis.Binding.Expressions;
+using Minsk.CodeAnalysis.Binding.Objects;
+using Minsk.CodeAnalysis.Binding.Statements;
+using Minsk.CodeAnalysis.Syntax.Kind;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;

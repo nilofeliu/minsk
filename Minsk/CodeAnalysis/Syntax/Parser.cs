@@ -1,4 +1,7 @@
-﻿using Minsk.CodeAnalysis.Syntax;
+﻿using Minsk.CodeAnalysis.Syntax.Expression;
+using Minsk.CodeAnalysis.Syntax.Kind;
+using Minsk.CodeAnalysis.Syntax.Object;
+using Minsk.CodeAnalysis.Syntax.Statement;
 using Minsk.CodeAnalysis.Text;
 using System.Collections.Immutable;
 

@@ -1,4 +1,5 @@
 ﻿using Minsk.CodeAnalysis.Syntax;
+using Minsk.CodeAnalysis.Syntax.Kind;
 
 namespace Minsk.Tests.CodeAnalysis.Syntax;
 

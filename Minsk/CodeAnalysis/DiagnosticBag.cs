@@ -1,5 +1,4 @@
-﻿
-using Minsk.CodeAnalysis.Syntax;
+﻿using Minsk.CodeAnalysis.Syntax.Kind;
 using Minsk.CodeAnalysis.Text;
 using System.Collections;
 using System.Xml.Linq;
