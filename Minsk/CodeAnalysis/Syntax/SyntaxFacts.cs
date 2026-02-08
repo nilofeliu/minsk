@@ -5,9 +5,11 @@ namespace Minsk.CodeAnalysis.Syntax;
 
 public static class SyntaxFacts
 {
+    static SyntaxIndex syntaxIndex = SyntaxIndex.Instance;
+
     public static int GetUnaryOperatorPrecedence(this SyntaxKind kind)
     {
-        if (SyntaxIndex.UnaryOperators.TryGetValue(kind, out var syntaxType))
+        if (syntaxIndex.UnaryOperators.TryGetValue(kind, out var syntaxType))
             return syntaxType.Precedence;
 
         return 0;
@@ -15,7 +17,7 @@ public static class SyntaxFacts
 
     public static int GetBinaryOperatorPrecedence(this SyntaxKind kind)
     {
-        if (SyntaxIndex.BinaryOperators.TryGetValue(kind, out var syntaxType))
+        if (syntaxIndex.BinaryOperators.TryGetValue(kind, out var syntaxType))
             return syntaxType.Precedence;
 
         return 0;
@@ -23,34 +25,29 @@ public static class SyntaxFacts
 
     public static SyntaxKind GetKeywordKind(string text)
     {
-        // Check all keyword dictionaries
-        var allKeywords = SyntaxIndex.ReservedKeywords;
 
-        foreach (var kvp in allKeywords)
-        {
+        var result = syntaxIndex.ReservedKeywords
+            .FirstOrDefault(kvp => kvp.Value.Text == text);
 
-            if (kvp.Value.Text == text)
-                return kvp.Key;
-        }
+        return result.Value != null ? result.Key : SyntaxKind.IdentifierToken;
 
-        return SyntaxKind.IdentifierToken;
     }
 
     public static IEnumerable<SyntaxKind> GetUnaryOperatorKinds()
     {
-        return SyntaxIndex.UnaryOperators.Keys;
+        return syntaxIndex.UnaryOperators.Keys;
     }
 
     public static IEnumerable<SyntaxKind> GetBinaryOperatorKinds()
     {
-        return SyntaxIndex.BinaryOperators.Keys;
+        return syntaxIndex.BinaryOperators.Keys;
     }
 
     public static string? GetText(SyntaxKind kind)
     {
         // Try to get from the combined index first
-        if (SyntaxIndex.BuildSyntaxKindIndex().TryGetValue(kind, out var syntaxType))
-            return syntaxType.Text;
+        if (syntaxIndex.SyntaxKindIndex.TryGetValue(kind, out var syntaxType))
+            return syntaxType;
 
         return null;
     }
