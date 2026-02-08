@@ -23,7 +23,7 @@ namespace Minsk.CodeAnalysis.Lowering
                 // end:
 
                 var endLabel = lowerer.GenerateLabel();
-                var gotoFalse = new BoundConditionalGotoStatement(endLabel, node.Condition, true);
+                var gotoFalse = new BoundConditionalGotoStatement(endLabel, node.Condition, false);
                 var endLabelStatement = new BoundLabelStatement(endLabel);
                 var result = new BoundBlockStatement(ImmutableArray.Create<BoundStatement>(
                     gotoFalse,
