@@ -86,7 +86,7 @@ internal abstract class BoundTreeRewrite
         if (condition == node.Condition && thenStatement == node.ThenStatement && elseStatement == node.ElseStatement)
             return node;
         
-        return new BoundIfStatement(condition, thenStatement, ImmutableArray<BoundElseIfClause>.Empty, elseStatement); 
+        return new BoundIfStatement(condition, thenStatement, elseStatement); 
     }
 
     protected virtual BoundStatement RewriteWhileStatement(BoundWhileStatement node)
