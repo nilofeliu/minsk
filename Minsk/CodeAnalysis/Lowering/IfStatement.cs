@@ -10,6 +10,7 @@ namespace Minsk.CodeAnalysis.Lowering
 {
     internal static class IfStatement
     {
+
         internal static BoundStatement Rewrite(Lowerer lowerer, BoundIfStatement node)
         {
             if (node.ElseStatement == null)
@@ -52,7 +53,7 @@ namespace Minsk.CodeAnalysis.Lowering
                 var elseLabel = lowerer.GenerateLabel();
                 var endLabel = lowerer.GenerateLabel();
 
-                var gotoFalse = new BoundConditionalGotoStatement(elseLabel, node.Condition, true);
+                var gotoFalse = new BoundConditionalGotoStatement(elseLabel, node.Condition, false);
                 var gotoEndStatement = new BoundGotoStatement(endLabel);
                 var elseLabelStatement = new BoundLabelStatement(elseLabel);
                 var endLabelStatement = new BoundLabelStatement(endLabel);
