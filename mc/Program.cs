@@ -1,6 +1,9 @@
 ﻿using Minsk.CodeAnalysis;
+using Minsk.CodeAnalysis.Syntax;
+using Minsk.CodeAnalysis.Text;
 using System;
-using static Minsk.TerminalPrompt;
+using System.Text;
+using static Minsk.Repl;
 
 namespace Minsk
 {
@@ -8,7 +11,10 @@ namespace Minsk
     {
         private static void Main(string[] args)
         {
-            PromptReader();
-        }                
+            var repl = new MinskRepl();
+            repl.Run();
+
+        }
     }
+      
 }
