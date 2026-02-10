@@ -64,5 +64,6 @@
         IfStatement,
         WhileStatement,
         VariableDeclaration,
+        ElseIfKeyword,
     }
 }

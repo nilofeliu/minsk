@@ -117,15 +117,40 @@ namespace Minsk.CodeAnalysis.Syntax
         }
         private ElseClauseSyntax ParseElseClause()
         {
-            if (Current.Kind != SyntaxKind.ElseKeyword)
+            if (Current.Kind != SyntaxKind.ElseKeyword && Current.Kind != SyntaxKind.ElseIfKeyword)
                 return null;
 
             var keyword = NextToken();
-            var statement = ParseStatement();
 
-            return new ElseClauseSyntax(keyword, statement);
+            if (keyword.Kind == SyntaxKind.ElseIfKeyword)
+            {
+                var condition = ParseExpression();
+                var thenStatement = ParseStatement();
+
+                // RECURSIVE CALL: Parse more elseif/else clauses
+                var elseClause = ParseElseClause();
+
+                var ifKeyword = new SyntaxToken(SyntaxKind.IfKeyword, keyword.Position, "if", null);
+                return new ElseClauseSyntax(keyword, new IfStatementSyntax(ifKeyword, condition, thenStatement, elseClause));
+            }
+            else
+            {
+                var statement = ParseStatement();
+                return new ElseClauseSyntax(keyword, statement);
+            }
         }
-        
+
+        //private ElseClauseSyntax ParseElseClause()
+        //{
+        //    if (Current.Kind != SyntaxKind.ElseKeyword)
+        //        return null;
+
+        //    var keyword = NextToken();
+        //    var statement = ParseStatement();
+
+        //    return new ElseClauseSyntax(keyword, statement);
+        //}
+
         private StatementSyntax ParseWhileStatement()
         {
             var keyword = MatchToken(SyntaxKind.WhileKeyword);

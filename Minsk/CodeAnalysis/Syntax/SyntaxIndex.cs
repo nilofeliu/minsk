@@ -122,6 +122,7 @@ namespace Minsk.CodeAnalysis.Syntax
             var statementKeywords = new Dictionary<SyntaxKind, SyntaxType>();
             statementKeywords.Add(SyntaxKind.IfKeyword, new SyntaxType(SyntaxKind.IfKeyword, "if", 0));
             statementKeywords.Add(SyntaxKind.ElseKeyword, new SyntaxType(SyntaxKind.ElseKeyword, "else", 0));
+            statementKeywords.Add(SyntaxKind.ElseIfKeyword, new SyntaxType(SyntaxKind.ElseIfKeyword, "elseif", 0));
             statementKeywords.Add(SyntaxKind.WhileKeyword, new SyntaxType(SyntaxKind.WhileKeyword, "while", 0));
             statementKeywords.Add(SyntaxKind.ForKeyword, new SyntaxType(SyntaxKind.ForKeyword, "for", 0));
             statementKeywords.Add(SyntaxKind.ToKeyword, new SyntaxType(SyntaxKind.ToKeyword, "to", 0));
