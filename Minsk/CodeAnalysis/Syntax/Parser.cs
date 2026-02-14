@@ -1,4 +1,5 @@
-﻿using Minsk.CodeAnalysis.Syntax.Expression;
+﻿using Minsk.CodeAnalysis.Syntax.Core;
+using Minsk.CodeAnalysis.Syntax.Expression;
 using Minsk.CodeAnalysis.Syntax.Kind;
 using Minsk.CodeAnalysis.Syntax.Object;
 using Minsk.CodeAnalysis.Syntax.Statement;
@@ -86,6 +87,8 @@ namespace Minsk.CodeAnalysis.Syntax
                     return ParseVariableDeclaration();
                 case SyntaxKind.IfKeyword:
                     return ParseIfStatement();
+                case SyntaxKind.SwitchKeyword:
+                    return ParseSwitchStatement();
                 case SyntaxKind.WhileKeyword:
                     return ParseWhileStatement();
                 case SyntaxKind.ForKeyword:
@@ -106,6 +109,73 @@ namespace Minsk.CodeAnalysis.Syntax
         }
 
 
+        private StatementSyntax ParseSwitchStatement()
+        {
+            var keyword = MatchToken(SyntaxKind.SwitchKeyword);
+            var pattern = ParseExpression();
+            MatchToken(SyntaxKind.ColonToken);
+            var casesBuilder = ImmutableArray.CreateBuilder<StatementSyntax>();
+            while (Current.Kind != SyntaxKind.EndKeyword &&
+                Current.Kind != SyntaxKind.EndOfFileToken)  // ← See point 2
+            {
+                var startToken = Current;
+                var statement = ParseSwitchCaseStatement();
+                casesBuilder.Add(statement);
+
+                // if ParseStatement does not consume any token,
+                // skip the current token and continue.
+                // No error needs to be reporteed, because it has 
+                // already been tried to parse the expression;
+
+                if (Current == startToken) NextToken();
+                //Console.Write();
+            }
+            var cases = casesBuilder.ToImmutable();
+
+            SwitchCaseStatementSyntax defaultCase = null;
+
+            if (Current.Kind == SyntaxKind.SwitchDefaultKeyword)
+                defaultCase = ParseSwitchCaseStatement();
+
+            if (Current.Kind == SyntaxKind.EndKeyword)
+                MatchToken(SyntaxKind.EndKeyword);
+
+            var _cases = ImmutableArray<SwitchCaseStatementSyntax>.Empty;
+
+            var output = new SwitchStatementSyntax(keyword, pattern, _cases, defaultCase);
+
+            return output;
+
+        }
+
+        private SwitchCaseStatementSyntax ParseSwitchCaseStatement()
+        {
+            SyntaxToken keyword;
+
+            if (Current.Kind == SyntaxKind.SwitchCaseKeyword)
+                keyword = MatchToken(SyntaxKind.SwitchCaseKeyword);
+            else 
+                keyword = MatchToken(SyntaxKind.SwitchDefaultKeyword);
+          
+                var matchCase = ParseExpression();
+
+            var caseStatementsBuilder = ImmutableArray.CreateBuilder<StatementSyntax>();
+            while (Current.Kind != SyntaxKind.SwitchCaseKeyword &&
+                Current.Kind != SyntaxKind.SwitchDefaultKeyword &&
+                Current.Kind != SyntaxKind.EndKeyword &&
+                Current.Kind != SyntaxKind.EndOfFileToken)
+            {
+                var statement = ParseStatement();
+                caseStatementsBuilder.Add(statement);
+            }
+            var caseStatements = caseStatementsBuilder.ToImmutable();
+
+
+            return new SwitchCaseStatementSyntax(keyword, matchCase, caseStatements);
+        }
+
+
+
         private StatementSyntax ParseIfStatement()
         {
             var keyword = MatchToken(SyntaxKind.IfKeyword);
@@ -115,7 +185,10 @@ namespace Minsk.CodeAnalysis.Syntax
 
             return new IfStatementSyntax(keyword, condition, statement, elseClause);
         }
-        private ElseClauseSyntax ParseElseClause()
+
+
+        private ElseClauseSyntax ParseElseClause()        
+        
         {
             if (Current.Kind != SyntaxKind.ElseKeyword && Current.Kind != SyntaxKind.ElseIfKeyword)
                 return null;
@@ -139,17 +212,6 @@ namespace Minsk.CodeAnalysis.Syntax
                 return new ElseClauseSyntax(keyword, statement);
             }
         }
-
-        //private ElseClauseSyntax ParseElseClause()
-        //{
-        //    if (Current.Kind != SyntaxKind.ElseKeyword)
-        //        return null;
-
-        //    var keyword = NextToken();
-        //    var statement = ParseStatement();
-
-        //    return new ElseClauseSyntax(keyword, statement);
-        //}
 
         private StatementSyntax ParseWhileStatement()
         {
