@@ -1,4 +1,5 @@
-﻿using Minsk.CodeAnalysis.Syntax.Kind;
+﻿using Minsk.CodeAnalysis.Syntax.Core;
+using Minsk.CodeAnalysis.Syntax.Kind;
 using Minsk.CodeAnalysis.Text;
 using System.Collections.Immutable;
 using static System.Net.Mime.MediaTypeNames;
@@ -106,7 +107,7 @@ internal sealed class Lexer
 
     private bool TryReadIdentifierOrKeyword()
     {
-        if (char.IsLetter(Current))
+        if (char.IsLetterOrDigit(Current) || Current == '_')
         {
             ReadIdentifierTokenOrKeyword();
             return true;
@@ -143,7 +144,7 @@ internal sealed class Lexer
 
     private void ReadIdentifierTokenOrKeyword()
     {
-        while (char.IsLetter(Current))
+        while (char.IsLetterOrDigit(Current) || Current == '_')
             Next();
 
         var length = _position - _start;
