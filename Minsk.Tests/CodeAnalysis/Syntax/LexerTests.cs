@@ -1,4 +1,4 @@
-﻿using Minsk.CodeAnalysis.Syntax;
+﻿using Minsk.CodeAnalysis.Syntax.Core;
 using Minsk.CodeAnalysis.Syntax.Kind;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -154,10 +154,14 @@ public class LexerTests
             return true;
         if (t1keywords && t2 == SyntaxKind.IdentifierToken)
             return true;
+        if (t1keywords && t2 == SyntaxKind.NumberToken)
+            return true;
         if (t1 == SyntaxKind.IdentifierToken && t2keywords)
             return true;
 
         if (t1 == SyntaxKind.IdentifierToken && t2 == SyntaxKind.IdentifierToken)
+            return true;
+        if (t1 == SyntaxKind.IdentifierToken && t2 == SyntaxKind.NumberToken)
             return true;
 
         if (t1 == SyntaxKind.NumberToken && t2 == SyntaxKind.NumberToken)

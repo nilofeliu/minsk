@@ -2,7 +2,8 @@
 using Minsk.CodeAnalysis.Binding.Objects;
 using Minsk.CodeAnalysis.Binding.Statements;
 using Minsk.CodeAnalysis.Lowering;
-using Minsk.CodeAnalysis.Syntax;
+using Minsk.CodeAnalysis.Symbols;
+using Minsk.CodeAnalysis.Syntax.Core;
 using System.Collections.Immutable;
 
 namespace Minsk.CodeAnalysis

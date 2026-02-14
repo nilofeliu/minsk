@@ -2,6 +2,7 @@
 using Minsk.CodeAnalysis.Binding.Expressions;
 using Minsk.CodeAnalysis.Binding.Objects;
 using Minsk.CodeAnalysis.Binding.Statements;
+using Minsk.CodeAnalysis.Symbols;
 using Minsk.CodeAnalysis.Syntax.Kind;
 using System.Collections.Immutable;
 

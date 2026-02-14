@@ -2,7 +2,7 @@
 using Minsk.CodeAnalysis.Text;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace Minsk.CodeAnalysis.Syntax
+namespace Minsk.CodeAnalysis.Syntax.Core
 {
     public sealed class SyntaxToken : SyntaxNode
     {

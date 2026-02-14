@@ -1,4 +1,4 @@
-﻿using Minsk.CodeAnalysis.Syntax;
+﻿using Minsk.CodeAnalysis.Syntax.Core;
 using Minsk.CodeAnalysis.Syntax.Expression;
 using Minsk.CodeAnalysis.Syntax.Kind;
 using Minsk.CodeAnalysis.Syntax.Statement;

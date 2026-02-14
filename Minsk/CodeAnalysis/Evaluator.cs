@@ -1,6 +1,7 @@
 ﻿using Minsk.CodeAnalysis.Binding.Expressions;
 using Minsk.CodeAnalysis.Binding.Kind;
 using Minsk.CodeAnalysis.Binding.Statements;
+using Minsk.CodeAnalysis.Symbols;
 using System;
 using System.Collections.Generic;
 using System.Linq;

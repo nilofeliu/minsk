@@ -1,4 +1,5 @@
 ﻿using Minsk.CodeAnalysis.Binding.Statements;
+using Minsk.CodeAnalysis.Symbols;
 using System.Collections.Immutable;
 
 namespace Minsk.CodeAnalysis.Binding.Objects

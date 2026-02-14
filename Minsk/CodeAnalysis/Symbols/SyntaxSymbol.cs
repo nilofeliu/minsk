@@ -1,18 +1,20 @@
 ﻿using Minsk.CodeAnalysis.Syntax.Kind;
 
-namespace Minsk.CodeAnalysis.Syntax.Object
+namespace Minsk.CodeAnalysis.Symbols
 {
-    public sealed class SyntaxType
+    public sealed class SyntaxSymbol
     {
         public SyntaxKind Kind { get; }
         public string Text { get; }
         public int Precedence { get; }
 
-        public SyntaxType(SyntaxKind kind, string text, int precedence)
+        public SyntaxSymbol(SyntaxKind kind, string text, int precedence)
         {
             Kind = kind;
             Text = text;
             Precedence = precedence;
         }
     }
+
+    
 }

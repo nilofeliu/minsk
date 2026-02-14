@@ -1,6 +1,9 @@
 ﻿using Minsk.CodeAnalysis.Binding.Expressions;
 using Minsk.CodeAnalysis.Binding.Objects;
 using Minsk.CodeAnalysis.Binding.Statements;
+using Minsk.CodeAnalysis.Symbols;
+using Minsk.CodeAnalysis.Syntax;
+using Minsk.CodeAnalysis.Syntax.Core;
 using Minsk.CodeAnalysis.Syntax.Expression;
 using Minsk.CodeAnalysis.Syntax.Kind;
 using Minsk.CodeAnalysis.Syntax.Object;
@@ -80,6 +83,8 @@ internal sealed class Binder
                 return BindWhileStatement((WhileStatementSyntax)syntax);
             case SyntaxKind.ForStatement:
                 return BindForStatement((ForStatementSyntax)syntax);
+            case SyntaxKind.SwitchStatement:
+                return BindSwitchStatement((SwitchStatementSyntax)syntax);
             case SyntaxKind.ExpressionStatement:
                 return BindExpressionStatement((ExpressionStatementSyntax)syntax);
             default:
@@ -151,6 +156,62 @@ internal sealed class Binder
         _scope = _scope.Parent;
 
         return new BoundForStatement(variable, lowerBound, upperBound, body);
+    }
+
+    private BoundStatement BindSwitchStatement(SwitchStatementSyntax syntax)
+    {
+        var boundPattern = BindExpression(syntax.Pattern);
+
+        // Bind default case
+        BoundStatement boundDefault = null;
+        if (syntax.DefaultCase != null)
+        {
+            var defaultStatements = ImmutableArray.CreateBuilder<BoundStatement>();
+            foreach (var stmt in syntax.DefaultCase.Statement)
+            {
+                defaultStatements.Add(BindStatement(stmt));
+            }
+            boundDefault = new BoundBlockStatement(defaultStatements.ToImmutable());
+        }
+
+        // Build if-else chain
+        BoundStatement result = boundDefault;
+
+        foreach (var caseClause in syntax.Cases)
+        {
+            var boundCaseExpression = BindExpression(caseClause.Expression);
+
+            var equalsOperator = BoundBinaryOperator.Bind(
+                SyntaxKind.EqualsEqualsToken,
+                boundPattern.Type,
+                boundCaseExpression.Type);
+
+            var condition = new BoundBinaryExpression(
+                boundPattern,
+                equalsOperator,
+                boundCaseExpression);
+
+            var caseStatements = ImmutableArray.CreateBuilder<BoundStatement>();
+            foreach (var stmt in caseClause.Statement)
+            {
+                caseStatements.Add(BindStatement(stmt));
+            }
+            var boundCaseStatement = new BoundBlockStatement(caseStatements.ToImmutable());
+
+            result = new BoundIfStatement(condition, boundCaseStatement, result);
+        }
+
+        return result;
+
+
+        // For Testing and Debug only
+        // Not yet implemented
+        // Just a placeholder
+        //var _syntax = new LiteralExpressionSyntax(new SyntaxToken(SyntaxKind.BoolKeyword, 0, "true", null),
+        //    0);
+
+        //var output = BindExpression(_syntax);
+        //return new BoundExpressionStatement(output);
     }
 
     private BoundExpression BindExpression(ExpressionSyntax syntax, Type targetType)

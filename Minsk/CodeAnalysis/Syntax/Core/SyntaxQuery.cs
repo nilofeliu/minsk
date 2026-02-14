@@ -1,7 +1,9 @@
 ﻿using Minsk.CodeAnalysis.Syntax.Kind;
 using System.Collections.ObjectModel;
 
-namespace Minsk.CodeAnalysis.Syntax;
+namespace Minsk.CodeAnalysis.Syntax.Core;
+
+
 
 public static class SyntaxQuery
 {

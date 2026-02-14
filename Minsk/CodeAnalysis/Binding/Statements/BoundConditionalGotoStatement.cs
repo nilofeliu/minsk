@@ -1,5 +1,6 @@
 ﻿using Minsk.CodeAnalysis.Binding.Expressions;
 using Minsk.CodeAnalysis.Binding.Kind;
+using Minsk.CodeAnalysis.Symbols;
 
 namespace Minsk.CodeAnalysis.Binding.Statements
 {

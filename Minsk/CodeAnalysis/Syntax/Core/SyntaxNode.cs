@@ -2,7 +2,7 @@
 using Minsk.CodeAnalysis.Text;
 using System.Reflection;
 
-namespace Minsk.CodeAnalysis.Syntax
+namespace Minsk.CodeAnalysis.Syntax.Core
 {
     public abstract class SyntaxNode
     {

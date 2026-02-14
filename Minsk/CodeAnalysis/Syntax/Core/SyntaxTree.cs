@@ -3,7 +3,7 @@ using Minsk.CodeAnalysis.Syntax.Object;
 using Minsk.CodeAnalysis.Text;
 using System.Collections.Immutable;
 
-namespace Minsk.CodeAnalysis.Syntax
+namespace Minsk.CodeAnalysis.Syntax.Core
 {
     public sealed class SyntaxTree
     {

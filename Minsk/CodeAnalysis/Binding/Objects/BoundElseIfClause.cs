@@ -1,6 +1,6 @@
 ﻿using Minsk.CodeAnalysis.Binding.Expressions;
 using Minsk.CodeAnalysis.Binding.Statements;
-using Minsk.CodeAnalysis.Syntax;
+using Minsk.CodeAnalysis.Syntax.Core;
 using Minsk.CodeAnalysis.Syntax.Kind;
 
 internal sealed class BoundElseIfClause : SyntaxNode

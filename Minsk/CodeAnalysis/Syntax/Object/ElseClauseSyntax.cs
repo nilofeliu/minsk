@@ -1,4 +1,5 @@
-﻿using Minsk.CodeAnalysis.Syntax.Kind;
+﻿using Minsk.CodeAnalysis.Syntax.Core;
+using Minsk.CodeAnalysis.Syntax.Kind;
 using Minsk.CodeAnalysis.Syntax.Statement;
 
 namespace Minsk.CodeAnalysis.Syntax.Object

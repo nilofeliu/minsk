@@ -21,6 +21,7 @@
         CompilationUnit,
         ElseClause,
         ElseIfClause,
+        //SwitchCaseClause,
 
         // Operators
         AmpersandToken,
@@ -46,8 +47,12 @@
         ForKeyword,
         WhileKeyword,
         IfKeyword,
+        ElseIfKeyword,
         ElseKeyword,
         ToKeyword,
+        SwitchKeyword,
+        SwitchCaseKeyword,
+        SwitchDefaultKeyword,
 
         // Expressions
         AssignmentExpression,
@@ -64,6 +69,43 @@
         IfStatement,
         WhileStatement,
         VariableDeclaration,
-        ElseIfKeyword,
+        SwitchStatement,
+
+        //Flow Control
+        ContinueKeyword,
+        BreakKeyword,
+        EndKeyword,
+
+        //Typed Variables
+        VoidKeyword,
+        CharKeyword,
+        BoolKeyword,
+        ByteKeyword,
+        SByteKeyword,
+        ShortKeyword,
+        UShortKeyword,
+        IntKeyword,
+        UIntKeyword,
+        LongKeyword,
+        ULongKeyword,
+        FloatKeyword,
+        DoubleKeyword,
+        DecimalKeyword,
+        StringKeyword,
+        ObjectKeyword,
+
+        // Type .Net Frameworks Keywords
+        SingleKeyword,
+        Int8Keyword,
+        Int16Keyword,
+        Int32Keyword,
+        Int64Keyword,
+        UInt8Keyword,
+        UInt16Keyword,
+        UInt32Keyword,
+        UInt64Keyword,
+
+        //Punctuation Token
+        ColonToken,
     }
 }
