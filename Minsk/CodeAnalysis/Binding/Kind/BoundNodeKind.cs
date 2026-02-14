@@ -26,6 +26,7 @@
         LabelStatement,
         ConditionalGotoStatement,
         SwitchStatement,
+        SwitchCase,
     }
 }
 

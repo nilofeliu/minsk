@@ -12,12 +12,13 @@ public sealed class SwitchStatementSyntax : StatementSyntax
         SyntaxToken switchKeyword,
         ExpressionSyntax pattern,
         ImmutableArray<SwitchCaseStatementSyntax> cases,
-        SwitchCaseStatementSyntax defaultCase)
+        SwitchCaseStatementSyntax defaultCase, SyntaxToken endToken)
     {
         SwitchKeyword = switchKeyword;
         Pattern = pattern;
         Cases = cases;
         DefaultCase = defaultCase;
+        EndToken = endToken;
     }
 
     public override SyntaxKind Kind => SyntaxKind.SwitchStatement;
@@ -25,4 +26,5 @@ public sealed class SwitchStatementSyntax : StatementSyntax
     public ExpressionSyntax Pattern { get; }  // ← Added
     public ImmutableArray<SwitchCaseStatementSyntax>? Cases { get; }
     public SwitchCaseStatementSyntax? DefaultCase { get; }
+    public SyntaxToken EndToken { get; }
 }

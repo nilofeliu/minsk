@@ -160,58 +160,39 @@ internal sealed class Binder
 
     private BoundStatement BindSwitchStatement(SwitchStatementSyntax syntax)
     {
-        var boundPattern = BindExpression(syntax.Pattern);
+        // Bind the switch value expression
+        var boundSwitchValue = BindExpression(syntax.Pattern);
 
-        // Bind default case
-        BoundStatement boundDefault = null;
+        // Bind each case
+        ImmutableArray<BoundSwitchCase>? boundCases = null;
+
+        if (syntax.Cases.HasValue)
+        {
+            var boundCasesBuilder = ImmutableArray.CreateBuilder<BoundSwitchCase>();
+
+            foreach (var caseClause in syntax.Cases.Value)
+            {
+                // Bind the case pattern expression
+                var boundCasePattern = BindExpression(caseClause.Expression);
+
+                // Bind the case body statement
+                var boundCaseBody = BindStatement(caseClause.Body);
+
+                boundCasesBuilder.Add(new BoundSwitchCase(boundCasePattern, boundCaseBody));
+            }
+
+            boundCases = boundCasesBuilder.ToImmutable();
+        }
+
+        // Bind default case if present
+        BoundSwitchCase? boundDefault = null;
         if (syntax.DefaultCase != null)
         {
-            var defaultStatements = ImmutableArray.CreateBuilder<BoundStatement>();
-            foreach (var stmt in syntax.DefaultCase.Statement)
-            {
-                defaultStatements.Add(BindStatement(stmt));
-            }
-            boundDefault = new BoundBlockStatement(defaultStatements.ToImmutable());
+            var boundDefaultBody = BindStatement(syntax.DefaultCase.Body);
+            boundDefault = new BoundSwitchCase(null, boundDefaultBody); // No pattern for default
         }
 
-        // Build if-else chain
-        BoundStatement result = boundDefault;
-
-        foreach (var caseClause in syntax.Cases)
-        {
-            var boundCaseExpression = BindExpression(caseClause.Expression);
-
-            var equalsOperator = BoundBinaryOperator.Bind(
-                SyntaxKind.EqualsEqualsToken,
-                boundPattern.Type,
-                boundCaseExpression.Type);
-
-            var condition = new BoundBinaryExpression(
-                boundPattern,
-                equalsOperator,
-                boundCaseExpression);
-
-            var caseStatements = ImmutableArray.CreateBuilder<BoundStatement>();
-            foreach (var stmt in caseClause.Statement)
-            {
-                caseStatements.Add(BindStatement(stmt));
-            }
-            var boundCaseStatement = new BoundBlockStatement(caseStatements.ToImmutable());
-
-            result = new BoundIfStatement(condition, boundCaseStatement, result);
-        }
-
-        return result;
-
-
-        // For Testing and Debug only
-        // Not yet implemented
-        // Just a placeholder
-        //var _syntax = new LiteralExpressionSyntax(new SyntaxToken(SyntaxKind.BoolKeyword, 0, "true", null),
-        //    0);
-
-        //var output = BindExpression(_syntax);
-        //return new BoundExpressionStatement(output);
+        return new BoundSwitchStatement(boundSwitchValue, boundCases, boundDefault);
     }
 
     private BoundExpression BindExpression(ExpressionSyntax syntax, Type targetType)

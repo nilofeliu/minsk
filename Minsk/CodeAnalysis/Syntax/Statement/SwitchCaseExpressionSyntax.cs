@@ -11,15 +11,15 @@ public sealed class SwitchCaseStatementSyntax : StatementSyntax
     public SwitchCaseStatementSyntax(
         SyntaxToken caseKeyword,
         ExpressionSyntax caseMatch,
-        ImmutableArray<StatementSyntax> statement)
+        StatementSyntax body)
     {
         CaseKeyword = caseKeyword;
         Expression = caseMatch;
-        Statement = statement;
+        Body = body;
     }
 
     public override SyntaxKind Kind => SyntaxKind.SwitchCaseKeyword;
     public SyntaxToken CaseKeyword { get; }
     public ExpressionSyntax Expression { get; }
-    public ImmutableArray<StatementSyntax> Statement { get; }
+    public StatementSyntax Body { get; }
 }

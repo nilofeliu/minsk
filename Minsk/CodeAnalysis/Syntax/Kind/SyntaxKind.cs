@@ -21,7 +21,8 @@
         CompilationUnit,
         ElseClause,
         ElseIfClause,
-        //SwitchCaseClause,
+        SwitchCaseClause,
+        SwitchDefaultClause,
 
         // Operators
         AmpersandToken,

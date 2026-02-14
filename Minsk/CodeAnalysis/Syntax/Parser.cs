@@ -114,35 +114,34 @@ namespace Minsk.CodeAnalysis.Syntax
             var keyword = MatchToken(SyntaxKind.SwitchKeyword);
             var pattern = ParseExpression();
             MatchToken(SyntaxKind.ColonToken);
-            var casesBuilder = ImmutableArray.CreateBuilder<StatementSyntax>();
+            var casesBuilder = ImmutableArray.CreateBuilder<SwitchCaseStatementSyntax>();
             while (Current.Kind != SyntaxKind.EndKeyword &&
+                Current.Kind != SyntaxKind.SwitchDefaultKeyword &&
                 Current.Kind != SyntaxKind.EndOfFileToken)  // ← See point 2
             {
-                var startToken = Current;
-                var statement = ParseSwitchCaseStatement();
-                casesBuilder.Add(statement);
+                var starToken = Current;
 
-                // if ParseStatement does not consume any token,
-                // skip the current token and continue.
-                // No error needs to be reporteed, because it has 
-                // already been tried to parse the expression;
-
-                if (Current == startToken) NextToken();
-                //Console.Write();
+                SwitchCaseStatementSyntax statement = null;
+                if (Current.Kind == SyntaxKind.SwitchCaseKeyword)
+                {
+                    statement = ParseSwitchCaseStatement();
+                    casesBuilder.Add(statement);
+                }
+                if (starToken == Current)
+                    NextToken();
             }
             var cases = casesBuilder.ToImmutable();
-
+              
             SwitchCaseStatementSyntax defaultCase = null;
 
             if (Current.Kind == SyntaxKind.SwitchDefaultKeyword)
                 defaultCase = ParseSwitchCaseStatement();
 
-            if (Current.Kind == SyntaxKind.EndKeyword)
-                MatchToken(SyntaxKind.EndKeyword);
+            var endToken = MatchToken(SyntaxKind.EndKeyword);
 
-            var _cases = ImmutableArray<SwitchCaseStatementSyntax>.Empty;
+            // var _cases = cases;  //ImmutableArray<SwitchCaseStatementSyntax>.Empty;
 
-            var output = new SwitchStatementSyntax(keyword, pattern, _cases, defaultCase);
+            var output = new SwitchStatementSyntax(keyword, pattern, cases, defaultCase, endToken);
 
             return output;
 
@@ -150,28 +149,15 @@ namespace Minsk.CodeAnalysis.Syntax
 
         private SwitchCaseStatementSyntax ParseSwitchCaseStatement()
         {
-            SyntaxToken keyword;
+            if (Current.Kind != SyntaxKind.SwitchCaseKeyword && Current.Kind != SyntaxKind.SwitchDefaultKeyword)
+                return null;
 
-            if (Current.Kind == SyntaxKind.SwitchCaseKeyword)
-                keyword = MatchToken(SyntaxKind.SwitchCaseKeyword);
-            else 
-                keyword = MatchToken(SyntaxKind.SwitchDefaultKeyword);
-          
-                var matchCase = ParseExpression();
+            SyntaxToken keyword = NextToken();            
+            var caseExpression = ParseExpression();
+            MatchToken(SyntaxKind.ColonToken);
+            var caseStatement = ParseStatement();
 
-            var caseStatementsBuilder = ImmutableArray.CreateBuilder<StatementSyntax>();
-            while (Current.Kind != SyntaxKind.SwitchCaseKeyword &&
-                Current.Kind != SyntaxKind.SwitchDefaultKeyword &&
-                Current.Kind != SyntaxKind.EndKeyword &&
-                Current.Kind != SyntaxKind.EndOfFileToken)
-            {
-                var statement = ParseStatement();
-                caseStatementsBuilder.Add(statement);
-            }
-            var caseStatements = caseStatementsBuilder.ToImmutable();
-
-
-            return new SwitchCaseStatementSyntax(keyword, matchCase, caseStatements);
+            return new SwitchCaseStatementSyntax(keyword, caseExpression, caseStatement);
         }
 
 

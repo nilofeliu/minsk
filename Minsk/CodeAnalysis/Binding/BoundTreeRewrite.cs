@@ -1,6 +1,7 @@
 ﻿using Minsk.CodeAnalysis.Binding.Expressions;
 using Minsk.CodeAnalysis.Binding.Kind;
 using Minsk.CodeAnalysis.Binding.Statements;
+using Minsk.CodeAnalysis.Syntax.Kind;
 using System.Collections.Immutable;
 using System.Linq.Expressions;
 
@@ -23,6 +24,8 @@ internal abstract class BoundTreeRewrite
                 return RewriteWhileStatement((BoundWhileStatement)node);
             case BoundNodeKind.ForStatement:
                 return RewriteForStatement((BoundForStatement)node);
+            case BoundNodeKind.SwitchStatement:
+                return RewriteSwitchStatement((BoundSwitchStatement)node);
             case BoundNodeKind.LabelStatement:
                 return RewriteLabelStatement((BoundLabelStatement)node);
             case BoundNodeKind.GotoStatement:
@@ -111,6 +114,59 @@ internal abstract class BoundTreeRewrite
 
         return new BoundForStatement(node.Variable, lowerBound, upperBound, body);
     }
+
+    private BoundStatement RewriteSwitchStatement(BoundSwitchStatement node)
+    {
+        // switch (x) {
+        //     case 1: stmt1;
+        //     case 2: stmt2;
+        //     default: stmtDefault;
+        // }
+        //
+        // Becomes:
+        //
+        // if (x == 1)
+        //     stmt1
+        // else if (x == 2)
+        //     stmt2
+        // else
+        //     stmtDefault
+
+        BoundStatement? result = null;
+
+        // Build from the end backwards (default first, then cases in reverse)
+        if (node.DefaultCase != null)
+        {
+            result = node.DefaultCase.Body;
+        }
+
+        // Process cases in reverse order to build nested if-else chain
+        if (node.Cases.HasValue)
+        {
+            for (int i = node.Cases.Value.Length - 1; i >= 0; i--)
+            {
+                var caseClause = node.Cases.Value[i];
+
+                // Create equality check: switchValue == casePattern
+                var condition = new BoundBinaryExpression(
+                    node.Pattern,
+                    BoundBinaryOperator.Bind(SyntaxKind.EqualsEqualsToken,
+                                             node.Pattern.Type,
+                                             caseClause.Pattern.Type),
+                    caseClause.Pattern
+                );
+
+                var thenStatement = caseClause.Body;
+                var elseStatement = result; // Previous result becomes else clause
+
+                result = new BoundIfStatement(condition, thenStatement, elseStatement);
+            }
+        }
+
+        // If no cases and no default, return empty statement
+        return result ?? new BoundBlockStatement(ImmutableArray<BoundStatement>.Empty);
+    }
+
 
     protected virtual BoundStatement RewriteLabelStatement(BoundLabelStatement node)
     {
