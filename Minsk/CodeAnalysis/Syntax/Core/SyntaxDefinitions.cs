@@ -43,6 +43,8 @@ public static class SyntaxDefinitions
         statementKeywords.Add(SyntaxKind.SwitchKeyword, new SyntaxSymbol(SyntaxKind.SwitchKeyword, "switch", 0));
         statementKeywords.Add(SyntaxKind.SwitchCaseKeyword, new SyntaxSymbol(SyntaxKind.SwitchCaseKeyword, "case", 0));
         statementKeywords.Add(SyntaxKind.SwitchDefaultKeyword, new SyntaxSymbol(SyntaxKind.SwitchDefaultKeyword, "default", 0));
+        statementKeywords.Add(SyntaxKind.MatchKeyword, new SyntaxSymbol(SyntaxKind.MatchKeyword, "match", 0));
+
 
         return statementKeywords;
     }
@@ -144,6 +146,7 @@ public static class SyntaxDefinitions
         //punctuationTokens.Add(SyntaxKind.CommaToken, new SyntaxSymbol(SyntaxKind.CommaToken, ",", 0));
         //punctuationTokens.Add(SyntaxKind.SemicolonToken, new SyntaxSymbol(SyntaxKind.SemicolonToken, ";", 0));
         punctuationTokens.Add(SyntaxKind.ColonToken, new SyntaxSymbol(SyntaxKind.ColonToken, ":", 0));
+       // punctuationTokens.Add(SyntaxKind.UnderscoreToken, new SyntaxSymbol(SyntaxKind.UnderscoreToken, "_", 0));
         //punctuationTokens.Add(SyntaxKind.DotToken, new SyntaxSymbol(SyntaxKind.DotToken, ".", 0));
         //punctuationTokens.Add(SyntaxKind.QuestionToken, new SyntaxSymbol(SyntaxKind.QuestionToken, "?", 0));
         //punctuationTokens.Add(SyntaxKind.ExclamationToken, new SyntaxSymbol(SyntaxKind.ExclamationToken, "!", 0));
@@ -151,7 +154,6 @@ public static class SyntaxDefinitions
         //punctuationTokens.Add(SyntaxKind.HashToken, new SyntaxSymbol(SyntaxKind.HashToken, "#", 0));
         //punctuationTokens.Add(SyntaxKind.DollarToken, new SyntaxSymbol(SyntaxKind.DollarToken, "$", 0));
         //punctuationTokens.Add(SyntaxKind.PercentToken, new SyntaxSymbol(SyntaxKind.PercentToken, "%", 0));
-        //punctuationTokens.Add(SyntaxKind.UnderscoreToken, new SyntaxSymbol(SyntaxKind.UnderscoreToken, "_", 0));
         //punctuationTokens.Add(SyntaxKind.BacktickToken, new SyntaxSymbol(SyntaxKind.BacktickToken, "`", 0));
         //punctuationTokens.Add(SyntaxKind.BackslashToken, new SyntaxSymbol(SyntaxKind.BackslashToken, "\\", 0));
         //punctuationTokens.Add(SyntaxKind.OpenBracketToken, new SyntaxSymbol(SyntaxKind.OpenBracketToken, "[", 0));

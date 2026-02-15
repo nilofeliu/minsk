@@ -83,10 +83,17 @@ namespace Minsk.CodeAnalysis.Lowering
                 for (int i = 0; i < node.Cases.Value.Length; i++)
                 {
                     statements.Add(new BoundLabelStatement(caseLabels[i]));
-                    statements.Add(node.Cases.Value[i].Body);
-                    statements.Add(new BoundGotoStatement(endLabel));
+
+                    if (node.Cases.Value[i].Body != null &&
+                        !(node.Cases.Value[i].Body is BoundBlockStatement block && block.Statements.Length == 0))
+                    {
+                        statements.Add(node.Cases.Value[i].Body);
+                        statements.Add(new BoundGotoStatement(endLabel)); // ← Only add if has body
+                    }
+                    // Empty body = no goto, falls through to next label
                 }
             }
+
 
             // Generate default body if present
             if (node.DefaultCase != null)

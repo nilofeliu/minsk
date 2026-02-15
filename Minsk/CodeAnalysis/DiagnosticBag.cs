@@ -83,5 +83,11 @@ namespace Minsk.CodeAnalysis
             var message = $"Variable '{name}' is read-only and cannot be assigned to.";
             Report(span, message);
         }
+
+        internal void ReportDuplicateCaseLabel(TextSpan span, object value)
+        {
+            var message = $"The case label '{value}' already appears in this switch statement.";
+            Report(span, message);
+        }
     }
 }

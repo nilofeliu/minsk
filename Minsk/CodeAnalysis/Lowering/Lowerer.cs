@@ -69,11 +69,15 @@ internal sealed class Lowerer : BoundTreeRewrite
         return WhileStatement.Rewrite(this, node);
     }
 
-
     protected override BoundStatement RewriteForStatement(BoundForStatement node)
     {
         return ForStatement.Rewrite(this, node);
     }
-    
+
+    protected override BoundStatement RewriteSwitchStatement(BoundSwitchStatement node)
+    {
+        return SwitchStatement.Rewrite(this, node);
+    }
+
 }
 

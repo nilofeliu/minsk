@@ -50,6 +50,10 @@ namespace Minsk.CodeAnalysis.Syntax
             return _tokens[index];
         }
 
+        private SyntaxToken Lookahead()
+        { 
+            return Peek(1);
+        }
 
         private SyntaxToken Current => Peek(0);
 
@@ -89,6 +93,8 @@ namespace Minsk.CodeAnalysis.Syntax
                     return ParseIfStatement();
                 case SyntaxKind.SwitchKeyword:
                     return ParseSwitchStatement();
+                case SyntaxKind.MatchKeyword:
+                    return ParseSwitchStatement();
                 case SyntaxKind.WhileKeyword:
                     return ParseWhileStatement();
                 case SyntaxKind.ForKeyword:
@@ -111,20 +117,37 @@ namespace Minsk.CodeAnalysis.Syntax
 
         private StatementSyntax ParseSwitchStatement()
         {
-            var keyword = MatchToken(SyntaxKind.SwitchKeyword);
+            SyntaxToken keyword;
+            if (Current.Kind == SyntaxKind.MatchKeyword)
+                keyword = MatchToken(SyntaxKind.MatchKeyword);
+            else
+                keyword = MatchToken(SyntaxKind.SwitchKeyword);
+            
             var pattern = ParseExpression();
             MatchToken(SyntaxKind.ColonToken);
             var casesBuilder = ImmutableArray.CreateBuilder<SwitchCaseStatementSyntax>();
+
+            SwitchCaseStatementSyntax defaultCase = null;
+
             while (Current.Kind != SyntaxKind.EndKeyword &&
                 Current.Kind != SyntaxKind.SwitchDefaultKeyword &&
                 Current.Kind != SyntaxKind.EndOfFileToken)  // ← See point 2
             {
                 var starToken = Current;
+               // SwitchCaseStatementSyntax statement = null;
 
-                SwitchCaseStatementSyntax statement = null;
                 if (Current.Kind == SyntaxKind.SwitchCaseKeyword)
                 {
-                    statement = ParseSwitchCaseStatement();
+                    var statement = ParseSwitchCaseStatement();
+
+                    if (statement.Expression is NameExpressionSyntax name &&
+                        name.IdentifierToken.Text == "_")
+                    {
+                        defaultCase = statement;
+                        break;
+                    }
+
+
                     casesBuilder.Add(statement);
                 }
                 if (starToken == Current)
@@ -132,9 +155,8 @@ namespace Minsk.CodeAnalysis.Syntax
             }
             var cases = casesBuilder.ToImmutable();
               
-            SwitchCaseStatementSyntax defaultCase = null;
 
-            if (Current.Kind == SyntaxKind.SwitchDefaultKeyword)
+            if (Current.Kind == SyntaxKind.SwitchDefaultKeyword && defaultCase == null)
                 defaultCase = ParseSwitchCaseStatement();
 
             var endToken = MatchToken(SyntaxKind.EndKeyword);
@@ -152,10 +174,36 @@ namespace Minsk.CodeAnalysis.Syntax
             if (Current.Kind != SyntaxKind.SwitchCaseKeyword && Current.Kind != SyntaxKind.SwitchDefaultKeyword)
                 return null;
 
-            SyntaxToken keyword = NextToken();            
-            var caseExpression = ParseExpression();
+            SyntaxToken keyword = NextToken();
+            ExpressionSyntax caseExpression = null;
+            if (keyword.Kind == SyntaxKind.SwitchCaseKeyword)
+            {
+                caseExpression = ParseExpression();
+            }
             MatchToken(SyntaxKind.ColonToken);
-            var caseStatement = ParseStatement();
+
+
+            var statementBuilder = ImmutableArray.CreateBuilder<StatementSyntax>();
+            while (Current.Kind != SyntaxKind.EndKeyword &&
+                Current.Kind != SyntaxKind.SwitchDefaultKeyword &&
+                Current.Kind != SyntaxKind.SwitchCaseKeyword &&
+                Current.Kind != SyntaxKind.EndOfFileToken)  // ← See point 2
+            {
+                var starToken = Current;
+
+                var statement = ParseStatement();
+                statementBuilder.Add(statement);
+
+                if (starToken == Current)
+                    NextToken();
+            }
+
+            var statements = statementBuilder.ToImmutable();
+
+            var caseStatement = new BlockStatementSyntax(
+                new SyntaxToken(SyntaxKind.OpenBraceToken, 0, "", null),
+                statements,
+                new SyntaxToken(SyntaxKind.CloseBraceToken, 0, "", null));
 
             return new SwitchCaseStatementSyntax(keyword, caseExpression, caseStatement);
         }

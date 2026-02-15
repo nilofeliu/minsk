@@ -87,6 +87,13 @@ namespace Minsk.Tests.CodeAnalysis
 
         [InlineData("{var result = 0 for i = 1 to 10 { result = result + i } result }", 55)]
         [InlineData("{ var a = 10 for i = 1 to (a = a - 1) { } a }", 9)]
+
+        [InlineData("{ var a = 0 var x = 2 switch x: case 1: a = 10 case 2: a = 20 default: a = 30 end a }", 20)]
+        [InlineData("{ var a = 0 var x = 2 switch x: case 1: a = 5 a = a + 5 case 2: a = 10 a = a + 10 default: a = 30 end a }", 20)]
+        [InlineData("{ var a = 0 var x = 1 switch x: case 1: case 2: a = 10 a = a + 10 default: a = 30 end a }", 20)]
+
+        [InlineData("{ var a = 0 var x = 2 match x: case 1: a = 10 case 2: a = 20 case _: a = 30 end a }", 20)]
+        [InlineData("{ var a = 0 var x = 1 match x: case 1: case 2: a = 10 a = a + 10 default: a = 30 end a }", 20)]
         public void Evaluator_Computes_CorrectValues(string text, object expectedValue)
         {
             AssertValue(text, expectedValue);
@@ -128,6 +135,28 @@ namespace Minsk.Tests.CodeAnalysis
                 Unexpected token <EndOfFileToken>, expected <CloseBraceToken>.
             ";
 
+            AssertDiagnostics(text, diagnostics);
+        }
+
+        [Fact]
+        public void Evaluator_SwitchStatement_Reports_DuplicateCaseLabel()
+        {
+            var text = @"
+            {
+                var x = 2
+                switch x:
+                    case 1:
+                        var a = 10
+                    case [1]:
+                        var b = 20
+                    default:
+                        var c = 30
+                end
+            }
+        ";
+            var diagnostics = @"
+                  The case label '1' already appears in this switch statement.
+              ";
             AssertDiagnostics(text, diagnostics);
         }
 

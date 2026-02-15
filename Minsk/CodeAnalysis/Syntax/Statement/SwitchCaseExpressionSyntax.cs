@@ -10,16 +10,20 @@ public sealed class SwitchCaseStatementSyntax : StatementSyntax
 {
     public SwitchCaseStatementSyntax(
         SyntaxToken caseKeyword,
-        ExpressionSyntax caseMatch,
-        StatementSyntax body)
+        ExpressionSyntax? caseMatch,
+        StatementSyntax? body)
     {
         CaseKeyword = caseKeyword;
         Expression = caseMatch;
         Body = body;
+
     }
 
-    public override SyntaxKind Kind => SyntaxKind.SwitchCaseKeyword;
+    public override SyntaxKind Kind =>
+     CaseKeyword.Kind == SyntaxKind.SwitchCaseKeyword
+         ? SyntaxKind.SwitchCaseClause
+         : SyntaxKind.SwitchDefaultClause;
     public SyntaxToken CaseKeyword { get; }
-    public ExpressionSyntax Expression { get; }
-    public StatementSyntax Body { get; }
+    public ExpressionSyntax? Expression { get; }
+    public StatementSyntax? Body { get; }
 }

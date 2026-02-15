@@ -27,6 +27,7 @@
         ConditionalGotoStatement,
         SwitchStatement,
         SwitchCase,
+        ForeachStatement,
     }
 }
 

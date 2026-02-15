@@ -40,6 +40,18 @@ namespace Minsk.CodeAnalysis.Syntax.Core
                                 yield return child;
                     }
                 }
+                else if (property.PropertyType.IsGenericType &&
+                         property.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>) &&
+                         typeof(IEnumerable<SyntaxNode>).IsAssignableFrom(Nullable.GetUnderlyingType(property.PropertyType)))
+                {
+                    var children = (IEnumerable<SyntaxNode>?)property.GetValue(this);
+                    if (children != null)
+                    {
+                        foreach (var child in children)
+                            if (child != null)
+                                yield return child;
+                    }
+                }
             }
         }
 

@@ -115,58 +115,94 @@ internal abstract class BoundTreeRewrite
         return new BoundForStatement(node.Variable, lowerBound, upperBound, body);
     }
 
-    private BoundStatement RewriteSwitchStatement(BoundSwitchStatement node)
+    protected virtual BoundStatement RewriteForeachStatement(BoundForeachStatement node)
     {
-        // switch (x) {
-        //     case 1: stmt1;
-        //     case 2: stmt2;
-        //     default: stmtDefault;
-        // }
-        //
-        // Becomes:
-        //
-        // if (x == 1)
-        //     stmt1
-        // else if (x == 2)
-        //     stmt2
-        // else
-        //     stmtDefault
+        var collection = RewriteExpression(node.Collection);
+        var body = RewriteStatement(node.Body);
+        if (collection == node.Collection && body == node.Body)
+            return node;
+        return new BoundForeachStatement(node.Variable, collection, body);
+    }
 
+    protected virtual BoundStatement RewriteSwitchStatement(BoundSwitchStatement node)
+    {
         BoundStatement? result = null;
 
-        // Build from the end backwards (default first, then cases in reverse)
         if (node.DefaultCase != null)
         {
             result = node.DefaultCase.Body;
         }
 
-        // Process cases in reverse order to build nested if-else chain
         if (node.Cases.HasValue)
         {
             for (int i = node.Cases.Value.Length - 1; i >= 0; i--)
             {
                 var caseClause = node.Cases.Value[i];
 
-                // Create equality check: switchValue == casePattern
-                var condition = new BoundBinaryExpression(
+                // Skip empty cases - they'll be combined with the next non-empty case
+                if (caseClause.Body == null ||
+                    (caseClause.Body is BoundBlockStatement block && block.Statements.Length == 0))
+                {
+                    continue;
+                }
+
+                // Collect conditions from this case and any preceding empty cases that fall through
+                var conditions = new List<BoundExpression>();
+
+                // Add current case condition
+                var currentCondition = new BoundBinaryExpression(
                     node.Pattern,
                     BoundBinaryOperator.Bind(SyntaxKind.EqualsEqualsToken,
                                              node.Pattern.Type,
                                              caseClause.Pattern.Type),
                     caseClause.Pattern
                 );
+                conditions.Add(currentCondition);
+
+                // Look backwards for empty cases that fall through to this one
+                for (int j = i - 1; j >= 0; j--)
+                {
+                    var prevCase = node.Cases.Value[j];
+                    if (prevCase.Body != null &&
+                        !(prevCase.Body is BoundBlockStatement b && b.Statements.Length == 0))
+                    {
+                        break; // Hit a non-empty case, stop
+                    }
+
+                    // Add this empty case's condition
+                    var prevCondition = new BoundBinaryExpression(
+                        node.Pattern,
+                        BoundBinaryOperator.Bind(SyntaxKind.EqualsEqualsToken,
+                                                 node.Pattern.Type,
+                                                 prevCase.Pattern.Type),
+                        prevCase.Pattern
+                    );
+                    conditions.Add(prevCondition);
+                    i--; // Skip this case in the outer loop
+                }
+
+                // Combine all conditions with OR
+                BoundExpression combinedCondition = conditions[0];
+                for (int k = 1; k < conditions.Count; k++)
+                {
+                    combinedCondition = new BoundBinaryExpression(
+                        combinedCondition,
+                        BoundBinaryOperator.Bind(SyntaxKind.PipePipeToken,
+                                                typeof(bool),
+                                                typeof(bool)),
+                        conditions[k]
+                    );
+                }
 
                 var thenStatement = caseClause.Body;
-                var elseStatement = result; // Previous result becomes else clause
+                var elseStatement = result;
 
-                result = new BoundIfStatement(condition, thenStatement, elseStatement);
+                result = RewriteIfStatement(new BoundIfStatement(combinedCondition, thenStatement, elseStatement));
             }
         }
 
-        // If no cases and no default, return empty statement
         return result ?? new BoundBlockStatement(ImmutableArray<BoundStatement>.Empty);
     }
-
 
     protected virtual BoundStatement RewriteLabelStatement(BoundLabelStatement node)
     {

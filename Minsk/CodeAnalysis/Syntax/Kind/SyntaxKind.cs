@@ -54,6 +54,7 @@
         SwitchKeyword,
         SwitchCaseKeyword,
         SwitchDefaultKeyword,
+        MatchKeyword,
 
         // Expressions
         AssignmentExpression,
@@ -108,5 +109,6 @@
 
         //Punctuation Token
         ColonToken,
+        //UnderscoreToken,
     }
 }

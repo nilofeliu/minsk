@@ -26,7 +26,7 @@ internal sealed class BoundSwitchStatement : BoundStatement
 
 internal sealed class BoundSwitchCase : BoundNode
 {
-    public BoundSwitchCase(BoundExpression? pattern, BoundStatement body)
+    public BoundSwitchCase(BoundExpression? pattern, BoundStatement? body)
     {
         Pattern = pattern;
         Body = body;
@@ -35,5 +35,5 @@ internal sealed class BoundSwitchCase : BoundNode
     public override BoundNodeKind Kind => BoundNodeKind.SwitchCase;
 
     public BoundExpression? Pattern { get; }  // Null for default case
-    public BoundStatement Body { get; }
+    public BoundStatement? Body { get; }
 }
