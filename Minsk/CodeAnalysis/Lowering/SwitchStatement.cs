@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Minsk.CodeAnalysis.Lowering
 {
-    internal class SwitchStatement
+    internal sealed class SwitchStatement
     {
         internal static BoundStatement Rewrite(Lowerer lowerer, BoundSwitchStatement node)
         {

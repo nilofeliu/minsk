@@ -3,7 +3,7 @@ using System.Collections.Immutable;
 
 namespace Minsk.CodeAnalysis.Lowering
 {
-    internal static class WhileStatement
+    internal sealed class WhileStatement
     {
         internal static BoundStatement Rewrite(Lowerer lowerer, BoundWhileStatement node)
         {

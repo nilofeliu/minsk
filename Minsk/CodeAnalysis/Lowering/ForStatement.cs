@@ -8,7 +8,7 @@ using System.Collections.Immutable;
 
 namespace Minsk.CodeAnalysis.Lowering
 {
-    internal static class ForStatement
+    internal sealed class ForStatement
     {
         internal static BoundStatement Rewrite(Lowerer lowerer, BoundForStatement node)
         {

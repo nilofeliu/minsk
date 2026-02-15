@@ -8,9 +8,7 @@ using System.Threading.Tasks;
 
 namespace Minsk.CodeAnalysis.Lowering
 {
-
-
-    internal static class IfStatement
+    internal sealed class IfStatement
     {
 
         internal static BoundStatement Rewrite(Lowerer lowerer, BoundIfStatement node)
