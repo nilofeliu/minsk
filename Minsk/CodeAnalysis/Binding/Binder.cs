@@ -27,9 +27,6 @@ internal sealed class Binder
     public static BoundGlobalScope BindGlobalScope(BoundGlobalScope previous, CompilationUnitSyntax syntax)
     {
         var parentScope = CreateParentScope(previous);
-        // Possible fix for Scope nesting without braces.
-        //if (parentScope != null)
-        //    parentScope = parentScope;
 
         var binder = new Binder(parentScope);
         var expression = binder.BindStatement(syntax.Statement);
@@ -158,44 +155,7 @@ internal sealed class Binder
         return new BoundForStatement(variable, lowerBound, upperBound, body);
     }
 
-    //private BoundStatement BindSwitchStatement(SwitchStatementSyntax syntax)
-    //{
-    //    // Bind the switch value expression
-    //    var boundSwitchValue = BindExpression(syntax.Pattern);
-
-    //    // Bind each case
-    //    ImmutableArray<BoundSwitchCase>? boundCases = null;
-
-    //    if (syntax.Cases.HasValue)
-    //    {
-    //        var boundCasesBuilder = ImmutableArray.CreateBuilder<BoundSwitchCase>();
-
-    //        foreach (var caseClause in syntax.Cases.Value)
-    //        {
-    //            // Bind the case pattern expression
-    //            var boundCasePattern = BindExpression(caseClause.Expression);
-
-    //            // Bind the case body statement
-    //            var boundCaseBody = BindStatement(caseClause.Body);
-
-    //            boundCasesBuilder.Add(new BoundSwitchCase(boundCasePattern, boundCaseBody));
-    //        }
-
-    //        boundCases = boundCasesBuilder.ToImmutable();
-    //    }
-
-    //    // Bind default case if present
-    //    BoundSwitchCase? boundDefault = null;
-    //    if (syntax.DefaultCase != null)
-    //    {
-    //        var boundDefaultBody = BindStatement(syntax.DefaultCase.Body);
-    //        boundDefault = new BoundSwitchCase(null, boundDefaultBody); // No pattern for default
-    //    }
-
-    //    return new BoundSwitchStatement(boundSwitchValue, boundCases, boundDefault);
-    //}
-
-
+ 
     private BoundStatement BindSwitchStatement(SwitchStatementSyntax syntax)
     {
         // Bind the switch value expression
