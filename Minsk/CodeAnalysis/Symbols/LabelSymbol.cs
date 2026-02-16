@@ -1,14 +1,14 @@
 ﻿namespace Minsk.CodeAnalysis.Symbols
 {
-    public sealed class LabelSymbol : ISymbol
+    public sealed class LabelSymbol
     {
         public LabelSymbol(string name)
         {
-            Text = name;
+            Name = name;
         }
 
-        public string Text { get; }
+        public string Name { get; }
 
-        public override string ToString() => Text;
+        public override string ToString() => Name;
     }
 }

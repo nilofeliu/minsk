@@ -1,17 +1,17 @@
 ﻿namespace Minsk.CodeAnalysis.Symbols
 {
-    public sealed class VariableSymbol : ISymbol
+    public sealed class VariableSymbol
     {
         public VariableSymbol(string name, bool isReadOnly, Type type)
         {
-            Text = name;
+            Name = name;
             IsReadOnly = isReadOnly;
             Type = type;
         }
-        public string Text { get; }
+        public string Name { get; }
         public bool IsReadOnly { get; }
         public Type Type { get; }
 
-        public override string ToString() => Text;
+        public override string ToString() => Name;
     }
 }

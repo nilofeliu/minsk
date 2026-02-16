@@ -1,16 +1,11 @@
-﻿using Minsk.CodeAnalysis;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Text;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Minsk
 {
     internal abstract class Repl
     {
-
-        protected Compilation _previous;
-
         internal void Run()
         {
 
@@ -138,90 +133,7 @@ namespace Minsk
 
         private void HandleKey(ConsoleKeyInfo key, ObservableCollection<string> document, SubmissionView view)
         {
-            //if (key.Modifiers == ConsoleModifiers.Control)
-            //{
-            //    switch (key.Key)
-            //    {
-            //        case ConsoleKey.X:
-            //            HandleCtrlX(document, view); // Exit CompilationUnit
-            //            break;
-            //            // Add other Ctrl+ shortcuts here
-            //    }
-            //}
-            //else
-            //{ }
-            if (key.Modifiers == default(ConsoleModifiers))
-            {
-                switch (key.Key)
-                {
-                    case ConsoleKey.Enter:
-                        HandleEnterKey(document, view);
-                        break;
-                    case ConsoleKey.LeftArrow:
-                        HandleLeftArrowKey(document, view);
-                        break;
-                    case ConsoleKey.RightArrow:
-                        HandleRighArrowKey(document, view);
-                        break;
-                    case ConsoleKey.UpArrow:
-                        HandleUpArrowKey(document, view);
-                        break;
-                    case ConsoleKey.DownArrow:
-                        HandleDownArrorKey(document, view);
-                        break;
-                    default:
-                        if (key.KeyChar >= ' ');
-                        HandleTypingKey(document, view, key.KeyChar.ToString());
-                        break;      
-
-                }
-            }
-        }
-
-        private void HandleCtrlX(ObservableCollection<string> document, SubmissionView view)
-        {
-            ResetCompilation();
-        }
-
-        private void HandleEnterKey(ObservableCollection<string> document, SubmissionView view)
-        {
-            document.Add(string.Empty);
-            view.CurrentCharacter = 0;
-            view.CurrentLineIndex = document.Count - 1;
-        }
-
-        private void HandleLeftArrowKey(ObservableCollection<string> document, SubmissionView view)
-        {
-            if (view.CurrentCharacter > 0) 
-                view.CurrentCharacter--;
-        }
-
-        private void HandleRighArrowKey(ObservableCollection<string> document, SubmissionView view)
-        {
-            var line = document[view.CurrentLineIndex];
-            if (view.CurrentCharacter < line.Length - 1)
-                view.CurrentCharacter++;
-        }
-
-        private void HandleUpArrowKey(ObservableCollection<string> document, SubmissionView view)
-        {
-            if (view.CurrentLineIndex > 0)
-                view.CurrentLineIndex--;
-        }
-
-        private void HandleDownArrorKey(ObservableCollection<string> document, SubmissionView view)
-        {
-
-            if (view.CurrentLineIndex > document.Count - 1) 
-                view.CurrentLineIndex++;
-        }
-
-        private void HandleTypingKey(ObservableCollection<string> document, SubmissionView view, string text)
-        {
-            var lineIndex = view.CurrentLineIndex;
-            var start = view.CurrentCharacter;
-            document[lineIndex] = document[lineIndex].Insert(start, text);
-            view.CurrentCharacter += text.Length;
+            throw new NotImplementedException();
         }
 
         private string EditSubmissionOld()
@@ -275,11 +187,6 @@ namespace Minsk
         protected abstract bool IsCompletedSubmission(string text);
 
         protected abstract void EvaluateSubmission(string text);
-
-        protected void ResetCompilation()
-        {
-            _previous = null;
-        }
 
         protected static void PrintExceptions(List<Exception> exceptions)
         {

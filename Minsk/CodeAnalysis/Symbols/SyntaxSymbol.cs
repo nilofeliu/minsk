@@ -2,21 +2,19 @@
 
 namespace Minsk.CodeAnalysis.Symbols
 {
-    public sealed class SyntaxSymbol : ISymbol
+    public sealed class SyntaxSymbol
     {
         public SyntaxKind Kind { get; }
         public string Text { get; }
-        public int UnaryPrecedence { get; }
-        public int BinaryPrecedence { get; }
+        public int Precedence { get; }
 
-        public SyntaxSymbol(SyntaxKind kind, string text, int binaryPrecedence = 0, int unaryPrecedence = 0)
+        public SyntaxSymbol(SyntaxKind kind, string text, int precedence)
         {
             Kind = kind;
             Text = text;
-            UnaryPrecedence = unaryPrecedence;
-            BinaryPrecedence = binaryPrecedence;
+            Precedence = precedence;
         }
     }
 
-
+    
 }

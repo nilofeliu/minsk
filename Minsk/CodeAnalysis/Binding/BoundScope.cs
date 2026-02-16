@@ -16,10 +16,10 @@ namespace Minsk.CodeAnalysis.Binding
 
         public bool TryDeclare(VariableSymbol variable)
         {
-            if (_variables.ContainsKey(variable.Text))
+            if (_variables.ContainsKey(variable.Name))
                 return false;
 
-            _variables.Add(variable.Text, variable);
+            _variables.Add(variable.Name, variable);
             return true;
         }
 

@@ -9,33 +9,19 @@ public static class SyntaxQuery
 {
     private static SyntaxIndex _syntaxIndex = SyntaxIndex.Instance;
 
-    //public static int GetUnaryOperatorPrecedence(this SyntaxKind kind)
-    //{
-    //    if (_syntaxIndex.UnaryOperators.TryGetValue(kind, out var syntaxType))
-    //        return syntaxType.UnaryPrecedence;
-
-    //    return 0;
-    //}
-
-    //public static int GetBinaryOperatorPrecedence(this SyntaxKind kind)
-    //{
-    //    if (_syntaxIndex.BinaryOperators.TryGetValue(kind, out var syntaxType))
-    //        return syntaxType.BinaryPrecedence;
-
-    //    return 0;
-    //}
-
     public static int GetUnaryOperatorPrecedence(this SyntaxKind kind)
     {
-        if (_syntaxIndex.Operators.TryGetValue(kind, out var syntaxSymbol))
-            return syntaxSymbol.UnaryPrecedence;
+        if (_syntaxIndex.UnaryOperators.TryGetValue(kind, out var syntaxType))
+            return syntaxType.Precedence;
+
         return 0;
     }
 
     public static int GetBinaryOperatorPrecedence(this SyntaxKind kind)
     {
-        if (_syntaxIndex.Operators.TryGetValue(kind, out var syntaxSymbol))
-            return syntaxSymbol.BinaryPrecedence;
+        if (_syntaxIndex.BinaryOperators.TryGetValue(kind, out var syntaxType))
+            return syntaxType.Precedence;
+
         return 0;
     }
 
@@ -45,7 +31,6 @@ public static class SyntaxQuery
             ? kind
             : SyntaxKind.IdentifierToken;
     }
-
 
     //public static SyntaxKind GetKeywordKind(string text)
     //{
@@ -59,16 +44,12 @@ public static class SyntaxQuery
 
     public static IEnumerable<SyntaxKind> GetUnaryOperatorKinds()
     {
-        return _syntaxIndex.Operators
-            .Where(op => op.Value.UnaryPrecedence > 0)
-            .Select(op => op.Key);
+        return _syntaxIndex.UnaryOperators.Keys;
     }
 
     public static IEnumerable<SyntaxKind> GetBinaryOperatorKinds()
     {
-        return _syntaxIndex.Operators
-            .Where(op => op.Value.BinaryPrecedence > 0)
-            .Select(op => op.Key); ;
+        return _syntaxIndex.BinaryOperators.Keys;
     }
 
     public static Dictionary<string, SyntaxKind> GetTokenIndex()
