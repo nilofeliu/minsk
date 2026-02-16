@@ -6,13 +6,15 @@ namespace Minsk.CodeAnalysis.Symbols
     {
         public SyntaxKind Kind { get; }
         public string Text { get; }
-        public int Precedence { get; }
+        public int BinaryPrecedence { get; }
+        public int UnaryPrecedence { get; }
 
-        public SyntaxSymbol(SyntaxKind kind, string text, int precedence)
+        public SyntaxSymbol(SyntaxKind kind, string text, int binaryPrecedence = 0, int unaryPrecedence = 0)
         {
             Kind = kind;
             Text = text;
-            Precedence = precedence;
+            BinaryPrecedence = binaryPrecedence;
+            UnaryPrecedence = unaryPrecedence;
         }
     }
 
