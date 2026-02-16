@@ -10,9 +10,8 @@ namespace Minsk.CodeAnalysis.Syntax.Core;
 
         public static SyntaxIndex Instance => _instance.Value;
 
-        // Instance fields (moved from static)
-        private readonly Dictionary<SyntaxKind, SyntaxSymbol> _unaryOperators;
-        private readonly Dictionary<SyntaxKind, SyntaxSymbol> _binaryOperators;
+        // Instance fields (moved from static)     
+        private readonly Dictionary<SyntaxKind, SyntaxSymbol> _operators;
         private readonly Dictionary<SyntaxKind, SyntaxSymbol> _assignmentOperators;
         private readonly Dictionary<SyntaxKind, SyntaxSymbol> _reservedKeywords;
         private readonly Dictionary<SyntaxKind, SyntaxSymbol> _flowControlKeywords;
@@ -20,7 +19,7 @@ namespace Minsk.CodeAnalysis.Syntax.Core;
         private readonly Dictionary<SyntaxKind, SyntaxSymbol> _punctuationOperators;
 
 
-    private readonly Dictionary<string, SyntaxKind> _textToKind;
+        private readonly Dictionary<string, SyntaxKind> _textToKind;
         private readonly Dictionary<string, SyntaxKind> _tokenIndex;
 
         private readonly Dictionary<SyntaxKind, string> _syntaxKindIndex;
@@ -29,8 +28,7 @@ namespace Minsk.CodeAnalysis.Syntax.Core;
         // Private constructor — called only once
         private SyntaxIndex()
         {
-            _unaryOperators = LoadUnaryOperators();
-            _binaryOperators = LoadBinaryOperators();
+            _operators = LoadOperators();
             _assignmentOperators = LoadAssignmentOperators();
             _punctuationOperators = LoadPunctuationOperators();
             _reservedKeywords = LoadReservedKeywords();
@@ -45,11 +43,12 @@ namespace Minsk.CodeAnalysis.Syntax.Core;
         }
 
 
-        // Public instance properties 
-        internal Dictionary<SyntaxKind, SyntaxSymbol> UnaryOperators => _unaryOperators;
-        internal Dictionary<SyntaxKind, SyntaxSymbol> BinaryOperators => _binaryOperators;
+    // Public instance properties 
+        internal Dictionary<SyntaxKind, SyntaxSymbol> Operators => _operators;
         internal Dictionary<SyntaxKind, SyntaxSymbol> AssignmentOperators => _assignmentOperators;
         internal Dictionary<SyntaxKind, SyntaxSymbol> ReservedKeywords => _reservedKeywords;
+
+
         internal Dictionary<SyntaxKind, SyntaxSymbol> FlowControlKeywords => _flowControlKeywords;
         internal Dictionary<SyntaxKind, SyntaxSymbol> TypedVariablesKeywords => _typedVariablesKeywords;
 
@@ -75,10 +74,9 @@ namespace Minsk.CodeAnalysis.Syntax.Core;
         private Dictionary<SyntaxKind, string> BuildSyntaxKindIndex()
         {
             var combined = new Dictionary<SyntaxKind, string>();
-            MergeDictionary(combined, _unaryOperators);
-            MergeDictionary(combined, _binaryOperators);
-            MergeDictionary(combined, _assignmentOperators);
-            MergeDictionary(combined, _reservedKeywords);
+            MergeDictionary(combined, Operators);
+            MergeDictionary(combined, AssignmentOperators);
+            MergeDictionary(combined, ReservedKeywords);
             MergeDictionary(combined, _punctuationOperators);
         return combined;
         }
@@ -106,13 +104,4 @@ namespace Minsk.CodeAnalysis.Syntax.Core;
             }
         }
 
-        // Public accessors now use instance fields
-        public Dictionary<SyntaxKind, SyntaxSymbol> GetUnaryOperators() => _unaryOperators;
-        public Dictionary<SyntaxKind, SyntaxSymbol> GetBinaryOperators() => _binaryOperators;
-        public Dictionary<SyntaxKind, SyntaxSymbol> GetAssignmentOperators() => _assignmentOperators;
-        public Dictionary<SyntaxKind, SyntaxSymbol> GetReservedKeywords() => _reservedKeywords;
-        public Dictionary<SyntaxKind, SyntaxSymbol> GetTypedVariablesKeywords() => _typedVariablesKeywords;
-        public Dictionary<SyntaxKind, SyntaxSymbol> GetFlowControlKeywords() => _flowControlKeywords;
-
-        public Dictionary<SyntaxKind, string> GetSyntaxKindIndex() => _syntaxKindIndex;
     }

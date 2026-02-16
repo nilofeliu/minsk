@@ -8,8 +8,7 @@ namespace Minsk
 {
     internal sealed class MinskRepl : Repl
     {
-        private Compilation _previous;
-
+        
         private bool _showTree;
         private bool _showProgram;
         private readonly Dictionary<VariableSymbol, object> _variables = new();
@@ -33,7 +32,7 @@ namespace Minsk
                     Console.Clear();
                     break;
                 case "#reset":
-                    _previous = null;
+                    ResetCompilation();
                     break;
                 case "#help":
                     PrintCommands();
