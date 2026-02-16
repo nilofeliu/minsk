@@ -1,12 +1,6 @@
 ﻿using Minsk.CodeAnalysis.Symbols;
 using Minsk.CodeAnalysis.Syntax.Kind;
-using System;
 using System.Collections;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Minsk.CodeAnalysis.Syntax.Core;
 
@@ -51,10 +45,13 @@ internal class SyntaxRegistry
 
     private readonly Dictionary<string, SyntaxKind> _kindIndex = new();
     private readonly Dictionary<SyntaxKind, string> _textIndex = new ();
+    private readonly Dictionary<SyntaxKind, SyntaxSymbol> _keywordIndex = new();
 
     // Indices properties
     internal Dictionary<SyntaxKind, string> TextIndex => _textIndex;
     internal Dictionary<string, SyntaxKind> KindIndex => _kindIndex;
+    internal Dictionary<SyntaxKind, SyntaxSymbol> KeywordIndex => _keywordIndex;
+
 
     internal SymbolRegistry GetSymbolRegistry => _tables;
 
@@ -64,6 +61,7 @@ internal class SyntaxRegistry
         _tables.TryAdd(SymbolTable.Operators, new List<SyntaxSymbol>());
         _tables.TryAdd(SymbolTable.Keywords, new List<SyntaxSymbol>());
         _tables.TryAdd(SymbolTable.Delimiters, new List<SyntaxSymbol>());
+
     }
 
     private void UpdateIndexTable(SyntaxSymbol symbol)
@@ -72,19 +70,33 @@ internal class SyntaxRegistry
         UpdateTextIndex(symbol);
     }
 
-    private void UpdateKindIndex(SyntaxSymbol symbol)
+    private bool UpdateKindIndex(SyntaxSymbol symbol)
     {
         if (_kindIndex.ContainsKey(symbol.Text))
-            return;
+            return false;
 
         _kindIndex.Add(symbol.Text, symbol.Kind);
+        return true;
     }
-    private void UpdateTextIndex(SyntaxSymbol symbol)
+    private bool UpdateTextIndex(SyntaxSymbol symbol)
     {
         if (_textIndex.ContainsKey(symbol.Kind))
-            return;
+            return false;
 
         _textIndex.Add(symbol.Kind, symbol.Text);
+        return true;
+    }
+
+    private void UpdateKeywordList()
+     {
+        if (_tables.TryGetValue(SymbolTable.Keywords, out var keywordList))
+        {
+            foreach (var token in keywordList)
+            {
+                if (!_keywordIndex.ContainsKey(token.Kind))   
+                    _keywordIndex.Add(token.Kind, token);
+            }
+        }
     }
 
     public List<SyntaxSymbol> GetSymbolsByCategory(SymbolTable table)
@@ -113,7 +125,9 @@ internal class SyntaxRegistry
             newList.Add(symbol);
             _tables.TryAdd(categoryName, newList);
         }
+        
         UpdateIndexTable(symbol);
+        UpdateKeywordList();
     }
 
     public void Register(SymbolTable categoryName, List<SyntaxSymbol> symbolList)
@@ -128,6 +142,7 @@ internal class SyntaxRegistry
         foreach (var symbol in symbolList)
         {
             UpdateIndexTable(symbol);
+            UpdateKeywordList();
         }
     }
 

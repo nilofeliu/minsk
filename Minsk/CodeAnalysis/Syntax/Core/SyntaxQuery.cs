@@ -60,6 +60,23 @@ public static class SyntaxQuery
         return _registry.KindIndex;
     }
 
+    public static bool ContainsKeyword(SyntaxKind kind)
+    {
+        return _registry.KeywordIndex.ContainsKey(kind);
+    }
+    public static bool ContainsKeyword(string text)
+    {
+        return _registry.KeywordIndex.Values.Any(symbol => symbol.Text == text);
+    }
+
+    public static bool ContainsKind(SyntaxKind kind)
+    {
+        if (_registry.TextIndex.ContainsKey(kind))
+            return true;
+
+        return false;
+    }
+
     public static string? GetText(SyntaxKind kind)
     {
         // Try to get from the combined index first

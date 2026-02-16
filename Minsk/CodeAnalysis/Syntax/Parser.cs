@@ -5,6 +5,7 @@ using Minsk.CodeAnalysis.Syntax.Object;
 using Minsk.CodeAnalysis.Syntax.Statement;
 using Minsk.CodeAnalysis.Text;
 using System.Collections.Immutable;
+using System.Xml.Linq;
 
 namespace Minsk.CodeAnalysis.Syntax
 {
@@ -23,14 +24,19 @@ namespace Minsk.CodeAnalysis.Syntax
 
             var lexer = new Lexer(text);
             SyntaxToken token;
+            SyntaxToken previousToken = null;                        
+
             do
             {
                 token = lexer.Lex();
+                if (SyntaxQuery.ContainsKeyword(token.Kind))
+                    token = ProcessToken(token, previousToken);
 
                 if (token.Kind != SyntaxKind.WhiteSpaceToken &&
                     token.Kind != SyntaxKind.BadToken)
                 {
                     tokens.Add(token);
+                    previousToken = token;
                 }
 
             } while (token.Kind != SyntaxKind.EndOfFileToken);
@@ -40,6 +46,19 @@ namespace Minsk.CodeAnalysis.Syntax
             _diagnostic.AddRange(lexer.Diagnostics);
         }
 
+        internal SyntaxToken ProcessToken(SyntaxToken token, SyntaxToken? previousToken)
+        {
+            if (previousToken != null)
+                if (previousToken.Kind == SyntaxKind.VarKeyword ||
+                previousToken.Kind == SyntaxKind.LetKeyword)
+                {
+                    var keywordKind = SyntaxKind.IdentifierToken;
+                    return new SyntaxToken(keywordKind, token.Position, token.Text, token.Value);
+                }
+
+            return token;
+
+        }
 
         private SyntaxToken Peek(int offset)
         {
@@ -71,7 +90,7 @@ namespace Minsk.CodeAnalysis.Syntax
 
             _diagnostic.ReportUnexpectedToken(Current.Span, Current.Kind, kind);
             return new SyntaxToken(kind, Current.Position, null, null);
-        }   
+        }
 
         public CompilationUnitSyntax ParseCompilationUnit()
         {
@@ -104,6 +123,11 @@ namespace Minsk.CodeAnalysis.Syntax
             }
         }
 
+        private SyntaxKind ParseIdentifierKeyword()
+        {
+            return SyntaxKind.IdentifierToken;
+        }
+
         private StatementSyntax ParseVariableDeclaration()
         {
             var expected = Current.Kind == SyntaxKind.LetKeyword ? SyntaxKind.LetKeyword : SyntaxKind.VarKeyword;
@@ -111,8 +135,13 @@ namespace Minsk.CodeAnalysis.Syntax
             var identifier = MatchToken(SyntaxKind.IdentifierToken);
             var equals = MatchToken(SyntaxKind.EqualsToken);
             var initializer = ParseExpression();
+
+            if (SyntaxQuery.ContainsKeyword(identifier.Text))
+                _diagnostic.ReportKeywordAsIdentifier(identifier.Span, identifier.Text);
+
             return new VariableDeclarationSyntax(keyword, identifier, equals, initializer);
         }
+
 
 
         private StatementSyntax ParseSwitchStatement()

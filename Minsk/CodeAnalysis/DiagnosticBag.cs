@@ -89,5 +89,11 @@ namespace Minsk.CodeAnalysis
             var message = $"The case label '{value}' already appears in this switch statement.";
             Report(span, message);
         }
+
+        internal void ReportKeywordAsIdentifier(TextSpan span, string keyword)
+        {
+            var message = $"'{keyword}' is a keyword and cannot be used as an identifier.";
+            Report(span, message);
+        }
     }
 }

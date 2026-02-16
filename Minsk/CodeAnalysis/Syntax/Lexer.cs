@@ -150,6 +150,7 @@ internal sealed class Lexer
         var length = _position - _start;
         var text = _text.ToString(_start, length);
         _kind = SyntaxQuery.GetKeywordKind(text);
+        //_kind = SyntaxKind.IdentifierToken;
     }
 
     private void ReadWhiteSpaceToken()
