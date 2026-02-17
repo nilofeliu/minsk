@@ -176,7 +176,6 @@ namespace Minsk.CodeAnalysis.Syntax
                         break;
                     }
 
-
                     casesBuilder.Add(statement);
                 }
                 if (starToken == Current)
@@ -209,27 +208,31 @@ namespace Minsk.CodeAnalysis.Syntax
             {
                 caseExpression = ParseExpression();
             }
+
             MatchToken(SyntaxKind.ColonToken);
 
+            var caseStatement = ParseMultiStatements(SyntaxKind.EndKeyword, SyntaxKind.EndOfFileToken,
+                SyntaxKind.SwitchDefaultKeyword, SyntaxKind.SwitchCaseKeyword);
 
-            var statementBuilder = ImmutableArray.CreateBuilder<StatementSyntax>();
-            while (Current.Kind != SyntaxKind.EndKeyword &&
-                Current.Kind != SyntaxKind.SwitchDefaultKeyword &&
-                Current.Kind != SyntaxKind.SwitchCaseKeyword &&
-                Current.Kind != SyntaxKind.EndOfFileToken)  // ← See point 2
-            {
-                var starToken = Current;
+            //var statementBuilder = ImmutableArray.CreateBuilder<StatementSyntax>();
 
-                var statement = ParseStatement();
-                statementBuilder.Add(statement);
+            //while (Current.Kind != SyntaxKind.EndKeyword &&
+            //    Current.Kind != SyntaxKind.SwitchDefaultKeyword &&
+            //    Current.Kind != SyntaxKind.SwitchCaseKeyword &&
+            //    Current.Kind != SyntaxKind.EndOfFileToken)  // ← See point 2
+            //{
+            //    var starToken = Current;
 
-                if (starToken == Current)
-                    NextToken();
-            }
+            //    var statement = ParseStatement();
+            //    statementBuilder.Add(statement);
 
-            var statements = statementBuilder.ToImmutable();
+            //    if (starToken == Current)
+            //        NextToken();
+            //}
 
-            BlockStatementSyntax caseStatement = ParseScopedStatements(statements);
+            //var statements = statementBuilder.ToImmutable();
+
+            //BlockStatementSyntax caseStatement = ParseScopedStatements(statements);
 
             return new SwitchCaseStatementSyntax(keyword, caseExpression, caseStatement);
         }
@@ -240,29 +243,14 @@ namespace Minsk.CodeAnalysis.Syntax
             var keyword = MatchToken(SyntaxKind.IfKeyword);
             var condition = ParseExpression();
             var colonToken = MatchToken(SyntaxKind.ColonToken);
-            var casesBuilder = ImmutableArray.CreateBuilder<StatementSyntax>();
 
-            while (Current.Kind != SyntaxKind.EndKeyword &&
-                Current.Kind != SyntaxKind.ElseKeyword &&
-                Current.Kind != SyntaxKind.ElseIfKeyword &&
-                Current.Kind != SyntaxKind.EndOfFileToken)  // ← See point 2
-            {
-                var starToken = Current;
-                // SwitchCaseStatementSyntax statement = null;
-
-                    var statement = ParseStatement();
-                casesBuilder.Add(statement);
-
-                if (starToken == Current)
-                    NextToken();
-            }
-            var statements = casesBuilder.ToImmutable();
+            var caseStatement = ParseMultiStatements(SyntaxKind.ElseKeyword, SyntaxKind.ElseIfKeyword,
+                SyntaxKind.EndKeyword, SyntaxKind.EndOfFileToken);
 
             var elseClause = ParseElseClause();
             var endToken = MatchToken(SyntaxKind.EndKeyword);
                 
 
-            BlockStatementSyntax caseStatement = ParseScopedStatements(statements);
 
             return new IfStatementSyntax(keyword, condition, caseStatement, elseClause);
         }
@@ -276,34 +264,17 @@ namespace Minsk.CodeAnalysis.Syntax
 
             var keyword = NextToken();
 
-            var casesBuilder = ImmutableArray.CreateBuilder<StatementSyntax>();
-
             if (keyword.Kind == SyntaxKind.ElseIfKeyword)
             {
                 var condition = ParseExpression();
                 var colonToken = MatchToken(SyntaxKind.ColonToken);
 
-                while (Current.Kind != SyntaxKind.EndKeyword &&
-                    Current.Kind != SyntaxKind.ElseKeyword &&
-                    Current.Kind != SyntaxKind.ElseIfKeyword &&
-                    Current.Kind != SyntaxKind.EndOfFileToken)
-                {
-                    var starToken = Current;
-                    
-                    var statement = ParseStatement();
-                    casesBuilder.Add(statement);
-                    
-                    if (starToken == Current)
-                        NextToken();
-                }
-
-                var statements = casesBuilder.ToImmutable();
-
                 // RECURSIVE CALL: Parse more elseif/else clauses
+                var caseStatement = ParseMultiStatements(SyntaxKind.ElseKeyword, SyntaxKind.ElseIfKeyword,
+                    SyntaxKind.EndKeyword, SyntaxKind.EndOfFileToken);
+
+
                 var elseClause = ParseElseClause();
-
-                BlockStatementSyntax caseStatement = ParseScopedStatements(statements);
-
                 
                 var ifKeyword = new SyntaxToken(SyntaxKind.IfKeyword, keyword.Position, "if", null);
                 return new ElseClauseSyntax(keyword,
@@ -313,23 +284,8 @@ namespace Minsk.CodeAnalysis.Syntax
             {
                 var colonToken = MatchToken(SyntaxKind.ColonToken);
 
-                while (Current.Kind != SyntaxKind.EndKeyword &&
-                    Current.Kind != SyntaxKind.ElseKeyword &&
-                    Current.Kind != SyntaxKind.ElseIfKeyword &&
-                    Current.Kind != SyntaxKind.EndOfFileToken)  
-                {
-                    var starToken = Current;
-                    // SwitchCaseStatementSyntax statement = null;
-                    
-                    var statement = ParseStatement();
-                    casesBuilder.Add(statement);
-                    
-                    if (starToken == Current)
-                        NextToken();
-                }
-
-                var statements = casesBuilder.ToImmutable();
-                BlockStatementSyntax caseStatement = ParseScopedStatements(statements);
+                var caseStatement = ParseMultiStatements(SyntaxKind.ElseKeyword, SyntaxKind.ElseIfKeyword,
+                    SyntaxKind.EndKeyword, SyntaxKind.EndOfFileToken);
 
                 return new ElseClauseSyntax(keyword, caseStatement);
             }
@@ -342,26 +298,9 @@ namespace Minsk.CodeAnalysis.Syntax
 
             var colonToken = MatchToken(SyntaxKind.ColonToken);
 
-            var casesBuilder = ImmutableArray.CreateBuilder<StatementSyntax>();
-
-            while (Current.Kind != SyntaxKind.EndKeyword &&
-                Current.Kind != SyntaxKind.EndOfFileToken)  // ← See point 2
-            {
-                var starToken = Current;
-                // SwitchCaseStatementSyntax statement = null;
-                
-                var statement = ParseStatement();                
-                casesBuilder.Add(statement);
-                
-                if (starToken == Current)
-                    NextToken();
-            }
+            var body = ParseMultiStatements(SyntaxKind.EndKeyword, SyntaxKind.EndOfFileToken);
 
             var endToken = MatchToken(SyntaxKind.EndKeyword);
-
-            var statements = casesBuilder.ToImmutable();
-            BlockStatementSyntax body = ParseScopedStatements(statements);
-
 
             return new WhileStatementSyntax(keyword, condition, body);
         }
@@ -374,9 +313,31 @@ namespace Minsk.CodeAnalysis.Syntax
             var lowerBound = ParseExpression();
             var toKeword = MatchToken(SyntaxKind.ToKeyword);
             var upperBound = ParseExpression();
-            var body = ParseStatement();
+            var colonToken = MatchToken(SyntaxKind.ColonToken);
+            var body = ParseMultiStatements(SyntaxKind.EndKeyword, SyntaxKind.EndOfFileToken);
+            //var body = ParseStatement();
+            var endToken = MatchToken(SyntaxKind.EndKeyword);
             
             return new ForStatementSyntax(keyword, identifier, equals, lowerBound, toKeword, upperBound, body);
+        }
+
+        private BlockStatementSyntax ParseMultiStatements(params SyntaxKind[] terminatingKinds)
+        {
+            var builder = ImmutableArray.CreateBuilder<StatementSyntax>();
+
+            while (!terminatingKinds.Contains(Current.Kind) &&
+                   Current.Kind != SyntaxKind.EndOfFileToken)
+            {
+                var startToken = Current;
+                var statement = ParseStatement();
+                builder.Add(statement);
+
+                if (startToken == Current)
+                    NextToken();
+            }
+
+            var statements = builder.ToImmutable();
+            return ParseScopedStatements(statements);
         }
 
         private static BlockStatementSyntax ParseScopedStatements(ImmutableArray<StatementSyntax> statements)
@@ -444,8 +405,7 @@ namespace Minsk.CodeAnalysis.Syntax
             return ParseOperatorExpression();
 
         }
-
-
+        
         private ExpressionSyntax ParseOperatorExpression(int parentPrecedence = 0)
         {
             ExpressionSyntax left;

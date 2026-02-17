@@ -86,8 +86,8 @@ namespace Minsk.Tests.CodeAnalysis
         [InlineData("{var i = 10 var result = 0 while i > 0: { result = result + i i = i -1} end result }", 55 )]
         [InlineData("{var i = 10 var result = 0 while i > 0:  result = result + i i = i -1 end result }", 55)]
 
-        [InlineData("{var result = 0 for i = 1 to 10 { result = result + i } result }", 55)]
-        [InlineData("{ var a = 10 for i = 1 to (a = a - 1) { } a }", 9)]
+        [InlineData("{var result = 0 for i = 1 to 10: { result = result + i } end result }", 55)]
+        [InlineData("{ var a = 10 for i = 1 to (a = a - 1): { } end a }", 9)]
 
         [InlineData("{ var a = 0 var x = 2 switch x: case 1: a = 10 case 2: a = 20 default: a = 30 end a }", 20)]
         [InlineData("{ var a = 0 var x = 2 switch x: case 1: a = 5 a = a + 5 case 2: a = 10 a = a + 10 default: a = 30 end a }", 20)]
@@ -205,8 +205,9 @@ namespace Minsk.Tests.CodeAnalysis
             var text = @"
                 {
                     var result = 0
-                    for i = [false] to 10
+                    for i = [false] to 10:
                         result = result + i
+                    end
                 }
             ";
 
@@ -223,8 +224,9 @@ namespace Minsk.Tests.CodeAnalysis
             var text = @"
                 {
                     var result = 0
-                    for i = 1 to [true]
+                    for i = 1 to [true]:
                         result = result + i
+                    end
                 }
             ";
 
