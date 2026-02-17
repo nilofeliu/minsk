@@ -6,17 +6,26 @@
         BadToken,
         EndOfFileToken,
         WhiteSpaceToken,
-        NumberToken,        
+        NumberToken,      
+        
+        // Math Operators Tokens
         PlusToken,
         MinusToken,
         StarToken,
         SlashToken,
+
+        // Scope Tokens
         OpenParenthesisToken,
         CloseParenthesisToken,
         CloseBraceToken,
         OpenBraceToken,
+
+        // Other Tokens
         IdentifierToken,
 
+        //Punctuation Token
+        ColonToken,
+        
         // Nodes
         CompilationUnit,
         ElseClause,
@@ -40,11 +49,15 @@
         PipePipeToken,
         TildeToken,
 
-        // Keywords
+        // Boolean Keywords
         TrueKeyword,
         FalseKeyword,
+
+        // Assignment Keywords
         LetKeyword,
         VarKeyword,
+
+        // Control Keywords
         ForKeyword,
         WhileKeyword,
         IfKeyword,
@@ -55,6 +68,11 @@
         SwitchCaseKeyword,
         SwitchDefaultKeyword,
         MatchKeyword,
+
+        //Flow Control
+        ContinueKeyword,
+        BreakKeyword,
+        EndKeyword,
 
         // Expressions
         AssignmentExpression,
@@ -73,15 +91,24 @@
         VariableDeclaration,
         SwitchStatement,
 
-        //Flow Control
-        ContinueKeyword,
-        BreakKeyword,
-        EndKeyword,
+        //Primitive Keywords
+        CharKeyword,
+        BoolKeyword,
+        ByteKeyword,
+        SByteKeyword,
+        ShortKeyword,
+        UShortKeyword,
+        IntKeyword,
+        UIntKeyword,
+        LongKeyword,
+        ULongKeyword,
+        FloatKeyword,
+        DoubleKeyword,
+        DecimalKeyword,
+        StringKeyword,
+        VoidKeyword,
 
-        
+        //ObjectKeyword,
 
-        //Punctuation Token
-        ColonToken,
-        //UnderscoreToken,
     }
 }
