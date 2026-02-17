@@ -1,4 +1,5 @@
 ﻿using Minsk.CodeAnalysis.Symbols;
+using System.Linq;
 
 namespace Minsk.CodeAnalysis.Syntax.Core;
 
@@ -29,6 +30,7 @@ internal class SymbolRepository
             .Concat(SyntaxDefinitions.LoadBooleanKeywords())
             .Concat(SyntaxDefinitions.LoadFlowControlKeywords())
             .Concat(SyntaxDefinitions.LoadVariableKeywords())
+            .Concat(SyntaxDefinitions.LoadPrimitiveKeywords())
             .ToList();
     }
 

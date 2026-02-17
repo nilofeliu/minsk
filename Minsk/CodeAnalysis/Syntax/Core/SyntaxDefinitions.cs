@@ -54,7 +54,7 @@ internal static class SyntaxDefinitions
     internal static List<SyntaxSymbol> LoadAssignmentOperators()
     {
         var assignmentOperators = new List<SyntaxSymbol>();
-        assignmentOperators.Add(new SyntaxSymbol(SyntaxKind.EqualsToken, "="));
+        TryAddSymbol(assignmentOperators, new SyntaxSymbol(SyntaxKind.EqualsToken, "="));
         return assignmentOperators;
     }
 
@@ -122,4 +122,83 @@ internal static class SyntaxDefinitions
         return variableKeywords;
     }
 
+    internal static List<SyntaxSymbol> LoadPrimitiveKeywords()
+    {
+        var primitiveKeywords = new List<SyntaxSymbol>();
+
+        TryAddSymbol(primitiveKeywords, new SyntaxSymbol(SyntaxKind.CharKeyword, "char"));
+        TryAddSymbol(primitiveKeywords, new SyntaxSymbol(SyntaxKind.BoolKeyword, "bool"));
+        TryAddSymbol(primitiveKeywords, new SyntaxSymbol(SyntaxKind.ByteKeyword, "byte"));
+        TryAddSymbol(primitiveKeywords, new SyntaxSymbol(SyntaxKind.SByteKeyword, "sbyte"));
+        TryAddSymbol(primitiveKeywords, new SyntaxSymbol(SyntaxKind.ShortKeyword, "short"));
+        TryAddSymbol(primitiveKeywords, new SyntaxSymbol(SyntaxKind.UShortKeyword, "ushort"));
+        TryAddSymbol(primitiveKeywords, new SyntaxSymbol(SyntaxKind.IntKeyword, "int"));
+        TryAddSymbol(primitiveKeywords, new SyntaxSymbol(SyntaxKind.UIntKeyword, "uint"));
+        TryAddSymbol(primitiveKeywords, new SyntaxSymbol(SyntaxKind.LongKeyword, "long"));
+        TryAddSymbol(primitiveKeywords, new SyntaxSymbol(SyntaxKind.ULongKeyword, "ulong"));
+        TryAddSymbol(primitiveKeywords, new SyntaxSymbol(SyntaxKind.FloatKeyword, "float"));
+        TryAddSymbol(primitiveKeywords, new SyntaxSymbol(SyntaxKind.DoubleKeyword, "double"));
+        TryAddSymbol(primitiveKeywords, new SyntaxSymbol(SyntaxKind.DecimalKeyword, "decimal"));
+        TryAddSymbol(primitiveKeywords, new SyntaxSymbol(SyntaxKind.StringKeyword, "string"));        
+        TryAddSymbol(primitiveKeywords, new SyntaxSymbol(SyntaxKind.VoidKeyword, "void"));
+        //TryAddSymbol(primitiveKeywords, new SyntaxSymbol(SyntaxKind.ObjectKeyword, "object"));
+
+        return primitiveKeywords;
+    }
+
+    internal static List<SyntaxSymbol> LoadConstructKeywords()
+    {
+        var constructKeywords = new List<SyntaxSymbol>();
+
+        //// Type definition keywords
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.ClassKeyword, "class"));
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.InterfaceKeyword, "interface"));
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.StructKeyword, "struct"));
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.EnumKeyword, "enum"));
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.DelegateKeyword, "delegate"));
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.RecordKeyword, "record"));
+
+        //// Namespace keyword
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.NamespaceKeyword, "namespace"));
+
+        //// Access modifiers
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.PublicKeyword, "public"));
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.PrivateKeyword, "private"));
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.InternalKeyword, "internal"));
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.ProtectedKeyword, "protected"));
+
+        //// Member keywords
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.StaticKeyword, "static"));
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.ReadOnlyKeyword, "readonly"));
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.ConstKeyword, "const"));
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.VirtualKeyword, "virtual"));
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.AbstractKeyword, "abstract"));
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.SealedKeyword, "sealed"));
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.OverrideKeyword, "override"));
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.NewKeyword, "new"));
+
+        //// Property/event keywords
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.GetKeyword, "get"));
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.SetKeyword, "set"));
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.InitKeyword, "init"));
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.EventKeyword, "event"));
+
+        //// Exception handling
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.TryKeyword, "try"));
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.CatchKeyword, "catch"));
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.FinallyKeyword, "finally"));
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.ThrowKeyword, "throw"));
+
+        //// Other keywords
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.UsingKeyword, "using"));
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.ReturnKeyword, "return"));
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.BaseKeyword, "base"));
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.ThisKeyword, "this"));
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.NullKeyword, "null"));
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.AsKeyword, "as"));
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.IsKeyword, "is"));
+        //TryAddSymbol(constructKeywords, new SyntaxSymbol(SyntaxKind.InKeyword, "in"));
+
+        return constructKeywords;
+    }
 }
