@@ -107,7 +107,7 @@ internal sealed class Lexer
 
     private bool TryReadIdentifierOrKeyword()
     {
-        if (char.IsLetterOrDigit(Current) || Current == '_')
+        if (char.IsLetter(Current) || Current == '_')
         {
             ReadIdentifierTokenOrKeyword();
             return true;
@@ -150,7 +150,6 @@ internal sealed class Lexer
         var length = _position - _start;
         var text = _text.ToString(_start, length);
         _kind = SyntaxQuery.GetKeywordKind(text);
-        //_kind = SyntaxKind.IdentifierToken;
     }
 
     private void ReadWhiteSpaceToken()
