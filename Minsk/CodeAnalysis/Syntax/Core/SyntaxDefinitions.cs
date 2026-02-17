@@ -89,6 +89,7 @@ internal static class SyntaxDefinitions
         TryAddSymbol(statementKeywords, new SyntaxSymbol(SyntaxKind.ElseKeyword, "else"));
         TryAddSymbol(statementKeywords, new SyntaxSymbol(SyntaxKind.ElseIfKeyword, "elseif"));
         TryAddSymbol(statementKeywords, new SyntaxSymbol(SyntaxKind.WhileKeyword, "while"));
+        TryAddSymbol(statementKeywords, new SyntaxSymbol(SyntaxKind.DoKeyword, "do"));
         TryAddSymbol(statementKeywords, new SyntaxSymbol(SyntaxKind.ForKeyword, "for"));
         TryAddSymbol(statementKeywords, new SyntaxSymbol(SyntaxKind.ToKeyword, "to"));
         TryAddSymbol(statementKeywords, new SyntaxSymbol(SyntaxKind.SwitchKeyword, "switch"));

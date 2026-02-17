@@ -58,6 +58,7 @@
         VarKeyword,
 
         // Control Keywords
+        DoKeyword,
         ForKeyword,
         WhileKeyword,
         IfKeyword,
@@ -88,6 +89,7 @@
         ForStatement,
         IfStatement,
         WhileStatement,
+        DoStatement,
         VariableDeclaration,
         SwitchStatement,
 
