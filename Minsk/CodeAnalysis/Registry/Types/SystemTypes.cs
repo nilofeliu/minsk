@@ -1,4 +1,5 @@
 ﻿using Minsk.CodeAnalysis.Symbols;
+using Minsk.CodeAnalysis.Syntax.Kind;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,42 +11,31 @@ namespace Minsk.CodeAnalysis.Registry.Types
     internal static class SystemPrimitiveTypesRepository
     {
         //This is for TypeKind Index. Not SyntaxKind. Need to refactor it.
-        internal static List<PrimitiveTypeSymbol> LoadTypeKeywords()
+        internal static List<PrimitiveTypeObject> LoadTypeKeywords()
         {
-            var typeKeywords = new List<PrimitiveTypeSymbol>();
+            var typeKeywords = new List<PrimitiveTypeObject>();
 
             // Built-in value types
-            typeKeywords.Add(new PrimitiveTypeSymbol("char", "System.Char"));
-            typeKeywords.Add(new PrimitiveTypeSymbol("bool", "System.Boolean"));
-            typeKeywords.Add(new PrimitiveTypeSymbol("byte", "System.Byte"));
-            typeKeywords.Add(new PrimitiveTypeSymbol("sbyte", "System.SByte"));
-            typeKeywords.Add(new PrimitiveTypeSymbol("short", "System.Int16"));
-            typeKeywords.Add(new PrimitiveTypeSymbol("ushort", "System.UInt16"));
-            typeKeywords.Add(new PrimitiveTypeSymbol("int", "System.Int32"));
-            typeKeywords.Add(new PrimitiveTypeSymbol("uint", "System.UInt32"));
-            typeKeywords.Add(new PrimitiveTypeSymbol("long", "System.Int64"));
-            typeKeywords.Add(new PrimitiveTypeSymbol("ulong", "System.UInt64"));
-            typeKeywords.Add(new PrimitiveTypeSymbol("float", "System.Single"));
-            typeKeywords.Add(new PrimitiveTypeSymbol("double", "System.Double"));
-            typeKeywords.Add(new PrimitiveTypeSymbol("decimal", "System.Decimal"));
+            typeKeywords.Add(new PrimitiveTypeObject(SyntaxKind.CharKeyword, "char"));
+            typeKeywords.Add(new PrimitiveTypeObject(SyntaxKind.BoolKeyword, "bool"));
+            typeKeywords.Add(new PrimitiveTypeObject(SyntaxKind.ByteKeyword, "byte"));
+            typeKeywords.Add(new PrimitiveTypeObject(SyntaxKind.SByteKeyword, "sbyte"));
+            typeKeywords.Add(new PrimitiveTypeObject(SyntaxKind.ShortKeyword, "short"));
+            typeKeywords.Add(new PrimitiveTypeObject(SyntaxKind.UShortKeyword, "ushort"));
+            typeKeywords.Add(new PrimitiveTypeObject(SyntaxKind.IntKeyword, "int"));
+            typeKeywords.Add(new PrimitiveTypeObject(SyntaxKind.UIntKeyword, "uint"));
+            typeKeywords.Add(new PrimitiveTypeObject(SyntaxKind.LongKeyword, "long"));
+            typeKeywords.Add(new PrimitiveTypeObject(SyntaxKind.ULongKeyword, "ulong"));
+            typeKeywords.Add(new PrimitiveTypeObject(SyntaxKind.FloatKeyword, "float"));
+            typeKeywords.Add(new PrimitiveTypeObject(SyntaxKind.DoubleKeyword, "double"));
+            typeKeywords.Add(new PrimitiveTypeObject(SyntaxKind.DecimalKeyword, "decimal"));
 
             // Built-in reference types
-            typeKeywords.Add(new PrimitiveTypeSymbol("string", "System.String"));
-            typeKeywords.Add(new PrimitiveTypeSymbol("object", "System.Object"));
+            typeKeywords.Add(new PrimitiveTypeObject(SyntaxKind.StringKeyword, "string"));
+            //typeKeywords.Add(new PrimitiveTypeObject(SyntaxKind.ObjectKeyword, "object"));
 
             // Special types
-            typeKeywords.Add(new PrimitiveTypeSymbol("void", "System.Void"));
-
-            // .NET Framework type aliases (System.*)
-            typeKeywords.Add(new PrimitiveTypeSymbol("single", "System.Single"));
-            typeKeywords.Add(new PrimitiveTypeSymbol("int8", "System.SByte"));
-            typeKeywords.Add(new PrimitiveTypeSymbol("int16", "System.Int16"));
-            typeKeywords.Add(new PrimitiveTypeSymbol("int32", "System.Int32"));
-            typeKeywords.Add(new PrimitiveTypeSymbol("int64", "System.Int64"));
-            typeKeywords.Add(new PrimitiveTypeSymbol("uint8", "System.Byte"));
-            typeKeywords.Add(new PrimitiveTypeSymbol("uint16", "System.UInt16"));
-            typeKeywords.Add(new PrimitiveTypeSymbol("uint32", "System.UInt32"));
-            typeKeywords.Add(new PrimitiveTypeSymbol("uint64", "System.UInt64"));
+            typeKeywords.Add(new PrimitiveTypeObject(SyntaxKind.VoidKeyword, "void"));
 
             return typeKeywords;
         }

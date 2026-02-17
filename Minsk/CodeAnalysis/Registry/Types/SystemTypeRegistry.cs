@@ -3,11 +3,11 @@ using System.Collections;
 
 internal class SystemTypeRegistry
 {
-    internal class TypeSymbolRegistry : IEnumerable<KeyValuePair<string, PrimitiveTypeSymbol>>
+    internal class TypeSymbolRegistry : IEnumerable<KeyValuePair<string, PrimitiveTypeObject>>
     {
-        private readonly Dictionary<string, PrimitiveTypeSymbol> _data = new Dictionary<string, PrimitiveTypeSymbol>();
+        private readonly Dictionary<string, PrimitiveTypeObject> _data = new Dictionary<string, PrimitiveTypeObject>();
 
-        public bool TryAdd(string key, PrimitiveTypeSymbol symbol)
+        public bool TryAdd(string key, PrimitiveTypeObject symbol)
         {
             if (_data.ContainsKey(key))
                 return false;
@@ -15,7 +15,7 @@ internal class SystemTypeRegistry
             return true;
         }
 
-        public bool TryGetValue(string name, out PrimitiveTypeSymbol symbol)
+        public bool TryGetValue(string name, out PrimitiveTypeObject symbol)
         {
             return _data.TryGetValue(name, out symbol);
         }
@@ -26,7 +26,7 @@ internal class SystemTypeRegistry
         }
 
 
-        public IEnumerator<KeyValuePair<string, PrimitiveTypeSymbol>> GetEnumerator()
+        public IEnumerator<KeyValuePair<string, PrimitiveTypeObject>> GetEnumerator()
         {
             return _data.GetEnumerator();
         }
@@ -49,17 +49,17 @@ internal class SystemTypeRegistry
         _tables = new TypeSymbolRegistry();
     }
 
-    public PrimitiveTypeSymbol? GetSymbolByCategory(string categoryName)
+    public PrimitiveTypeObject? GetSymbolByCategory(string categoryName)
     {
         return _tables.TryGetValue(categoryName, out var symbol) ? symbol : null;
     }
 
-    public List<PrimitiveTypeSymbol> GetAllSymbols()
+    public List<PrimitiveTypeObject> GetAllSymbols()
     {
         return _tables.ToList().Select(kvp => kvp.Value).ToList();
     }
 
-    public void Register(string categoryName, PrimitiveTypeSymbol symbol)
+    public void Register(string categoryName, PrimitiveTypeObject symbol)
     {
         _tables.TryAdd(categoryName, symbol);
     }
