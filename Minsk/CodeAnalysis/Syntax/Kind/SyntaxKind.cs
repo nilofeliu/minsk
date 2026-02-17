@@ -89,7 +89,7 @@
         ForStatement,
         IfStatement,
         WhileStatement,
-        DoStatement,
+        DoWhileStatement,
         VariableDeclaration,
         SwitchStatement,
 

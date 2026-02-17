@@ -22,6 +22,8 @@ internal abstract class BoundTreeRewrite
                 return RewriteIfStatement((BoundIfStatement)node);
             case BoundNodeKind.WhileStatement:
                 return RewriteWhileStatement((BoundWhileStatement)node);
+            case BoundNodeKind.DoWhileStatement:
+                return RewriteDoWhileStatement((BoundDoWhileStatement)node);
             case BoundNodeKind.ForStatement:
                 return RewriteForStatement((BoundForStatement)node);
             case BoundNodeKind.SwitchStatement:
@@ -39,6 +41,7 @@ internal abstract class BoundTreeRewrite
                 throw new Exception($"Unexpecte node : {node.Kind}");
         }
     }
+
     protected virtual BoundStatement RewriteBlockStatement(BoundBlockStatement node)
     {
         ImmutableArray<BoundStatement>.Builder builder = null;
@@ -102,6 +105,17 @@ internal abstract class BoundTreeRewrite
 
 
         return new BoundWhileStatement(condition,body);
+    }
+
+    protected virtual BoundStatement RewriteDoWhileStatement(BoundDoWhileStatement node)
+    {
+        var condition = RewriteExpression(node.Condition);
+        var body = RewriteStatement(node.Body);
+
+        if (condition == node.Condition && body == node.Body)
+            return node;
+
+        return new BoundDoWhileStatement(condition, body);
     }
 
     protected virtual BoundStatement RewriteForStatement(BoundForStatement node)

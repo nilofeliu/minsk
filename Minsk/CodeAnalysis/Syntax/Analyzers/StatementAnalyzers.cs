@@ -51,6 +51,8 @@ internal class StatementAnalyzers
                 return ParseSwitchStatement();
             case SyntaxKind.WhileKeyword:
                 return ParseWhileStatement();
+            case SyntaxKind.DoKeyword:
+                return ParseDoWhileStatement();
             case SyntaxKind.ForKeyword:
                 return ParseForStatement();
             default:
@@ -214,6 +216,20 @@ internal class StatementAnalyzers
         var endToken = _matchToken(SyntaxKind.EndKeyword);
 
         return new WhileStatementSyntax(keyword, condition, body);
+    }
+
+    private StatementSyntax ParseDoWhileStatement()
+    {
+        var keyword = _matchToken(SyntaxKind.DoKeyword);
+        var colonToken = _matchToken(SyntaxKind.ColonToken);
+
+        var body = ParseMultiStatements(SyntaxKind.WhileKeyword);
+
+        var whileToken = _matchToken(SyntaxKind.WhileKeyword);
+        var condition = _expressionAnalyzer.ParseExpression();
+               
+
+        return new DoWhileStatementSyntax(keyword, body, condition);
     }
 
     private StatementSyntax ParseForStatement()

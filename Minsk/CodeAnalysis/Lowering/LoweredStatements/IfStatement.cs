@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Minsk.CodeAnalysis.Lowering
+namespace Minsk.CodeAnalysis.Lowering.LoweredStatements
 {
     internal sealed class IfStatement
     {
@@ -26,7 +26,7 @@ namespace Minsk.CodeAnalysis.Lowering
                 var endLabel = lowerer.GenerateLabel();
                 var gotoFalse = new BoundConditionalGotoStatement(endLabel, node.Condition, false);
                 var endLabelStatement = new BoundLabelStatement(endLabel);
-                var result = new BoundBlockStatement(ImmutableArray.Create<BoundStatement>(
+                var result = new BoundBlockStatement(ImmutableArray.Create(
                     gotoFalse,
                     node.ThenStatement,
                     endLabelStatement)
@@ -57,7 +57,7 @@ namespace Minsk.CodeAnalysis.Lowering
                 var gotoEndStatement = new BoundGotoStatement(endLabel);
                 var elseLabelStatement = new BoundLabelStatement(elseLabel);
                 var endLabelStatement = new BoundLabelStatement(endLabel);
-                var result = new BoundBlockStatement(ImmutableArray.Create<BoundStatement>(
+                var result = new BoundBlockStatement(ImmutableArray.Create(
                     gotoFalse,
                     node.ThenStatement,
                     gotoEndStatement,

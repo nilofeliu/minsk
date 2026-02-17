@@ -2,14 +2,11 @@
 using Minsk.CodeAnalysis.Binding.Objects;
 using Minsk.CodeAnalysis.Binding.Statements;
 using Minsk.CodeAnalysis.Symbols;
-using Minsk.CodeAnalysis.Syntax;
-using Minsk.CodeAnalysis.Syntax.Core;
 using Minsk.CodeAnalysis.Syntax.Expression;
 using Minsk.CodeAnalysis.Syntax.Kind;
 using Minsk.CodeAnalysis.Syntax.Object;
 using Minsk.CodeAnalysis.Syntax.Statement;
 using System.Collections.Immutable;
-using System.Collections.ObjectModel;
 
 namespace Minsk.CodeAnalysis.Binding;
 
@@ -78,6 +75,8 @@ internal sealed class Binder
                 return BindIfStatement((IfStatementSyntax)syntax);
             case SyntaxKind.WhileStatement:
                 return BindWhileStatement((WhileStatementSyntax)syntax);
+            case SyntaxKind.DoWhileStatement:
+                return BindDoWhileStatement((DoWhileStatementSyntax)syntax);
             case SyntaxKind.ForStatement:
                 return BindForStatement((ForStatementSyntax)syntax);
             case SyntaxKind.SwitchStatement:
@@ -134,6 +133,14 @@ internal sealed class Binder
         var body = BindStatement(syntax.Body);
 
         return new BoundWhileStatement(condition, body);
+    }
+
+    private BoundStatement BindDoWhileStatement(DoWhileStatementSyntax syntax)
+    {
+        var body = BindStatement(syntax.Body);
+        var condition = BindExpression(syntax.Condition, typeof(bool));
+
+        return new BoundDoWhileStatement(condition, body); 
     }
 
     private BoundStatement BindForStatement(ForStatementSyntax syntax)

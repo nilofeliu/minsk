@@ -1,46 +1,40 @@
 ﻿using Minsk.CodeAnalysis.Binding.Statements;
 using System.Collections.Immutable;
-
-namespace Minsk.CodeAnalysis.Lowering
+namespace Minsk.CodeAnalysis.Lowering.LoweredStatements
 {
-    internal sealed class WhileStatement
+    internal sealed class DoWhileStatement
     {
-        internal static BoundStatement Rewrite(Lowerer lowerer, BoundWhileStatement node)
+        internal static BoundStatement Rewrite(Lowerer lowerer, BoundDoWhileStatement node)
         {
-            // while <condition>
+            // do
             //      <body>
+            // while <condition>
             //
             // ----->
             //
-            // goto check
             // continue:
             // <body>
             // check:
             // gotoTrue <condition> continue
             // end:
             //
-
             var continueLabel = lowerer.GenerateLabel();
             var checkLabel = lowerer.GenerateLabel();
             var endLabel = lowerer.GenerateLabel();
 
-            var gotoCheck = new BoundGotoStatement(checkLabel);
             var continueLabelStatement = new BoundLabelStatement(continueLabel);
             var checkLabelStatement = new BoundLabelStatement(checkLabel);
             var gotoTrue = new BoundConditionalGotoStatement(continueLabel, node.Condition);
             var endLabelStatement = new BoundLabelStatement(endLabel);
 
-            var result = new BoundBlockStatement(ImmutableArray.Create<BoundStatement>(
-                gotoCheck,
+            var result = new BoundBlockStatement(ImmutableArray.Create(
                 continueLabelStatement,
                 node.Body,
                 checkLabelStatement,
                 gotoTrue,
                 endLabelStatement
             ));
-
             return lowerer.RewriteStatement(result);
         }
-
     }
 }

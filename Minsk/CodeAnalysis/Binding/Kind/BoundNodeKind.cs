@@ -28,6 +28,7 @@
         SwitchStatement,
         SwitchCase,
         ForeachStatement,
+        DoWhileStatement,
     }
 }
 

@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Minsk.CodeAnalysis.Lowering
+namespace Minsk.CodeAnalysis.Lowering.LoweredStatements
 {
     internal sealed class SwitchStatement
     {

@@ -2,6 +2,7 @@
 using Minsk.CodeAnalysis.Binding.Expressions;
 using Minsk.CodeAnalysis.Binding.Objects;
 using Minsk.CodeAnalysis.Binding.Statements;
+using Minsk.CodeAnalysis.Lowering.LoweredStatements;
 using Minsk.CodeAnalysis.Symbols;
 using Minsk.CodeAnalysis.Syntax.Kind;
 using System;
@@ -67,6 +68,11 @@ internal sealed class Lowerer : BoundTreeRewrite
     protected override BoundStatement RewriteWhileStatement(BoundWhileStatement node)
     {
         return WhileStatement.Rewrite(this, node);
+    }
+
+    protected override BoundStatement RewriteDoWhileStatement(BoundDoWhileStatement node)
+    {
+        return DoWhileStatement.Rewrite(this, node);
     }
 
     protected override BoundStatement RewriteForStatement(BoundForStatement node)

@@ -86,6 +86,9 @@ namespace Minsk.Tests.CodeAnalysis
         [InlineData("{var i = 10 var result = 0 while i > 0: { result = result + i i = i -1} end result }", 55 )]
         [InlineData("{var i = 10 var result = 0 while i > 0:  result = result + i i = i -1 end result }", 55)]
 
+        [InlineData("{var i = 10 var result = 0 do: { result = result + i i = i -1} while i > 0 result }", 55)]
+        [InlineData("{var i = 10 var result = 0 do:  result = result + i i = i -1 while i > 0 result }", 55)]
+
         [InlineData("{var result = 0 for i = 1 to 10: { result = result + i } end result }", 55)]
         [InlineData("{ var a = 10 for i = 1 to (a = a - 1): { } end a }", 9)]
 

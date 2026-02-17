@@ -6,7 +6,7 @@ using Minsk.CodeAnalysis.Symbols;
 using Minsk.CodeAnalysis.Syntax.Kind;
 using System.Collections.Immutable;
 
-namespace Minsk.CodeAnalysis.Lowering
+namespace Minsk.CodeAnalysis.Lowering.LoweredStatements
 {
     internal sealed class ForStatement
     {
@@ -47,7 +47,7 @@ namespace Minsk.CodeAnalysis.Lowering
                     )
                 )
             );
-            var whileBody = new BoundBlockStatement(ImmutableArray.Create<BoundStatement>(node.Body, increment));
+            var whileBody = new BoundBlockStatement(ImmutableArray.Create(node.Body, increment));
             var whileStatement = new BoundWhileStatement(condition, whileBody);
             var result = new BoundBlockStatement(ImmutableArray.Create<BoundStatement>(
                 variableDeclaration,
