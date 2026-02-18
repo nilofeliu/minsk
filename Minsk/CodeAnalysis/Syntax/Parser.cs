@@ -19,6 +19,7 @@ internal sealed class Parser
 
     public DiagnosticBag Diagnostics => _diagnostic;
 
+    
     public Parser(SourceText text)
     {
         List<SyntaxToken> tokens = new List<SyntaxToken>();
@@ -51,6 +52,7 @@ internal sealed class Parser
         NextTokenDelegate nextTokenDelegate = NextToken;
         MatchTokenDelegate matchTokenDelegate = MatchToken;
 
+
         _expressionAnalyzer = new ExpressionAnalyzers(Peek, NextToken, MatchToken);
         _statementAnalyzer = new StatementAnalyzers(Diagnostics, _expressionAnalyzer, Peek, NextToken, MatchToken);
 
@@ -80,7 +82,7 @@ internal sealed class Parser
     }
 
     private SyntaxToken Current => Peek(0);
-
+        
     private SyntaxToken NextToken()
     {
         var current = Current;
@@ -108,8 +110,6 @@ internal sealed class Parser
     public delegate SyntaxToken CurrentDelegate();
     public delegate SyntaxToken NextTokenDelegate();
     public delegate SyntaxToken MatchTokenDelegate(SyntaxKind kind);
-
-
 
 }
 

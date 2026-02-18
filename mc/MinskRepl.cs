@@ -2,6 +2,7 @@
 using Minsk.CodeAnalysis.Symbols;
 using Minsk.CodeAnalysis.Syntax.Core;
 using Minsk.CodeAnalysis.Text;
+using Minsk.REPL;
 using System.Text;
 
 namespace Minsk
@@ -14,12 +15,15 @@ namespace Minsk
         private bool _showProgram;
         private readonly Dictionary<VariableSymbol, object> _variables = new();
 
+        private InputErrorManagement ErrorManager = InputErrorManagement.Instance;
+
         protected override void EvaluateMetaCommand(string input)
         {
             switch (input.ToLower().Trim())
             {
                 case "#exit":
                     Console.WriteLine("Exiting...");
+                    Environment.Exit(0);
                     return;
                 case "#showtree":
                     _showTree = !_showTree;
@@ -46,15 +50,20 @@ namespace Minsk
             }
         }
 
-        protected override bool IsCompletedSubmission(string text)
+        protected override bool IsCompleteSubmission(string text)
         {
             if (string.IsNullOrEmpty(text))
-                return false;
+                return true;
 
             var syntaxTree = SyntaxTree.Parse(text);
 
+
+            if (ErrorManager.GetIsSyntaxInputError())
+                return true;
+
             if (syntaxTree.Diagnostics.Any())
                 return false;
+
 
             return true;
         }
@@ -128,11 +137,7 @@ namespace Minsk
                         exceptions.Add(e);
                     }
                 }
-                PrintExceptions(exceptions);
             }
         }
-
-
     }
-
 }
