@@ -118,9 +118,6 @@ internal sealed class Binder
             else
                 _diagnostics.ReportVariableAlreadyDeclared(syntax.Identifier.Span, name);
 
-
-
-
         return new BoundVariableDeclarationStatement(variable, initializer);
     }
 
