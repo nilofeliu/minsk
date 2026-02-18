@@ -13,7 +13,8 @@ internal class SymbolRepository
     private SymbolRepository()
     {
         _registry.Register(SymbolTable.Operators, LoadOperators());
-        _registry.Register(SymbolTable.Keywords, LoadKeywords());
+        _registry.Register(SymbolTable.SystemKeywords, LoadKeywords());
+        _registry.Register(SymbolTable.ControlKeywords, LoadControlKeywords());
         _registry.Register(SymbolTable.Delimiters, LoadDelimiters());
     }
 
@@ -26,11 +27,16 @@ internal class SymbolRepository
 
     public static List<SyntaxSymbol> LoadKeywords()
     {
-        return SyntaxDefinitions.LoadStatementKeywords()
-            .Concat(SyntaxDefinitions.LoadBooleanKeywords())
-            .Concat(SyntaxDefinitions.LoadFlowControlKeywords())
+        return SyntaxDefinitions.LoadBooleanKeywords()
             .Concat(SyntaxDefinitions.LoadVariableKeywords())
             .Concat(SyntaxDefinitions.LoadPrimitiveKeywords())
+            .ToList();
+    }
+
+    public static List<SyntaxSymbol> LoadControlKeywords()
+    {
+        return SyntaxDefinitions.LoadStatementKeywords()
+            .Concat(SyntaxDefinitions.LoadFlowControlKeywords())
             .ToList();
     }
 

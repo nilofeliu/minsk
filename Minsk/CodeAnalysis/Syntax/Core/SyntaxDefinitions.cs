@@ -99,21 +99,23 @@ internal static class SyntaxDefinitions
 
         return statementKeywords;
     }
-    internal static List<SyntaxSymbol> LoadBooleanKeywords()
-    {
-        var booleanKeywords = new List<SyntaxSymbol>();
-        TryAddSymbol(booleanKeywords, new SyntaxSymbol(SyntaxKind.TrueKeyword, "true"));
-        TryAddSymbol(booleanKeywords, new SyntaxSymbol(SyntaxKind.FalseKeyword, "false"));
-        return booleanKeywords;
-    }       
+     
     internal static List<SyntaxSymbol> LoadFlowControlKeywords()
     {
         var flowControlKeywords = new List<SyntaxSymbol>();
         TryAddSymbol(flowControlKeywords, new SyntaxSymbol(SyntaxKind.ContinueKeyword, "continue"));
         TryAddSymbol(flowControlKeywords, new SyntaxSymbol(SyntaxKind.BreakKeyword, "break"));
         TryAddSymbol(flowControlKeywords, new SyntaxSymbol(SyntaxKind.EndKeyword, "end"));
+        TryAddSymbol(flowControlKeywords, new SyntaxSymbol(SyntaxKind.ReturnKeyword, "return"));
 
         return flowControlKeywords;
+    }
+    internal static List<SyntaxSymbol> LoadBooleanKeywords()
+    {
+        var booleanKeywords = new List<SyntaxSymbol>();
+        TryAddSymbol(booleanKeywords, new SyntaxSymbol(SyntaxKind.TrueKeyword, "true"));
+        TryAddSymbol(booleanKeywords, new SyntaxSymbol(SyntaxKind.FalseKeyword, "false"));
+        return booleanKeywords;
     }
     internal static List<SyntaxSymbol> LoadVariableKeywords()
     {

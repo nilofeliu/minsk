@@ -109,6 +109,7 @@
         DecimalKeyword,
         StringKeyword,
         VoidKeyword,
+        ReturnKeyword,
 
         //ObjectKeyword,
 

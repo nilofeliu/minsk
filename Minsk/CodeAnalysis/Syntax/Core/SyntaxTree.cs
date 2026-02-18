@@ -1,7 +1,6 @@
 ﻿using Minsk.CodeAnalysis.Syntax.Kind;
 using Minsk.CodeAnalysis.Syntax.Object;
 using Minsk.CodeAnalysis.Text;
-using Minsk.REPL;
 using System.Collections.Immutable;
 
 namespace Minsk.CodeAnalysis.Syntax.Core
@@ -13,7 +12,6 @@ namespace Minsk.CodeAnalysis.Syntax.Core
         public CompilationUnitSyntax Root { get; }
         public SyntaxToken EndOfFileToken { get; }
         
-        public InputErrorManagement ErrorManager = InputErrorManagement.Instance;
         public SyntaxTree(SourceText text) //ImmutableArray<Diagnostic> diagnostics, CompilationUnitSyntax root)
         {
             var parser = new Parser(text);

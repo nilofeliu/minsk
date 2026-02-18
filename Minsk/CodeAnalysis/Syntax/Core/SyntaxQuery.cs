@@ -60,13 +60,22 @@ public static class SyntaxQuery
         return _registry.KindIndex;
     }
 
-    public static bool ContainsKeyword(SyntaxKind kind)
+    public static bool ContainsSystemKeyword(SyntaxKind kind)
     {
-        return _registry.KeywordIndex.ContainsKey(kind);
+        return _registry.SystemKeywordIndex.ContainsKey(kind);
     }
-    public static bool ContainsKeyword(string text)
+    public static bool ContainsSystemKeyword(string text)
     {
-        return _registry.KeywordIndex.Values.Any(symbol => symbol.Text == text);
+        return _registry.SystemKeywordIndex.Values.Any(symbol => symbol.Text == text);
+    }
+
+    public static bool ContainsControlKeyword(SyntaxKind kind)
+    {
+        return _registry.ControlKeywordIndex.ContainsKey(kind);
+    }
+    public static bool ContainsControlKeyword(string text)
+    {
+        return _registry.ControlKeywordIndex.Values.Any(symbol => symbol.Text == text);
     }
 
     public static bool ContainsKind(SyntaxKind kind)

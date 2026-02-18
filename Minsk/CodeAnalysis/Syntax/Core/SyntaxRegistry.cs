@@ -45,13 +45,14 @@ internal class SyntaxRegistry
 
     private readonly Dictionary<string, SyntaxKind> _kindIndex = new();
     private readonly Dictionary<SyntaxKind, string> _textIndex = new ();
-    private readonly Dictionary<SyntaxKind, SyntaxSymbol> _keywordIndex = new();
+    private readonly Dictionary<SyntaxKind, SyntaxSymbol> _systemKeywordIndex = new();
+    private readonly Dictionary<SyntaxKind, SyntaxSymbol> _controKeywordIndex = new();
 
     // Indices properties
     internal Dictionary<SyntaxKind, string> TextIndex => _textIndex;
     internal Dictionary<string, SyntaxKind> KindIndex => _kindIndex;
-    internal Dictionary<SyntaxKind, SyntaxSymbol> KeywordIndex => _keywordIndex;
-
+    internal Dictionary<SyntaxKind, SyntaxSymbol> SystemKeywordIndex => _systemKeywordIndex;
+    internal Dictionary<SyntaxKind, SyntaxSymbol> ControlKeywordIndex => _controKeywordIndex;
 
     internal SymbolRegistry GetSymbolRegistry => _tables;
 
@@ -59,7 +60,8 @@ internal class SyntaxRegistry
     {
         _tables = new SymbolRegistry();
         _tables.TryAdd(SymbolTable.Operators, new List<SyntaxSymbol>());
-        _tables.TryAdd(SymbolTable.Keywords, new List<SyntaxSymbol>());
+        _tables.TryAdd(SymbolTable.SystemKeywords, new List<SyntaxSymbol>());
+        _tables.TryAdd(SymbolTable.ControlKeywords, new List<SyntaxSymbol>());
         _tables.TryAdd(SymbolTable.Delimiters, new List<SyntaxSymbol>());
 
     }
@@ -89,12 +91,20 @@ internal class SyntaxRegistry
 
     private void UpdateKeywordList()
      {
-        if (_tables.TryGetValue(SymbolTable.Keywords, out var keywordList))
+        if (_tables.TryGetValue(SymbolTable.SystemKeywords, out var keywordList))
         {
             foreach (var token in keywordList)
             {
-                if (!_keywordIndex.ContainsKey(token.Kind))   
-                    _keywordIndex.Add(token.Kind, token);
+                if (!_systemKeywordIndex.ContainsKey(token.Kind))   
+                    _systemKeywordIndex.Add(token.Kind, token);
+            }
+        }
+        if (_tables.TryGetValue(SymbolTable.ControlKeywords, out var controlkeywordList))
+        {
+            foreach (var token in controlkeywordList)
+            {
+                if (!_controKeywordIndex.ContainsKey(token.Kind))
+                    _controKeywordIndex.Add(token.Kind, token);
             }
         }
     }
@@ -160,6 +170,7 @@ internal class SyntaxRegistry
 public enum SymbolTable
 {
     Operators,
-    Keywords,
+    SystemKeywords,
     Delimiters,
+    ControlKeywords,
 }
