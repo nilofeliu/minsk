@@ -20,5 +20,10 @@ namespace Minsk.CodeAnalysis.Syntax.Core
             Value = value;
         }
 
+        /// <summary>
+        /// A token is missing if it was inserted by the parser and doesn't appear in source.
+        /// </summary>
+        public bool IsMissing => Text == null;
+
     }
 }
