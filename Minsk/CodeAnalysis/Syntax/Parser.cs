@@ -19,7 +19,7 @@ internal sealed class Parser
 
     public DiagnosticBag Diagnostics => _diagnostic;
 
-    
+
     public Parser(SourceText text)
     {
         List<SyntaxToken> tokens = new List<SyntaxToken>();
@@ -31,7 +31,7 @@ internal sealed class Parser
         do
         {
             token = lexer.Lex();
-            if (SyntaxQuery.ContainsKeyword(token.Kind))
+            if (SyntaxQuery.ContainsSystemKeyword(token.Kind))
                 token = ProcessToken(token, previousToken);
 
             if (token.Kind != SyntaxKind.WhiteSpaceToken &&
@@ -72,6 +72,7 @@ internal sealed class Parser
 
     }
 
+
     private SyntaxToken Peek(int offset)
     {
         var index = _position + offset;
@@ -94,8 +95,9 @@ internal sealed class Parser
     {
         if (Current.Kind == kind)
             return NextToken();
-
+                
         _diagnostic.ReportUnexpectedToken(Current.Span, Current.Kind, kind);
+
         return new SyntaxToken(kind, Current.Position, null, null);
     }
 

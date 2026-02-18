@@ -2,6 +2,7 @@
 using Minsk.CodeAnalysis.Binding.Objects;
 using Minsk.CodeAnalysis.Binding.Statements;
 using Minsk.CodeAnalysis.Symbols;
+using Minsk.CodeAnalysis.Syntax.Core;
 using Minsk.CodeAnalysis.Syntax.Expression;
 using Minsk.CodeAnalysis.Syntax.Kind;
 using Minsk.CodeAnalysis.Syntax.Object;
@@ -112,7 +113,13 @@ internal sealed class Binder
         var variable = new VariableSymbol(name, isReadOnly, initializer.Type);
 
         if (!_scope.TryDeclare(variable))
-            _diagnostics.ReportVariableAlreadyDeclared(syntax.Identifier.Span, name);
+            if (SyntaxQuery.ContainsSystemKeyword(syntax.Identifier.Text))
+                _diagnostics.ReportKeywordAsIdentifier(syntax.Identifier.Span, syntax.Identifier.Text);
+            else
+                _diagnostics.ReportVariableAlreadyDeclared(syntax.Identifier.Span, name);
+
+
+
 
         return new BoundVariableDeclarationStatement(variable, initializer);
     }
