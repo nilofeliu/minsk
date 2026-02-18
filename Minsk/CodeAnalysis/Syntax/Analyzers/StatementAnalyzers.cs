@@ -68,6 +68,9 @@ internal class StatementAnalyzers
         var equals = _matchToken(SyntaxKind.EqualsToken);
         var initializer = _expressionAnalyzer.ParseExpression();
 
+        if (SyntaxQuery.ContainsKeyword(identifier.Text))
+            _diagnostic.ReportKeywordAsIdentifier(identifier.Span, identifier.Text);
+
         return new VariableDeclarationSyntax(keyword, identifier, equals, initializer);
     }
 
