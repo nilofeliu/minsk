@@ -1,4 +1,5 @@
 ﻿using Minsk.CodeAnalysis.Symbols;
+using Minsk.CodeAnalysis.Syntax.Core;
 using System.Collections.Immutable;
 
 namespace Minsk.CodeAnalysis.Binding
@@ -17,6 +18,10 @@ namespace Minsk.CodeAnalysis.Binding
         public bool TryDeclare(VariableSymbol variable)
         {
             if (_variables.ContainsKey(variable.Name))
+                return false;
+
+            if (SyntaxQuery.ContainsSystemKeyword(variable.Name) ||
+                SyntaxQuery.ContainsControlKeyword(variable.Name))
                 return false;
 
             _variables.Add(variable.Name, variable);
