@@ -31,7 +31,8 @@ internal sealed class Parser
         do
         {
             token = lexer.Lex();
-            if (SyntaxQuery.ContainsSystemKeyword(token.Kind))
+            if (SyntaxQuery.ContainsSystemKeyword(token.Kind) ||
+                SyntaxQuery.ContainsControlKeyword(token.Kind))
                 token = ProcessToken(token, previousToken);
 
             if (token.Kind != SyntaxKind.WhiteSpaceToken &&
