@@ -2,7 +2,7 @@
 using Minsk.CodeAnalysis.Syntax.Kind;
 using Minsk.CodeAnalysis.Syntax.Statement;
 
-namespace Minsk.CodeAnalysis.Syntax.Object
+namespace Minsk.CodeAnalysis.Syntax.SyntaxNodes
 {
     public sealed class ElseClauseSyntax : SyntaxNode
     {

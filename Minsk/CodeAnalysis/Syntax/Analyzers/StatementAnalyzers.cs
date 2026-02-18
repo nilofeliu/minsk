@@ -3,6 +3,7 @@ using Minsk.CodeAnalysis.Syntax.Expression;
 using Minsk.CodeAnalysis.Syntax.Kind;
 using Minsk.CodeAnalysis.Syntax.Object;
 using Minsk.CodeAnalysis.Syntax.Statement;
+using Minsk.CodeAnalysis.Syntax.SyntaxNodes;
 using System.Collections.Immutable;
 using static Minsk.CodeAnalysis.Syntax.Parser;
 
