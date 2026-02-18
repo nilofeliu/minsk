@@ -1,51 +1,69 @@
 ﻿using Minsk.CodeAnalysis;
 using Minsk.CodeAnalysis.Symbols;
+using Minsk.CodeAnalysis.Syntax;
 using Minsk.CodeAnalysis.Syntax.Core;
+using Minsk.CodeAnalysis.Syntax.Kind;
 using Minsk.CodeAnalysis.Text;
-using Minsk.REPL;
-using System.Text;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Minsk
 {
     internal sealed class MinskRepl : Repl
     {
         private Compilation _previous;
-
         private bool _showTree;
         private bool _showProgram;
-        private readonly Dictionary<VariableSymbol, object> _variables = new();
+        private readonly Dictionary<VariableSymbol, object> _variables = new Dictionary<VariableSymbol, object>();
 
-        private InputErrorManagement ErrorManager = InputErrorManagement.Instance;
+        protected override void RenderLine(string line)
+        {
+            var tokens = SyntaxTree.ParseTokens(line);
+            foreach (var token in tokens)
+            {
+                var isSystemKeyword = SyntaxQuery.ContainsSystemKeyword(token.Kind);
+                var isControlKeyword = SyntaxQuery.ContainsControlKeyword(token.Kind);
+                var isNumber = token.Kind == SyntaxKind.NumberToken;
+
+                if (isSystemKeyword)
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                else if (isControlKeyword)
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+                else if (!isNumber)
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+
+                Console.Write(token.Text);
+
+                Console.ResetColor();
+            }
+        }
 
         protected override void EvaluateMetaCommand(string input)
         {
-            switch (input.ToLower().Trim())
+            switch (input)
             {
                 case "#exit":
                     Console.WriteLine("Exiting...");
                     Environment.Exit(0);
                     return;
-                case "#showtree":
+                case "#showTree":
                     _showTree = !_showTree;
-                    Console.WriteLine(_showTree ? $"Showing parse trees." : "Not showing parse trees.");
+                    Console.WriteLine(_showTree ? "Showing parse trees." : "Not showing parse trees.");
                     break;
-                case "#showprogram":
+                case "#showProgram":
                     _showProgram = !_showProgram;
-                    Console.WriteLine(_showProgram ? $"Showing bound tree." : "Not showing bound tree.");
+                    Console.WriteLine(_showProgram ? "Showing bound tree." : "Not showing bound tree.");
                     break;
                 case "#cls":
                     Console.Clear();
                     break;
                 case "#reset":
                     _previous = null;
-                    break;
-                case "#help":
-                    PrintCommands();
+                    _variables.Clear();
                     break;
                 default:
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Invalid command {input}.");
-                    Console.ResetColor();
+                    base.EvaluateMetaCommand(input);
                     break;
             }
         }
@@ -57,13 +75,8 @@ namespace Minsk
 
             var syntaxTree = SyntaxTree.Parse(text);
 
-
-            if (ErrorManager.GetIsSyntaxInputError())
-                return true;
-
             if (syntaxTree.Diagnostics.Any())
                 return false;
-
 
             return true;
         }
@@ -73,9 +86,8 @@ namespace Minsk
             var syntaxTree = SyntaxTree.Parse(text);
 
             var compilation = _previous == null
-                ? new Compilation(syntaxTree)
-                : _previous.ContinueWith(syntaxTree);
-
+                                ? new Compilation(syntaxTree)
+                                : _previous.ContinueWith(syntaxTree);
 
             if (_showTree)
                 syntaxTree.Root.WriteTo(Console.Out);
@@ -87,17 +99,13 @@ namespace Minsk
 
             if (!result.Diagnostics.Any())
             {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"{result.Value}");
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.WriteLine(result.Value);
                 Console.ResetColor();
-
                 _previous = compilation;
             }
             else
             {
-                Console.WriteLine();
-                List<Exception> exceptions = new();
-
                 foreach (var diagnostic in result.Diagnostics)
                 {
                     var lineIndex = syntaxTree.Text.GetLineIndex(diagnostic.Span.Start);
@@ -105,38 +113,33 @@ namespace Minsk
                     var lineNumber = lineIndex + 1;
                     var character = diagnostic.Span.Start - line.Start + 1;
 
-                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine();
+
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
                     Console.Write($"({lineNumber}, {character}): ");
                     Console.WriteLine(diagnostic);
                     Console.ResetColor();
 
-                    try
-                    {
+                    var prefixSpan = TextSpan.FromBounds(line.Start, diagnostic.Span.Start);
+                    var suffixSpan = TextSpan.FromBounds(diagnostic.Span.End, line.End);
 
-                        var prefixSpan = TextSpan.FromBounds(line.Start, diagnostic.Span.Start);
-                        var suffixSpan = TextSpan.FromBounds(diagnostic.Span.End, line.End);
+                    var prefix = syntaxTree.Text.ToString(prefixSpan);
+                    var error = syntaxTree.Text.ToString(diagnostic.Span);
+                    var suffix = syntaxTree.Text.ToString(suffixSpan);
 
-                        var prefix = syntaxTree.Text.ToString(prefixSpan);
-                        var error = syntaxTree.Text.ToString(diagnostic.Span);
-                        var suffix = syntaxTree.Text.ToString(suffixSpan);
+                    Console.Write("    ");
+                    Console.Write(prefix);
 
-                        Console.Write("    ");
-                        Console.Write(prefix);
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.Write(error);
+                    Console.ResetColor();
 
-                        Console.ForegroundColor = ConsoleColor.DarkRed;
-                        Console.Write(error);
-                        Console.ResetColor();
+                    Console.Write(suffix);
 
-                        Console.WriteLine(suffix);
-
-                        Console.WriteLine();
-
-                    }
-                    catch (Exception e)
-                    {
-                        exceptions.Add(e);
-                    }
+                    Console.WriteLine();
                 }
+
+                Console.WriteLine();
             }
         }
     }

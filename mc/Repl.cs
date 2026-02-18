@@ -15,7 +15,7 @@ internal abstract class Repl
         while (true)
         {
             var text = EditSubmission();
-            
+
             if (string.IsNullOrEmpty(text))
                 return;
 
@@ -203,8 +203,6 @@ internal abstract class Repl
                 case ConsoleKey.X:
                     HandleControlX();
                     return;
-                    break;
-
             }
         }
 
@@ -233,7 +231,7 @@ internal abstract class Repl
 
     private void HandleControlEnter(ObservableCollection<string> document, SubmissionView view)
     {
-        InsertLine(document, view);
+        _done = true;
     }
 
     private void HandleControlX()
@@ -405,3 +403,5 @@ internal abstract class Repl
     }
 
 }
+
+
