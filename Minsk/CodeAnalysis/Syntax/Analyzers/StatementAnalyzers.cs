@@ -60,11 +60,6 @@ internal class StatementAnalyzers
         }
     }
 
-    private SyntaxKind ParseIdentifierKeyword()
-    {
-        return SyntaxKind.IdentifierToken;
-    }
-
     private StatementSyntax ParseVariableDeclaration()
     {
         var expected = Current.Kind == SyntaxKind.LetKeyword ? SyntaxKind.LetKeyword : SyntaxKind.VarKeyword;
@@ -250,6 +245,11 @@ internal class StatementAnalyzers
 
     private BlockStatementSyntax ParseMultiStatements(params SyntaxKind[] terminatingKinds)
     {
+        if (Current.Kind == SyntaxKind.OpenBraceToken)
+        {
+            return ParseBlockStatement();
+        }
+
         var builder = ImmutableArray.CreateBuilder<StatementSyntax>();
 
         while (!terminatingKinds.Contains(Current.Kind) &&
