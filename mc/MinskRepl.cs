@@ -99,7 +99,7 @@ namespace Minsk
 
             if (!result.Diagnostics.Any())
             {
-                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine(result.Value);
                 Console.ResetColor();
                 _previous = compilation;
