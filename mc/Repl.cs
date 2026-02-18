@@ -345,6 +345,10 @@ internal abstract class Repl
 
     private void HandlePageDown(ObservableCollection<string> document, SubmissionView view)
     {
+
+        if (_submissionHistory.Count == 0)
+            return;
+
         _submissionHistoryIndex++;
         if (_submissionHistoryIndex > _submissionHistory.Count - 1)
             _submissionHistoryIndex = 0;
