@@ -15,7 +15,6 @@ internal abstract class Repl
         while (true)
         {
             var text = EditSubmission();
-            
             if (string.IsNullOrEmpty(text))
                 return;
 
@@ -203,8 +202,6 @@ internal abstract class Repl
                 case ConsoleKey.X:
                     HandleControlX();
                     return;
-                    break;
-
             }
         }
 
@@ -221,8 +218,7 @@ internal abstract class Repl
     private void HandleEnter(ObservableCollection<string> document, SubmissionView view)
     {
         var submissionText = string.Join(Environment.NewLine, document);
-        if (submissionText.StartsWith("#") ||
-            IsCompleteSubmission(submissionText))
+        if (submissionText.StartsWith("#") || IsCompleteSubmission(submissionText))
         {
             _done = true;
             return;
@@ -235,7 +231,6 @@ internal abstract class Repl
     {
         InsertLine(document, view);
     }
-
     private void HandleControlX()
     {
         _done = true;
@@ -391,8 +386,11 @@ internal abstract class Repl
         Console.WriteLine($"Invalid command {input}.");
         Console.ResetColor();
     }
+
     protected abstract bool IsCompleteSubmission(string text);
+
     protected abstract void EvaluateSubmission(string text);
+
     protected static void PrintCommands()
     {
         Console.WriteLine("Available commands:");
@@ -403,5 +401,4 @@ internal abstract class Repl
         Console.WriteLine("#help - Show this help message");
         Console.WriteLine("Type any expression to evaluate it.");
     }
-
 }
