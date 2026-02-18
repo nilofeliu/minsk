@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Minsk.CodeAnalysis.Registry.Types
+namespace Minsk.CodeAnalysis.System.Types
 {
     internal static class SystemPrimitiveTypesRepository
     {
