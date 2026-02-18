@@ -1,17 +1,13 @@
 ﻿using Minsk.CodeAnalysis.Syntax.Kind;
 using Minsk.CodeAnalysis.Text;
-using Minsk.REPL;
 using System.Collections;
-using System.Xml.Linq;
 
 namespace Minsk.CodeAnalysis
 {
     internal sealed class DiagnosticBag : IEnumerable<Diagnostic>
     {
         private readonly List<Diagnostic> _diagnostics = new();
-
-        public InputErrorManagement ErrorManager = InputErrorManagement.Instance;
-
+        
         private void Report(TextSpan span, string message)
         {
             var diagnostic = new Diagnostic(span, message);
@@ -47,7 +43,6 @@ namespace Minsk.CodeAnalysis
         public void ReportUnexpectedToken(TextSpan span, SyntaxKind actalKind, SyntaxKind expectedKind)
         {
             var message = $"Unexpected token <{actalKind}>, expected <{expectedKind}>.";
-            ReportSyntaxInputError();
             Report(span, message);
 
         }
@@ -98,13 +93,8 @@ namespace Minsk.CodeAnalysis
         internal void ReportKeywordAsIdentifier(TextSpan span, string keyword)
         {
             var message = $"'{keyword}' is a keyword and cannot be used as an identifier.";
-            ReportSyntaxInputError();
             Report(span, message);
         }
-
-        private void ReportSyntaxInputError()
-        {
-            ErrorManager.SetIsSyntaxInputError(true);
-        }
+                
     }
 }
